@@ -1,0 +1,212 @@
+[SOUND]
+We have considered how to analyze most
+of the key elements of a language.
+But not all of them.
+A robust tool obviously
+has to handle them all.
+First, while assignments
+obviously transfer the taint from
+the source to the target,
+what should happen if the source is
+an expression rather than a variable?
+We must define the taint of operators.
+Usually, if an argument to
+an operator is tainted,
+then the expression containing
+that operator is, too.
+So, far we've assumed we know
+which function a call will invoke.
+This is important for
+linking up the flow constraints at
+the caller with those in the callee.
+But what if we make a call
+through a function pointer?
+The pointer is not assigned until runtime.
+So, that static compiled time analysis.
+Canno, cannot always
+be sure of its target.
+As it turns out we can use
+a kind of flow analysis to
+determine the set of possible targets
+a function pointer could contain.
+The analysis follows the same
+principles of the flow analysis that
+we've already seen.
+This way, when analyzing a call site using
+a function pointer, we add constraints as
+if all possible targets were called
+rather than a single target.
+And even more course analysis
+of possible targets, for
+example, based on a function's type
+could also be used rather than one
+that more precisely determines the
+possible values of the function pointer.
+C structs are records have several fields.
+The most precise analysis can track
+the taintedness of each field of
+a struct separately as if
+they were separate variables.
+But such precision can be expensive.
+Alternatively, an analysis can track
+the taintedness of the same field of
+all instances of a struct as if that
+field was a kind of global variable.
+Now this hurts precision but
+is often a big boost to performance.
+An in between position is to analyze only
+the taintedness of the struct as a whole.
+Or to do so for only some of its fields.
+Note that these decisions are relevant
+to object oriented languages.
+You can view objects as a struct
+containing function pointers and so
+the trade offs we've just
+considered apply in the analysis of
+object oriented languages.
+Another way to aggregate data in
+a language is to store it in an array, and
+there are several,
+similar trade-offs here.
+You can track taintedness
+of each element or
+you could track it on
+the array as a whole.
+The challenge here is that while
+struct fields are constants,
+array indexes are computed by arithmetic.
+As such, it is sometimes hard to
+track them precisely at compile time
+because we won't know what arithmetic
+produces until we run the program.
+And so
+a hybrid approach is inevitably employed.
+Up until now we have focused
+on how the analysis works.
+A key part of using it to
+perform security reviews is to
+properly label the tainted sources and
+untainted sinks.
+And there are many options here.
+We could label array indexes and
+format strings and SQL strings.
+We can also label functions that
+act as sanitizers or validators.
+These are library routines that take in
+tainted data and return untainted data.
+For example a function that escapes
+an HTML string would be a sanitizer.
+Labeling sanitizers is needed
+to avoid false alarms.
+Finally flow analysis need not only apply
+to finding improper use of tainted data.
+It can also be used to discover
+the improper disclosure of
+sensitive information.
+In particular we can imagine labeling
+sensitive data as secret, and
+untrusted output channels as public.
+And our goal is to prevent secret
+sources from reaching public sinks.
+In essence this is the dual of
+the tainting problem, where the only
+difference is that the lattice and
+flow relationships are inverted.
+Finally, we should point out that
+flow analysis is not the only kind of
+static analysis, in,
+in fact there are many other kinds.
+One common analysis, that is often used
+to assist other analysis problems,
+is called pointer analysis.
+With a common flavor of it
+called points to analysis.
+This analysis determines whether two
+pointers are possibly aliases, that is,
+whether they could both
+point to the same memory.
+Earlier we saw that knowing this
+is important for not missing bugs.
+In fact, our tainted flow analysis
+involved a very coarse grain
+form of point to pointer
+analysis within it.
+But more sophisticated analysis
+would improve precision.
+Significant advances have
+aided both the precision and
+scalability of pointer
+analysis in recent years.
+Another kind of analysis is
+called data flow analysis.
+And it was developed in the 1970s as part
+of research on optimizing compilers.
+Like the flow analysis
+we've already considered,
+data flow analysis focuses on the flow of
+values through variables in a program.
+But it maintains information
+about this flow bit differently.
+One common data flow analysis
+is called liveness analysis.
+And it determines which variables,
+at a given program point are still alive.
+That is, whether their values
+could still be red in the future.
+Other variables are dead, meaning
+that their values will be overridden.
+Liveness analysis is an important
+part of allocating variables to
+machine registers during copulation.
+Registers storing dead variables,
+can be re-used.
+Data flow analysis techniques
+are also useful for
+security questions and
+many industrial tools use them.
+For example, they can also answer
+the tainted flow question.
+Finally another significant
+kind of analysis is called
+abstract interpretation.
+It was invented in part to provide
+a theoretical explanation of
+data flow analysis, but it has grown into
+a style of analysis in its own right.
+The key idea of abstract interpretation,
+is that a static analysis is
+an abstraction of all possible
+concrete runs of a program.
+To be practical,
+the abstraction must discard information.
+For example,
+which calls correspond to which returns.
+The key is to discard as much
+information as possible for
+purposes of scalability, while still being
+able to prove the property of interest.
+An abstract interpretation is at the core
+of several industrial strength tools.
+Static analysis is gaining traction
+in practice with a variety of
+commercial products from a variety of
+companies as well as open-source tools.
+If you'd like to learn more about static
+analysis, I'd recommend this book,
+Secure Programming with
+Static Analysis by Brian Chess.
+This goes into more depth about how
+the static analysis tools work,
+elaborating on
+the description on this unit.
+And talks more about how static analysis
+fits in a secure development process.
+For more of the mathematical details
+about how program analysis works,
+I recommend this book by Nielson,
+Nielson, and Hankin.
+It's a bit dense for
+the casual reader, but it's good for
+introducing the academic
+field of static analysis.
+

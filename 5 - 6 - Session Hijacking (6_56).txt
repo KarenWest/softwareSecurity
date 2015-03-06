@@ -1,0 +1,192 @@
+[SOUND]
+As we've already mentioned,
+an extremely common use of Cookies
+is as session identifiers, which
+associate a user with a multi-interaction
+session with the website.
+The basic idea is simple.
+The user first logs into the website, for
+example, using a username and password.
+On successful log-in, the server sends
+back a session cookie with the response.
+Subsequent requests to the same site
+will also send along a session cookie.
+This cookie will either
+go in an HTTP header or
+will be explicitly included
+in a hidden field.
+At this point, the server now knows,
+who it's talking to.
+This approach makes the session cookie
+a prized commodity for attackers.
+In effect, a session cookie is
+a capability to access a site with
+credentials of the, of a particular user.
+Thus, this capability needs
+to be protected from theft.
+Otherwise, an attacker can impersonate the
+user and perform actions on her behalf.
+Such actions, could result in lost or
+corrupted data,
+like your bank account balance.
+To see how theft could happen,
+consider where,
+sh, cookies show up in an interaction.
+First, they are generated and
+possibly stored at a server.
+Then, they are transmitted between
+the server and client and back again.
+Finally, they are stored at the client for
+later use.
+As such, Cookies could be stolen by
+compromising, either the server or
+client and copying them.
+Or if the server's algorithm for
+generating Cookies is known,
+an adversary could predict,
+what a particular user's cookie is.
+Cookies could also be copied by sniffing
+the network to observe them in transit.
+Or the network could be manipulated,
+into sending the cookies
+to an adversary directly.
+Using techniques like DN ash ca,
+DNS cache poisoning.
+Cookie release due to compromise
+can be prevented by building more
+resilient clients,
+servers, and DNS caches.
+In other words, avoid buffer overruns and
+the other sorts of errors
+we've already seen.
+Now, cookie release due to sniffing can be
+avoided by using encrypted connections.
+In particular, sensitive interactions
+after a log-in should use
+secure HTTP called HTTPS,
+which encrypts the communicasen,
+communications, including the cookies.
+In fact, by setting the secure
+attribute of a cookie,
+you can ensure it will only be sent
+over HTTPS, and never over simply HTTP.
+This fail safe prevents a coding
+mistake from inadvertently revealing
+a session cookie.
+To avoid allowing the adversary
+to guess what a cookie will be,
+applications should generate
+cookies that are long, so
+that there are many possibilities for
+the adversary to try to guess and random.
+So, that the particular
+possibility is hard to predict.
+Note that the same guidelines should hold
+for generating SIDs in hidden form fields.
+Now if, despite these protections, a
+cookie is stolen, session hijacking can be
+further defended against by not using only
+cookies to identify a user's session.
+Instead, you can build your application
+to require correlating information
+on the site.
+That identifies a user,
+users current interaction.
+For example,
+if the user is currently looking at
+a Web page that shows his bank accounts,
+but then a request comes in asking for
+a transfer the web site should be able
+to tell that the request is not valid.
+This can be done by storing
+hidden fields on pages.
+Or using the refer attribute, so
+that impossible requests even with
+a proper cookie are rejected.
+This same sort of protection is used for
+CSRF attacks,
+which we will discuss shortly.
+There are yet more mitigations
+against the tax due to stolen cookies.
+To motivate them consider
+a recent Twitter vulnerability.
+Twitter uses a single cookie,
+called auth_token to identify a user.
+This cookie is computed from
+the user name and password.
+Now, this approach suffers
+from two weaknesses.
+First, the auth_token does not
+change from session to session.
+Second, it does not become invalid,
+when the user logs out.
+This means that stealing the cookie gives
+an attacker indefinite hijacking of
+a user's account.
+Now, the defenses we've already discussed
+can reduce the chance that a cookie is
+stolen or that it is used inappropriately.
+But there are two more
+defenses we can add.
+First, do not allow session
+cookies to go on indefinitely.
+They should have an expiration date.
+Now, this is like the expiration
+date on your credit card.
+It cannot be used after that date.
+The other defense is to direct a cookie
+to be deleted from a user's machine and
+from the server, once a session ends.
+This reduces the time that a cookie
+is exposed to possible theft due
+to compromise.
+Finally, let us consider a non-defense.
+You might think that you can neuter
+an attack by tying a session to
+a particular IP address.
+That is a user logs in
+from one machine and if
+a request comes from some other machine,
+they must be bogus and should be rejected.
+Now, this defense will murk,
+will work most of the time but
+there are sufficient problems
+that it is not usually deployed.
+In particular a user's IP address might
+legitimately change during a session.
+If using a mobile device it
+could legitimately roam for
+example, between networks.
+It could also be forced to
+renegotiate an address using
+the DHCP protocol for other reasons.
+In these cases,
+a user would suddenly be denied access.
+In addition to these false positives,
+relying only on network addresses
+will miss some attacks, too.
+One example is when a user's machine
+is behind a Network Address Translator,
+or NAT device.
+In such cases.
+Hosts beyond the NAT box will view
+all clients behind the NAT box as
+having the same address.
+The NAT box internally translates this
+address into different local addresses.
+As such,
+in a setting like an Internet cafe,
+it's not unlikely that all machines in the
+cafe will have the same external address.
+And as such, one machine in the cafe could
+hijack a session of another machine in
+the same cafe for
+example by sniffing the network.
+Once again, the right defense here is
+to protect the session identifier.
+Next, we'll look at a related form of
+attack called Cross-Site Request Forgery
+or CSRF.
+That requires similar and
+complimentary defenses.
+

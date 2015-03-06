@@ -1,0 +1,321 @@
+[SOUND] Now we're going to take a tour
+of what you will learn in this course.
+The target audience for
+the course is those people involved or
+interested in developing secure software.
+This includes people who
+design software systems.
+Who write code to implement those systems.
+Who review codes and
+designs that aim to be secure.
+And who test software to
+make sure it is secure.
+This course is one of several in the
+Maryland cybersecurity center series of
+courses in Coursera's cyber
+security specialization.
+At various points, it will overlap with
+topics covered in the other courses,
+which include usable security,
+cryptography, and hardware security.
+Now, that said,
+much of our focus will be on the core
+activities of building software.
+From designing its architecture,
+to writing it's code.
+To testing, and otherwise
+checking that the code is secure.
+We assume as a result that
+students taking the course have
+a substantial background
+in computer science.
+This is a technical class.
+As a rough estimate students should have
+had the equivalent background as a third
+year university student whose major is
+computer science, or a related field.
+More specifically, we assume
+the participants have a fair amount of
+experience writing code.
+Ideally, we're looking for
+the equivalent of three semester-long
+courses on programming.
+Two of these courses might consider
+high level languages, like Java or Ruby,
+or Python.
+But at least one should be on
+low-level programming in C and C++.
+Along with the language features
+that are common to both C and
+other languages in particular to C,
+we assume students are familiar with
+constructs like arrays and pointers.
+And with C's approach to memory
+management using the stack and heap.
+These concepts are critical to really
+understanding the certain sorts of
+pernicious security vulnerabilities.
+We also assume some familiarity
+with the following material, for
+which we'll provide some
+introductory review.
+Our labs would be implemented in
+an environment running Linux, so
+we assume familiarity with Linux
+basics like the command shell.
+We will also use the gdb program
+debugger for one of our labs.
+And so
+some knowledge of it will be helpful.
+We assume students are familiar
+with the world wide web and
+some basic networking concepts.
+And finally, we assume students have
+some familiarity with assembly language,
+preferably Intel x86 assembly.
+We expect the students to understand
+the basics of machine instructions and
+how processors execute them.
+But we will do some review of
+the standard architectural memory model,
+as a it pertains to memory based attacks.
+Our goal in this class is to learn how
+to make software that is more secure.
+We want to learn how to make better
+designs, write better implementations, and
+have better assurance at
+the end that the software we've
+written is resilient to attack.
+So how can we go about
+learning how to do this?
+We're going to take on two points of
+view when looking at software security,
+Black Hat, and White Hat.
+Black Hat takes on the point
+of view of the adversary.
+White Hat of the defender.
+So a Black hat is going to ask, what
+are the security relevant defects that
+constitute vulnerabilities
+in our software, and
+how can those defects be exploited?
+Putting on our White hat,
+we're going to ask,
+how do we prevent security
+relevant defects before we deploy?
+How do we make vulnerabilities we don't
+manage to avoid harder to exploit?
+Looking at just one hat or the other
+only gives us part of the picture.
+Therefor during the course we will wear
+both hats switching from one to the next.
+We will begin wearing our black hat
+looking at low level vulnerabilities
+in programs written in C, and C++.
+These vulnerabilities include many things.
+Most notably buffer overflows which can
+take place on the stack or the heap or
+due to integer overflow, or over-writing,
+or over-reading buffers in memory.
+We'll also look at format
+string mismatches and
+dangling pointer dereferences.
+These vulnerabilities lead to
+attacks like stack smashing or
+formating string attacks, or
+return oriented programming.
+All of them are violations of
+a property called memory safety.
+Where accesses to memory via pointers
+go to memory that they don't own and
+instead go to other parts of the program.
+The easiest way to ensure memory safety
+and thereby avoid these different sorts of
+attacks is to use what's called
+a memory-safe programming language.
+Or better yet
+a type-safe programing language.
+If you still want to use C and C++,
+which are not memory safe, then there
+are several automated defences that
+will help prevent or mitigate attacks.
+We'll discuss several.
+Stack canaries.
+Non-executable data.
+Address space layout randomization.
+Memory-safety enforcement,
+and control-flow integrity.
+And we'll discuss how to augment
+these defenses using safe
+programming patterns and libraries.
+One key idea in these programming
+patterns and libraries is to
+validate untrusted input and, therefore,
+prevent certain sorts of attacks.
+Next we'll turn our attention
+to securing the world wide web.
+Much of what we do today
+is on the web and,
+as a result,
+it's also the target of attack.
+The web brings with it
+new vulnerabilities and
+attacks and we'll discuss
+several including SQL injection,
+Cross-site scripting, Cross-site
+request forgery, and Session hijacking.
+We'll also look at the defenses
+against these attacks and
+we'll see that they have a similar theme
+to defenses we've seen to this point.
+For example, we should be careful who or
+what we trust by validating input.
+And, we should try to reduce any
+possible damage of attack by
+making exploitation harder.
+Now, at this point, we'll have considered
+the web and low-level software.
+But, we'll want to step back and
+look at the software
+development process generally.
+How are the ideas and attacks that
+we've seen to this point relevant to
+the overall software development process.
+So we'll look at the different phases of
+software development lifecycles including
+Requirements, Design, Implementation,
+and Testing and assurance.
+And we'll look at the corresponding
+activities that take security to heart.
+For example, defining security
+requirements and defining abuse cases.
+Performing architectural risk analysis and
+threat modeling.
+And using a security conscious design.
+We'll also want to conduct code reviews,
+perform risk-based security testing.
+And perform penetration testing to
+make sure that the software that we
+have designed and built truly is secure.
+Let's look at a couple of the phases now
+of the life cycle, in a bit more detail.
+For requirements and design, we'll look
+at how to identify sensitive data and
+resources, and
+define security requirements for them.
+These requirements include things we've
+mentioned already like confidentiality,
+integrity, and availability.
+We'll consider the expected
+threats against our system, and
+the abuse cases that could violate
+the requirements we've set down.
+Next we'll apply principles for
+secure software design to prevent,
+mitigate, and detect possible attacks.
+There are several different principles and
+rules that we'll use, but
+basically three main categories.
+First, favor simplicity in your design and
+code.
+Second, trust components with reluctance.
+And third, defend in depth,
+relying not on one defense but many.
+[SOUND] At the end as an exemplar
+of this sort of design practice,
+we'll look closely at
+the very secure FTP daemon.
+It was written very much
+with security in mind and
+employs many of the principles
+that we've just mentioned.
+Next, we'll turn our attention to
+the implementation and testing phase.
+And focus on Rules and Tools.
+In particular, we'll apply coding
+rules to implement our secure design.
+These rules will have similar goals
+to the principles we've looked at
+that is preventing, mitigating,
+or detecting possible attacks.
+We'll also look at how to apply
+automated code review techniques to
+find potential vulnerabilities
+in components.
+In particular, we'll look at a technique
+called static analysis that is
+able to analyze a program and
+consider all of it's possible
+executions when making a judgement.
+We'll also look at symbolic execution.
+Which is sort of a hybrid technique
+between static analysis and testing.
+And it underlies a technique
+called whitebox fuzz testing.
+Finally, we'll look at applying
+penetration testing to
+find potential flaws in a real
+system in a deployment environment.
+We'll look at different attack patterns
+as enabled by different sorts of
+pen testing tools.
+And we'll look at a technique
+called fuzz testing for
+trying to find failure
+scenarios in software programs.
+Stepping back.
+We can see that the content of this
+course has six over all units.
+The first is memory attacks,
+followed by memory defenses,
+looking at low-level software.
+Next, we look at web security.
+We follow that with secure design and
+development.
+Then, we dig in to automated code review,
+via static analysis in symbolic execution.
+And finally finish up with techniques for
+penetration testing, notably fuzzing.
+You can expect about 80 minutes
+of video per week for six weeks.
+We'll also have some supplemental
+readings and interviews from the experts.
+I've managed to put together
+interviews with four experts.
+Here we see Andy Chou,
+static analysis expert.
+And the CTO of Coverity, a company
+that makes a static analysis product.
+We also see Gary McGraw, who is a software
+security expert and noted author.
+And, he's the CTO of Cigital, Inc.
+I should say,
+many of the ideas that I put forth in
+this course are inspired by Gary's books.
+And, I was really pleased
+to interview him.
+Next we will hear from Eric Eames who
+is a penetration testing expert, and
+is a principal security consultant for
+the FusionX company.
+And Patrice Godefroid,
+a White-box fuzzing expert who
+is a principal researcher
+at Microsoft Research.
+We will assess your understanding of
+the material in the course in two ways.
+First we'll provide projects that
+should help you get a better grasp of
+the things that we're talking about like
+vulnerabilities and how to exploit them.
+How to use tools to better build
+software securely, and so on.
+And we'll have quizzes once per week that
+check your knowledge directly using tests.
+These quizzes will also cover things
+that you should've learned by doing
+the projects.
+That concludes our introduction, so
+let's get on with learning
+about software security.
+

@@ -1,0 +1,134 @@
+[MUSIC]
+So far we've seen that the server
+will produce static or
+dynamic HTML that it sends
+to the browser to render.
+Recall that static HTML is
+unchanged from request to request,
+whereas dynamic HTML is
+generated at the server, for
+example by running a PHP program
+which may query a database.
+Either way,
+HTML pages may contain programs written
+in a language called Javascript.
+And these programs will execute
+at the client, and perform fur,
+further rendering and
+content production on the page.
+So here's a little example of an HTML
+file that may be sent to the client.
+You can see it has the standard tags,
+it also has tags script that indicate the
+beginning and end of a Javascript program.
+Here the program sets two
+local variables a and b and
+then invokes document.write to
+modify the contents of the page.
+The contents of the page
+will include world,
+the value three which is the sum a plus b,
+and then a closed bold face tag
+which closes off the open bold
+face tag that was at the top.
+When this program is rendered by the
+browser it looks like this on the page.
+>> Javascript is a programming
+language who's programs called
+scripts implement client side
+portions of a web application.
+These programs run in the browser and
+therefore make the web
+experience more interactive.
+In fact, the web experience is so much
+better when using Javascript that people
+marked the point at which Javascript
+came into heavy use as web 2.0.
+Javascript programs are executed
+in the browser, and as just shown,
+can be used to alter a web page's
+contents to determine what is displayed.
+To access page elements
+Javascript programs use
+the document object model or DOM.
+Javascript programs can also
+perform interactive processing.
+For example, they can track mouse
+movements to implement drag and
+drop or run code to process button clicks.
+In addition to event handlers
+being used to update a page,
+they can be used to issue web requests and
+to read replies.
+Requests can be issue asynchronously,
+leading to a programming
+pattern called AJAX.
+This acronym stands for
+asynchronous Javascript plus XML.
+It first saw use in the early 2000s and
+then saw widespread deployment in Google
+Mail and Google Maps in 2004 and 2005.
+These we applications for
+email and maps were far more responsive
+then their web 1.0 counterparts.
+Finally, the most relevant part of our
+of Javascript to our discussion now
+is that programs can read and
+modify cookies.
+Javascript is a powerful
+programming language with access to
+sensitive resources
+maintained by the browser.
+And therefore the browser needs
+to enforce a security policy with
+respect to what Javascript
+programs can do.
+In particular if I use my browser to
+visit bank.com to do my banking but
+I also use it to visit
+attacker.com I don't want
+attacker.com Javascript programs
+to be able to access my bank data.
+How might they do this?
+Since Javascript programs can read
+cookies, then without security protection
+a script from attacker.com could run and
+alter the layout of bank.com's website,
+which say could be running in
+another browser, browser window.
+Or it could intercept keystroke events to
+sniff the user's password to bank.com.
+It could read cookies stored by bank.com.
+If cookies include session identifiers
+then the attacker.com script could issue
+web requests as if they were
+from the authenticated user.
+To avoid these problems browsers implement
+the so-called same origin policy or SOP.
+The browser associates the elements of
+a web page, including it's lay out,
+cookies, events, and so on with an origin.
+The origin is primarily
+defined by the hostname that
+the web page originated from,
+for example bank.com.
+The same origin policy states
+that a web page's elements can
+only be accessed by scripts with
+the same origin as the page.
+So to be clear,
+according to the same origin policy,
+Javascript programs are limited
+in the cookies that they access.
+Here we see a cookie that was set and
+stored into the cookie cache.
+And according to the rules the value
+should only be reachable by
+any domain ending in .zdnet.com.
+That is the origin of the cookie.
+We can see this in the domain part of
+the set cookie attribute shown at the top.
+Any other JavaScript program whose
+origin is different than zdnet.com will
+not have access to that cookie.
+

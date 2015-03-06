@@ -1,0 +1,174 @@
+[SOUND].
+Recall the two main kinds of web request.
+Get and post.
+Get requests are meant to be
+reads of the server state.
+As such, they are not intended to
+affect modifications to that state.
+Nevertheless, they often do just that.
+With this in mind, consider the URL
+to the banking website shown here.
+Suppose a user is logged into
+this site with an active session.
+What if an attacker is able to trick
+the user into visiting this link?
+The outcome for the user is not good.
+An unintended bank transfer
+out of his account.
+The question is, what would
+convince a user to visit this link?
+So, here's how this could happen.
+Suppose the client is logged
+in to the banking website, and
+at the same time is surfing the Internet,
+and ends up at attacker.com.
+Attacker.com returns
+a page back to the user.
+And that page in,
+contains this tag, where the tag includes
+a reference to the URL that we saw before.
+Now the browser,
+upon seeing the image tag,
+will automatically visit the URL to
+obtain what it believes will be an image.
+So, it will go to bank.com,
+and send the request.
+Now, normally if the user was not
+logged into the banking web site,
+Bank.com would reject the request,
+because the user was not authenticated.
+But, if the user happened to be
+logged in at the same time as when
+visiting attacker.com, then this request
+will be accompanied by the session ID
+that includes the cookie that says
+that the user was authenticated.
+And as a result bank.com will
+dutifully perform the request.
+This kind of misdirection attack is called
+a cross-site request forgery or CSRF.
+The target of the attack is a user with
+an account on a vulnerable server.
+The goal of the attack is to issue
+requests on the user's behalf.
+That look to the server to be legitimate.
+To ensure legitimacy, the requests
+are issued from the user's browser,
+which will send along
+the needed session cookies.
+For the request to come from the browser,
+the user must be tricked into clicking
+a link while logged into a sensitive site.
+In the previous depiction, this happened
+when visiting a malicious site,
+which sent a request to a URL
+embedded in an image tag.
+The user could also be tricked to click
+a link in a spam email, which will get,
+which will get sent by the browser.
+The link could be disguised, for example,
+by email formatting, to look benign.
+CSRF works,
+because certain sorts of request to
+the vulnerable site have the same
+structure minus the session information.
+Let's look into this in more detail.
+So, how can we protect
+against CSRF attacks?
+One way to do it is to pay attention
+to the Referer field that's set
+by the browser when it sends
+an HTTP request to the server.
+We call the request that we saw.
+In the example earlier in this unit, where
+we clicked a link on the Reddit.com site.
+Here we can see that
+the referer is filled in with
+the original page on
+which that link resided.
+What a server could do is check that when
+it receives a request, especially one
+that's sensitive, that the referer
+field only includes URLs for that site.
+Or from any trusted location from which
+the link could've been generated.
+In our example, the referer should
+not include attacker.com and
+it would reject the request.
+So, the pages that a user could
+legitimately reach should be
+allowed as referer fields.
+The problem here is that
+the refer field is optional.
+Not all browsers send it along.
+One way to deal with this problem is to
+use what's called lenient
+referrer checking.
+That is we should block
+requests with a bad refer.
+For example,
+attacker.com in our prior example.
+But allow requests with no refer,
+for example,
+because the browser just
+doesn't include it.
+So, then the question is,
+is a missing refer always harmless,
+assuming that the browser is legitimate?
+Unfortunately, the answer is no.
+Attackers can be clever in
+sending redirect requests and
+other protocol messages to.
+Cause the referrer to be removed.
+For example, it can bounce a user off
+an FTP page that the attacker controls.
+And the FTP request will not
+include a referrer header.
+The attacker could also exploit
+a browser vulnerability, and
+hack the browser to not
+include the referrer field.
+Or could mangle the web request in
+transit by snooping on the link.
+Another approach is to,
+you secretized links.
+The idea here is similar to hidden form
+fields, where we used capabilities.
+Here the hidden form field will be,
+will include a secret that the attacker
+has a difficult time guessing.
+So recall that the attacker relies
+on the cookie already being
+present in the user's cache,
+so that when the request to
+the remote site is initiated
+the cookie goes along with it.
+But the attacker does not know what
+the contents of the cookie are.
+It doesn't know what is
+expected on the page that
+would normally allow such requests.
+So if in that page, we can embed a secret
+that the attacker wouldn't know, and
+the server only allows
+the request if that secret is
+included say as a hidden form field.
+Then we protect against
+the attack that we saw before.
+That is attacks initiated
+indirectly from a remote site.
+We can even make the secret equal to
+the value in the session cookie because,
+as I said before the attacker
+has no way to see the cookie.
+The attacker can only cause the request
+to go out without knowing exactly what
+that request contains.
+And web frameworks help here.
+For example, Ruby on Rails is
+a web framework, that makes it
+easy to write multi-tier web applications,
+and Rails automatically embeds such
+secrets in the links that it generates for
+the webpages of the sites it produces.
+

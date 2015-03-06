@@ -1,0 +1,255 @@
+[SOUND]
+We have looked at a bunch of principles
+and rules that aim to ensure good design.
+And we've shown how failure to follow
+these principles can lead to flaws.
+Recently, a group of security
+professionals in industry, research and
+the government got together and
+formed the IEEE center for secure design.
+Their goal was to focus more
+attention on secure design.
+To reduce the prevalence
+of security flaws.
+One of the first activities of
+the center has been to dig deep into
+the collective experience of its members
+and identify and categorize common and
+dangerous design flaws.
+And here is their top ten list.
+Assume trust rather than
+explicitly give it or award it.
+Use an authentication mechanism that
+can be bypassed or tampered with.
+Authorize without considering
+sufficient context.
+Confuse data and
+control instructions, and process control
+instructions from untrusted sources.
+Fail to validate data explicitly and
+comprehensively.
+Fail to use cryptography correctly.
+Fail to identify sensitive data and
+how to handle it.
+Ignore the users.
+Integrate external components without
+considering their attack surface.
+Rigidly constrain future
+changes to objects and actors.
+We have considered flaws already in
+many of these various categories.
+So now we'll spend a little
+time considering a few more.
+The first design failure we'll consider
+results in authentication bypass.
+As one example of this,
+consider clients that are coerced
+to accept invalid SSL certificates.
+What's going to happen here,
+is that the client is failing to properly
+authenticate the server,
+because of the poor certificate.
+Keep in mind that SSL encrypts the
+connection to prevent eavesdroppers from
+seeing the communication
+between a client and
+a server, but SSL also,
+by using certificates,
+ensures that a client is talking to
+the server it thinks it's talking to.
+In other words, am I really talking to my
+bank or a site pretending to be my bank?
+The certificate tells you that it's
+the former and not the latter.
+Now, if an invalid certificate
+is presented to a client,
+a web browser should present a warning.
+Now we might wonder how many users
+will click through this warning.
+And that's a completely separate
+question of useability.
+However, we can also consider the case
+when the warning is not even shown.
+And this happens often times with
+mobile applications that use
+SSL behind the scenes.
+That is, they get an, an invalid
+certificate and now need to take action.
+Well, the action they should take is
+to give the user the opportunity to
+accept the connection or not, or
+to take some remedial action.
+Unfortunately, it turns out, according to
+research by Fahl et al, that many mobile
+applications fail to take any action and
+simply drop invalid certificates.
+This is because during development
+those developers often turn
+off SSL certificate validation, just to
+make it easier to test their applications.
+There's an important lesson here.
+Security is not a feature.
+We have to test not only
+what should happen,
+that you can connect to the correct bank.
+But, we need to test
+what should not happen.
+That is, if a bank provides an invalid
+certificate, we should not connect to it.
+Now as another example of a failure
+due to authentication bypass,
+consider authentication
+tokens with long time-outs.
+These motivate brute-force
+attempts to steal session cookies.
+Recall the Twitter auth_token failure that
+we discussed in the web security unit.
+On the other hand, making a time out
+too short, while improving security,
+will irritate users.
+So we have to find a balance.
+In general, a way to avoid authentication
+bypass is to develop good abuse cases.
+Consider what happens if we violate
+the assumption of unique knowledge, like,
+of a password, or unique possession,
+for example, of a key fob.
+How might an adversary learn a password,
+or
+spoof a biometric, or steal a session ID?
+Understanding these things help
+us builds better defenses.
+The next design failure we'll consider
+is bad, or wrong use, of crypto.
+I'll repeat what I said earlier.
+Don't roll your own crypto,
+whether algorithms or implementations.
+Instead use community resources
+both on the design and
+on implementation side to get it right.
+Another failure is to assume that a
+cryptoalgorithm that you do use gives you
+something that it doesn't.
+Encryption may protect confidentiality,
+but it does not always protect integrity.
+For example, if you encrypt something,
+someone maybe able to tamper with it and
+fool the party who decrypts it that
+you've said something that you didn't.
+Hashing on the flip side protects
+integrity but not confidentiality.
+So you could be sure no one
+tampered with your data but
+you can't be sure that they
+haven't seen what it contains.
+You also need to make sure
+that you use crypto properly.
+I've already mentioned once before,
+generating keys with
+insufficient randomness.
+You might also fail to generate
+keys of sufficient size,
+making your algorithm, your cyphertext,
+subject to brute force attacks.
+You need to also make sure you
+protect the keys from compromise.
+For example don't hard code them in
+binaries that your clients have access to.
+There's a lot to learn about cryptography,
+and
+we won't say much more
+about it in this course.
+But if you're interested, I recommend
+you check out Jonathan Katz's course on
+cryptography that's also part of
+the Coursera Cybersecurity specialization
+being offered by the University of
+Maryland's Maryland Cyber Security Center.
+The next design failure we'll
+consider is ignoring which data in
+your application is sensitive.
+Now it should go without saying that
+you need to think carefully about
+the sources of data that you're
+manipulating in your application.
+Which of these require protection?
+Obviously things like personally
+identifiable information or
+geolocation data due to sensor readings or
+cryptographic keys require protection.
+The problem is when you fail to identify
+data that requires protection and
+then expose it to general access.
+One example of this was the failure of
+the IOS designers in an earlier version
+of the iPhone back in 2011,
+to appreciate that
+geolocation data was being collected
+in a file called consolidated.db.
+This file ended up containing all of
+the locations that the phone went.
+Now this was not due to some
+Big Brother goal that, Apple had.
+Instead, it was just an oversight
+to remove the file or
+prevent it being captured on the phone.
+When considering the data sources
+that you may need to protect,
+you want to ask yourself,
+how are these data sources exposed?
+Are they exposed when the data is
+at rest or when in transmission?
+And what's the threat model?
+So if they're exposed at rest,
+you might want to encrypt them.
+If they're in, exposed in transmission,
+you might want to use an encrypted con-,
+connection technology like SSL.
+One possible failure for
+authentication is to embed
+an authentication token in an exposed URL.
+This fails to appreciate that an adversary
+could watch network traffic and
+see that exposed URL travel across the
+network, and thereby steal the session ID.
+Finally, we want to consider how data and
+its exposure changes over time.
+We can't just look at
+the application when we deploy.
+We have to look at each updated
+version of it to make sure that we
+continuously keep it secure.
+The last design failure we'll consider
+is ignoring the attack surface of
+external components.
+The attack surface are the elements of
+a system that an adversary can attack, or
+use in an attack.
+And the question is, when you build
+a system that involves third party
+components, how do these components
+contribute to my overall attack surface?
+Do they only do what I want and
+nothing else?
+Consider the recent shell-shock bug,
+which is a bug in the bash shell.
+Bash is often thought of as just
+a local shell that receives and
+processes commands.
+But it turns out to also be a third
+party component in other servers,
+like the Apache web server,
+which it uses to run CGI applications
+to generate dynamic content.
+It's also used by OpenSSH and
+DHCP servers.
+The failure here is that the bash shell,
+which is used by these sites,
+is far more powerful than necessary for
+these particular tasks.
+It really shouldn't have been
+used in the first place.
+As a result, a failure in bash now
+leads to a serious vulnerability in
+many network-facing servers.
+

@@ -1,0 +1,202 @@
+[MUSIC]
+How should we write software
+that will be secure?
+A flawed approach, would be to simply
+build the software while ignoring all
+security concerns,
+planing to revisit security later.
+There's no doubt that most
+of the time functionality is
+more important than security.
+We are writing software for a purpose.
+And we want the software's design
+to serve that purpose effectively,
+using efficient code,
+a nice user interface, and so on.
+But ignoring security at first
+means that security does
+not receive the attention that it should.
+And when the ship date arrives for
+our software,
+it shouldn't be surprising if the software
+has important vulnerabilities still in it.
+Therefore, a better approach is to build
+security in, right from the start.
+We want to incorporate
+security-minded thinking
+throughout the development process.
+As such, we can avoid missing
+important security requirements, or
+making critical security mistakes in
+the software design when the relevent,
+development activities are under way.
+That way,
+we won't discover problems at the end,
+when they can be very hard to fix.
+In this unit,
+we'll take a step back and look at the
+software development process as a whole.
+Since there are many
+processes in use today,
+from the traditional waterfall model to
+agile methods to combinations in between,
+we will focus on four common phases or
+activities that appear in all of them.
+The requirements phase involves
+determining what the software should do,
+and not do.
+The design phase looks at how to structure
+the system to meet these requirements.
+The implementation phase solves,
+involves actually writing
+code to implement the design.
+And the testing or
+assurance phase involves checking that
+the implementation actually
+does what it's supposed to.
+These phases recur in various
+guises throughout development.
+For example,
+they apply to the system as a whole and
+they apply to individual components.
+They may be reapplied
+as the system evolves.
+So, where does security minded thinking or
+said more actively,
+security engineering fit in.
+Well, all of these phases, of course.
+Throughout this unit,
+we'll look at several activities
+aimed at building secure software.
+During the requirements phase,
+we must consider security requirements
+that are specific to our security goals.
+To help, we should aim to develop,
+Abuse Cases that
+indicate potential security problems
+the software could experience.
+These Abuse Cases are informed
+by architectural risk analysis,
+which explicitly models the threats an
+attacker poses to a system, and considers
+the various ways under that model the
+attacker could try to compromise security.
+With the Security Requirements and
+risks identified, we can conduct
+a Security-oriented Design of the system,
+applying various tried and true principles
+and rules for securing that system.
+Once we have implemented some or part
+of this design, we can use Code Review.
+Ideally automated tools
+involved in that review,
+to try to find coding defects
+that could compromise security.
+We must also conduct a test plan which
+considers the risk of attack, and makes
+sure that a system can defend against
+the most likely, or most costly attacks.
+Finally, once the system, or particular
+components of it is fully constructed,
+we can make sure that it
+is secure end to end.
+Penetration testing looks at
+a system as an adversary would, and
+makes sure that the system really does
+resist attack as we expect it to.
+Note that in this course we're
+focusing on a system's software, but
+we should note that the hardware
+is also an important element of
+the design with respect to security.
+Software's strength is that it
+is malleable and easily changed.
+As such,
+last minute changes to design, and
+future improvements
+are easily accommodated.
+But this malleability creates
+a broader surface for attack.
+Hardware on the other hand,
+is very efficient, but
+it's also very rigidly defined.
+The cost of fabrication is such that
+it is simply not cost effective to
+make changes too often.
+But this rigidity is arguably good for
+security.
+Hardware is often carefully vetted,
+since mistakes are so
+expensive to correct, and as such,
+security mistakes occur less often.
+This immutability of the hardware,
+also makes the hardware harder to attack.
+In fact,
+hardware security advantages are such that
+security features are starting to
+show up in hardware more often.
+For example Intel's AES-NI instructions,
+implement fast and
+resilient symmetric cryptography.
+Intel has advertised
+a new chipset called SGX,
+that supports a kind of
+encrypted computation.
+Essentially code is encrypted
+until it is executed, so
+it can be hidden from prying eyes.
+The motivation is privacy on
+cloud computing platforms.
+There are also emerging
+hardware primitives,
+that software can use to
+implement strong security.
+For example,
+physically uncloneable functions, or
+PUFs, exploit the physical properties of
+chips as a source of strong randomness.
+This randomness is useful for
+cryptographic schemes, for
+example, to implement authentication.
+Intel's announced MPX extension
+provides primitives that
+compilers can use to implement
+memory safety more efficiently.
+If you're interested in learning more,
+I encourage you to check out
+Gang Qu's course on Hardware Security,
+it's also part of
+our cyber security specialization hosted
+by the Maryland Cyber Security Center.
+Gang is an expert in Hardware Security,
+and he's an Associate Professor in
+the Electrical and Computer Engineering
+department at the University of Maryland.
+Okay, to finish up the segment I'll
+briefly introduce an example that
+we'll return to at several times
+throughout the remainder of the unit, and
+that is online banking.
+In particular supposed we wanted to write
+software that allows account holders at
+a bank to have online
+access to their accounts.
+What requirements might we have for
+this application?
+Well obviously, we would like
+account holders to be able to
+deposit funds into their accounts.
+And we would like to prevent other
+people who are not authorized by
+the account holder from withdrawing those
+funds, say by initiating a bank transfer.
+We would like the account holder to,
+at whenever time they choose,
+access their funds by say withdrawing them
+or transferring them from their account.
+We don't want access
+prevented by a third party.
+And of course, we may have other
+security properties in mind,
+we'll see several as we go forward.
+

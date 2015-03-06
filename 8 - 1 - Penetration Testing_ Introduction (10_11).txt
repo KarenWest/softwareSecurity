@@ -1,0 +1,272 @@
+[SOUND]
+Penetration testing, or pen testing for
+short, is a direct assessment of the
+security of a complete software system.
+Its goal is to find
+evidence of insecurity,
+typically taking the form of
+exploitable vulnerabilities.
+Pen testing is a black hat activity done
+by so-called red teams or tiger teams, and
+employed for the good purpose of finding
+security defects prior to deployment.
+What is the target of a penetration test?
+The focus can be any of several
+different levels of a system made up
+of executable components.
+We can fuzz test single programs or we can
+look at complete applications, like web
+applications, consisting of communicating
+programs, the browser and server.
+We can even look at entire networks,
+looking for
+weaknesses that cross
+application boundaries,
+where one system could be exploited
+to then take advantage of another.
+In all cases, we're looking at
+whole programs, not parts thereof,
+like code fragments or
+configuration files, libraries and so on.
+Now who are pen testers,
+and how do they work?
+Well pen testers are teams
+that use guile and
+automated tools to find security issues.
+A good pen tester is creative,
+thinking carefully about how a system is
+put together to find assumptions
+that turn out to be weaknesses.
+Good tool support is essential for
+an effective pen testing engagement.
+As the pen tester comes up with
+hypotheses about potential weaknesses,
+tool support can be used to
+systematically probe a target and
+see if those weaknesses are present.
+Pen testing is carried about by the, late
+in the development process by a team that
+is different from the one
+that built the system.
+Having a separate team ensures that
+the target is given a fresh look.
+Developers can have blind spots
+about their own software and
+a separate team can help see past those.
+A separate team is also useful in that pen
+testing requires a specialized skill set
+and this skill set can be developed
+across multiple projects.
+The pen testing team may be told a lot or
+a little about the system that they
+are testing, and given a lot or a little
+access to its deployment environment.
+We might, on the one hand, try to simulate
+the access that an attacker should have.
+For example, only from outside a company
+firewall, via forward facing components.
+On the other hand,
+we might provide more access or
+information to model an attack
+by a company insider.
+In general, giving an adversary
+more powers gives a better
+idea of how the system holds up
+if some defenses fail to hold.
+That said, if the design was against a
+weaker threat model than it's being tested
+against, then it shouldn't be surprising
+that we'll find additional issues, and
+discovered issues should be assessed and
+kept in perspective.
+Pen testing has been around for
+quite a while.
+As computers were coming into wider use in
+the 1960s, time sharing operating systems
+emerged, which allowed multiple users
+to use a computer at the same time.
+Previously, computers were
+largely used in batch mode,
+running one program at a time
+which left no remnant behind.
+Time sharing with per user storage
+introduced new security challenges.
+In particular, operators were worried that
+one user might present a security risk to
+another user.
+As such, a task force of experts
+headed by Willis Ware of
+the RAND Corporation was
+formed to look at the issue.
+His team produced a report in 1967 that
+came to be known as the Ware Report.
+Many of the ideas that we have discussed
+in this class were first brought to
+light in the Ware Report.
+For example, the different
+categories of security policy,
+confidentiality, integrity and so on.
+Relevant to our current discussion,
+the report also used the term
+penetration to describe a successful
+attack on a computer system.
+By the 1970s, the government was regularly
+using teams to assess the security of
+computer systems by
+trying to penetrate them.
+These teams were referred to as red teams,
+or tiger teams.
+Today, penetration testing is a mature
+field, with services provided by
+independent companies, as well as
+divisions within larger organizations.
+Much of the buzz about cybersecurity,
+particularly among students,
+focuses around penetrations,
+which are gamified in CTF, or
+capture the flag competitions,
+like DefCon.
+There is also a penetration
+testing certification organized by
+the Information Assurance
+Certification Review Board, or IACRB.
+The certification is based on
+both conceptual material and
+a demonstration of skills by
+hacking into a target VM.
+Why should we do pen testing?
+Well, it has several benefits.
+First, penetrations are certain.
+After all, they have been demonstrated.
+Hopefully, they also come
+with some reusable evidence.
+For example, evidence of an SQL injection
+could be the exploit payload entered in
+a form field of a web application.
+As such, unlike errors produced by,
+say, code reviews or
+static analysis tools,
+penetrations are not hypothetical.
+By virtue of the fact that
+they are applied to whole,
+deployable components they are also
+relevant under realistic configurations.
+And, just as they are not hypothetical,
+they're not wrong.
+Penetrations are not, or
+are rarely, false alarms.
+Pen testing has non-technical
+benefits as well.
+One of them is a feel good factor.
+After completing an engagement those
+responsible for the target system can feel
+like they have really improved security or
+will soon once they fix the issues.
+And this is because they have found real
+vulnerabilities that probably would have
+gone unfixed and could really
+have been exploited in the wild.
+Before this point,
+such vulner, vulnerabilities were
+only hypothetical, not made manifest.
+Now on the other hand,
+penetration testing is not a panacea.
+We have to be careful not to assume we're
+getting more out of it than we really are.
+Most importantly,
+penetration testing will not find all of
+a system's security problems.
+As such, an absence of any
+discoveries does not imply
+the absence of vulnerabilities.
+Likewise, fixing
+vulnerabilities that were found,
+if any, does not mean that none are left.
+Penetration testers may not even have
+looked for certain sorts of problems,
+depending on the rules of the engagement
+and the assumptions of the threat model.
+Security, to the extent that pen testing
+has established it, is ephemeral.
+We cannot rest on our laurels.
+When you change the software, the
+configuration, the network topology, and
+so on, you potentially
+create new vulnerabilities.
+Why?
+Well, an important thing to keep in
+mind is that security, in general,
+is not compositional.
+This observation was first
+made by Leslie Lamport,
+recent Turing Award winner,
+back in the 1970's.
+What it means is that two components
+that are secure on their own
+are not necessarily secure
+when used in combination.
+Penetration testing looks at the whole
+system and that's its advantage, but
+subsequent changes might break a component
+and thus compromise the system.
+Even worse, a change to one component
+might not break that component, but
+could break the whole system anyway
+due to the lack of compositionality.
+As such, we must employ
+the other processes discussed in
+this course to reduce the chances as much
+as possible that we break components.
+And we must employ whole system testing
+to ensure that the composition works too.
+In short, despite its limitations,
+penetration testing is something
+very much worth doing.
+Okay, in the remainder of this unit,
+we're going to consider two parts.
+First, we present an overview
+of pen testing and
+the tools that are commonly
+used by pen testers.
+We will see that pen testing
+is both art and science.
+As an art form it relies on the creativity
+and ingenuity of the pen tester.
+As clearly successful techniques emerge,
+pen testing moves to becoming a science.
+And the fruits of this science
+are turned into tools and
+automation that subsequent
+pen testers can use.
+And we'll look at several
+tools in particular.
+First, Nmap is a tool for scanning
+networks, probing for computers and
+other devices that might
+be targets of attack.
+Zap, another tool to look at,
+is a web proxy that intercepts
+communications between a web browser and
+a web server, allowing the pen tester to
+see what's going on and to manipulate
+it looking for vulnerabilities.
+Third, metasploit is a tool for
+developing and deploying exploits.
+It is highly configurable with a tool
+kit that pen testers can use to find and
+exploit vulnerabilities.
+Now in the second part of the unit
+we'll consider fuzz testing or
+fuzzing, a technique that many pe,
+penetration testing yules, tools employ.
+Fuzz testing works by
+corrupting inputs and
+interactions between target components.
+The goal is to see whether such
+corruptions will cause the system to
+break in a way that could
+be exploited in an attack.
+And we'll consider several tools and
+techniques that have
+proven to be successful.
+

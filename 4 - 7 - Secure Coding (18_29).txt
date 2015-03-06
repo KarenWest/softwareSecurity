@@ -1,0 +1,470 @@
+[SOUND].
+While automated defenses are ideal,
+since they do not require
+changes to the original program,
+they cannot be completely relied upon to
+prevent exploitation of vulnerabilities.
+Therefore, as a complement to automated
+measures, developers should strive to
+avoid introducing vulnerabilities into
+their programs in the first place.
+Doing so
+can be achieved in at least two ways.
+First, developers can employ discipline,
+limiting themselves to coding
+patterns that avoid vulnerabilities.
+Such patterns are documented in
+coding standards like the CERT C
+coding standard or,
+other collected wisdom.
+Second, developers can also
+use advanced code review and
+testing mechanisms to find
+vulnerabilities prior to deployment.
+Such mechanisms employ techniques like
+static program analysis, buzz testing and
+symbolic execution.
+We will discuss these techniques
+in depth in a future module.
+In general, security conscious
+practices apply at both the Design and
+Implementation stages of
+a development process.
+Recommendations have two flavors,
+principles and rules.
+A principle, is a design goal with
+several possible manifestations.
+A rule, is a particular practice that
+follows from sound design principles.
+The difference between
+these is not hard and fast.
+For example, a principle might be,
+validate your input.
+How you do that is different,
+depending on the kind of input it is.
+That is, there are many possible rules.
+But, validate your input could itself
+be considered a manifestation of
+a principle of least privilege.
+That is, we would like to trust
+the input as little as possible.
+Nevertheless, the distinction
+is usually helpful.
+At this point we are going to look
+at several rules for good C coding.
+Following these rules will help
+us avoid vulnerabilities that
+could permit violating memory safety.
+In a later unit, we will look at secure
+development practices more broadly.
+The first rule we'll consider
+is Enforce input compliance.
+And to illustrate it, we'll use our
+earlier example of an ecoserver.
+So recall that the way that this works,
+is that it will read from standard input.
+First what it reads is an integer.
+So it will read a buffer
+up to a carriage return.
+Assuming it's not null, it will then
+call atoi to convert it to an integer.
+Next, it will read in another buffer,
+a message, up to the carriage return.
+And then, one character at a time,
+as long as it's not a control character,
+it will echo that
+character onto the screen.
+And then,
+finally print the carriage return.
+Now, the problem here is that length,
+the len field,
+could exceed the length
+of the actual message.
+And in this case we'll have a buffer
+overflow because we'll read
+whatever happened to be in buff,
+past its length beyond what was typed in.
+So the way that we can solve this problem
+is to enforce input compliance that is
+not trust that len is
+the appropriate length.
+Instead what we'll do is we'll compute
+length as either the minimum of this,
+length of the buffer that we read in or,
+whatever value the user typed in len.
+This way we're sure that we don't exceed
+the length of the actual buffer and
+therefore we won't release
+any sensitive information.
+Here's another example of
+enforcing input compliance.
+This function converts
+a digit to a character.
+So it takes the digit i,
+and then uses that i as an index
+into an array that has each digit.
+So when i is zero,
+it will get the first element of
+the buffer, which is the character zero.
+If i was five it would get the that
+offset into the character array and
+return the character five and so on.
+Now the problem is, i could be less
+than zero or greater than ten,
+greater than nine.
+And therefore read off the end of,
+of that buffer, overrunning it again.
+To solve this problem we can
+again Enforce input compliance.
+That if(i < 0 || i > 9),
+then we'll just return ?,
+instead.
+In general unfounded
+trust in received input
+is a recurring source of vulnerabilities.
+And we'll just continue to see examples in
+the course over and over again, where code
+assumes that input is well formed, and an
+adversary takes advantage of that trust.
+We want to apply a principle instead
+called Robust coding, and validating or
+enforcing input compliance is
+one element of that principle.
+You can think of it as
+like defensive driving.
+You want to avoid depending on anyone
+else around you to do the right thing.
+Instead you want to check at all times, or
+often enough, that something is the way
+you expect in order to minimize trust that
+whatever that other party is doing for
+you, that party is doing it the right way.
+So one way to realize this idea is
+to pessimistically check the assumed
+preconditions on outside callers.
+So we just saw this in the example with
+conversion by, instead of assuming that
+clients will always call convert with
+values between 0 and 9, we will check that
+that's the case, and throw an exception or
+return a different value instead.
+The next rule to consider is to use
+safe string functions rather than
+the unsafe versions.
+So gets, strcpy,
+strcat many of these routines assume that
+target buffers have a sufficient length.
+And here are two examples
+where that's not the case.
+We try to copy the string hello which
+takes six characters, the world hello plus
+the null terminator, into a buffer str
+that only has four characters of room.
+Or we do strcat into buf which has its
+first five characters taken up by the word
+find many more than the ten allowed in
+that buffer in the phrase day to you.
+The Safe versions are going to check the
+destination length that you pass in and
+therefore avoid this problem,
+so strlcopy and
+strlcat allow you to include the size
+of the target string and target buffer.
+So that the routines can check that
+the second strings you passed in
+aren't going to exceed that size.
+So, here are a bunch of the replacements
+for the unsafe string functions.
+Microsoft has its own versions
+that are slightly different.
+Strcpy_s, strcat_s, and so on.
+Another important thing,
+is to not forget the NUL terminator.
+Strings require one additional
+character to store the NUL terminator.
+And if you don't allocate space for
+it, then it could lead to overflows.
+So, here we might think oh, I'm going to
+store the string bye into the str buffer.
+Bye has three characters, so I should make
+the str buffer have three characters.
+But when we do that, str copy is going to
+add a fourth character, the NUL terminator
+at the end, which will overflow the stack
+will overflow the space allocated to str.
+So that's a right overflow.
+We'll also have a read overflow,
+when we call strlen on str.
+If instead we only wrote
+the three characters, and
+not the fourth character, because it
+will read past the NUL terminator.
+So using a safe string library
+will catch this mistake.
+Strlcpy will write the 0 terminator
+at the third position, so
+instead when we call strlen we'll get 2.
+That is the phrase the word
+B-Y instead of the word bye.
+So it's the wrong answer,
+but it's the safe answer.
+Another rule is to understand
+pointer arithmetic properly.
+Recall that the sizeof function
+returns a number of bytes, but
+pointer arithmetic multiplies,
+by the sizeof operator,
+on the type of the pointer
+that's being incremented.
+So here we have a little example where we
+have a buffer of integers of size SIZE.
+And we're iterating through it.
+And we've made a mistake by adding
+sizeof(buff) to the buf_ptr++.
+Sizeof(buff) returns bytes, but
+buff expects words to be added to it.
+So this is going to add four
+times as much length as,
+as really required, and
+therefore could potentially overflow.
+So we have to use the right units.
+Here we can do that by
+saying (buf + SIZE).
+SIZE is the size,
+it's the number of integers in the buffer.
+And therefore it is properly pointing
+to just past the end of the buf, and
+bounding it properly.
+Another mistake we will
+people might make is to
+have dangling pointers
+which can be exploited.
+And one way to defend against
+dangling pointer errors,
+even if you still make
+them is to null them out.
+So first, let's see what can go
+wrong with dangling pointers.
+In the program we have
+this variable x = 5.
+We malloc something into the pointer p, so
+the Heap here has some unallocated
+memory that's now allocated to p.
+We then free p, so
+now this memory is no longer active.
+Now while our memory safety definition
+would say you can't reuse memory,
+of course, a proper implementation
+may reuse memory, and
+an adversary could actually
+exploit that fact.
+So here we've allocated
+memory to the pointer q,
+which we assume is an int** pointer,
+that is a pointer to a pointer to an int.
+And maybe it turns out the malloc
+reuses the memory that p just used,
+and allocates it instead to q.
+Okay, so then we store into
+the location q the address of x.
+Now, we de-reference p, the dangling
+pointer, and store the value 5.
+Which is going to blow away the pointer
+that we had stored there into q.
+So that, when we de-reference
+the contents of what's pointed to by q,
+we're going to crash.
+In fact, we maybe do,
+far worse than crashing.
+Dangling pointers can be exploited for
+remote code injection.
+Basically you can imagine that if you can
+make a function pointer something that you
+overwrite through a dangling pointer,
+you can run into trouble.
+And in fact, it was a dangling
+pointer invalid pointer reference,
+that was exploited in a flaw that
+exploited some Google code back in 2010.
+Okay, so the way we fix this,
+is we can NULL after we free.
+So let's go through the steps again.
+Now, when we free,
+we're going to null out p.
+We'll continue on doing just as before.
+But now, where we wrote through p as
+a dangling pointer, we're going to crash.
+It's better to crash than it is
+to allow remote code execution.
+Another useful rule is to make sure
+that you manage memory properly.
+That is, you don't have memory leaks or
+otherwise say dangling pointers.
+And one way you can do that is you can
+use goto chains to avoid duplicated or
+missed code.
+This is kind of like try finally pattern
+that languages like Java have that
+C doesn't.
+So what we see in this case is that we
+have a couple of arguments that cause us
+to incrementally allocate some memory.
+So we allocate pf1, and then we check
+whether the first argument is okay.
+If it's not okay,
+we're going to go straight to DONE.
+Which is the label at
+the bottom of the code,
+which will then free
+that memory in return.
+Now if argument one was fine,
+we'll allocate into pf2.
+If argument two is not okay we'll go to
+FAIL_ARG2, that label instead, which will
+fail, which will free pf2, then fall
+through free(pf1) and then finally return.
+On the other hand you want to confirm
+that your logic is reasonable.
+If you mess up these goto chains you
+could end up avoiding checks that
+you shouldn't avoid, or
+doing redundant checks.
+And in fact Apples infamous
+goto fail bug was as
+a result of doing an improper goto chain.
+Now we've looked at the safe string
+library, strlcopy, strlcat and so on.
+But these libraries still recall
+that you still require that
+you call the functions properly.
+That is, you pass in the proper lengths of
+the, the target buffers for them to work.
+Instead, you might be better served by
+using a completely safe string library
+that can never have buffer overruns,
+no matter what mistakes you make.
+And in fact, this is the approach
+that's taken by Very Secure FTP.
+It implements a string library.
+Some of the,
+the API which is shown here on the slide.
+So basically it defines a new type called
+mystr and we can allocate a bunch of text.
+We can append to it.
+We can check where the strings are equal.
+We can see whether they contain spaces.
+And the internal representation
+of the string is hidden.
+But the way that it is implemented
+is that the length is known,
+doesn't rely on a null-terminator.
+And there's no way that you'll
+ever allocate past the end of
+the buffer because the buffer
+always comes with its length.
+C++'s standard string library
+also does something similar.
+In general, using safe libraries
+is a great way to make your
+program more secure because it allows
+you to reuse a well thought out design.
+Smart pointers is another example.
+These are pointers that only
+only permit safe operations and
+their lifetimes are managed appropriately.
+Just like with the safe strings where
+extra metadata, like the length,
+are kept with the string.
+Likewise, they are kept with the pointers,
+whether or not they are valid.
+All of that information is kept in
+the implementation of the pointer like in
+the Boost library for C++.
+On the networking side, you can use
+something like Google Protocol Buffers or
+Apache Thrift to make it easy to
+send network packets efficiently.
+And not worry about input validation or
+parsing or so
+on, the library will take
+care of all of that for you.
+It's not exactly a library because we
+think of it as a system feature, but
+it might as well be one, and
+that's using an allocator that's safe.
+Heap-based buffer overflows
+are still a problem.
+And one way to challenge those,
+to make it difficult to exploit them,
+is to make the address return
+by malloc unpredictable.
+In the same way that ASLR makes it hard to
+exploit stack smashing attacks because we
+don't know where the return
+address of the stack is.
+A randomizing malloc implementation
+makes it hard to guess what
+addresses are returned by malloc, and
+therefore makes it harder to exploit them.
+And there are a couple of options,
+the Windows Fault-Tolerant Heap,
+and for Window systems.
+And the DieHard allocator for
+Linux systems both implement this, this
+sort of safety by randomness approach.
+Okay, so that's all the rules that we're
+going to talk about for safe C coding.
+We'll get back to more on safe C design,
+in fact safe design overall,
+a bit later in the course.
+Let's finish up with
+with a fun poem that was
+written by Andrew Myers,
+called the Gashlycode Tinies.
+And it encapsulates a bunch of
+failures to follow important rules.
+It's inspired by
+the Gashlycrumb Tinies by Edward Gorey.
+A is for
+Amy whose malloc was one byte short.
+B is for Basil who used a quadratic sort.
+C is for Chuck who checked floats for
+equality.
+D is for Desmond who double-freed memory.
+E is for
+Ed whose exceptions weren't handled.
+F is for
+Franny whose stack pointers dangled.
+G is for Glenda whose reads and
+writes raced.
+H is for Hans who forgot the base case.
+I is for Ivan who did not initialize.
+J is for
+Jenny who did not know Least Surprise.
+K is for
+Kate whose inheritance depth might shock.
+L is for Larry who never released a lock.
+M is for
+Meg who used negatives as unsigned.
+N is for Ned with behavior left undefined.
+O is for Olive whose index was off by one.
+P is for Pat who ignored buffer overrun.
+Q is for
+Quentin whose numbers had overflows.
+R is for
+Rhoda whose code left the rep exposed.
+S is for
+Sam who skipped retesting after wait().
+T is for Tom who lacked TCP_NODELAY.
+U is for
+Una whose functions were most verbose.
+V is for
+Vic who subtracted when floats were close.
+W is Winnie who aliased arguments.
+X is for Xerxes who thought
+type casts made good sense.
+Y is for
+Yorick whose interface was too wide.
+And Z is for
+Zack whose code nulls were often spied.
+

@@ -1,0 +1,228 @@
+[SOUND]
+Symbolic execution was
+invented in the 1970s, but
+as I said before, it failed to take hold
+at that time as a commonly used tool.
+And this is because of limitations
+in both the algorithms and
+machine power available at that time.
+In the mid 2000s, two key systems
+triggered a revival of symbolic execution.
+And these systems were DART,
+developed by Godefroid and
+Sen and first published in 2005,
+and EXE, by Cadar,
+Ganesh, Pawlowski, Dill, and
+Engler, published in 2006.
+These systems demonstrated the promise
+of symbolic execution by showing it
+could find real bugs in interesting and
+complicated systems.
+And as such it spurred
+interested in the topic and
+many new systems have developed since.
+One important system that has made
+big impact in practice is SAGE.
+It is an concolic executor,
+developed at Microsoft Research, and
+grew out of Godefroid's work on DART.
+It uses the technique of generational
+search that we talked about before.
+SAGE primarily targets
+bugs in file parsers, for
+example parsers like jpg, Microsoft Word,
+Microsoft PowerPoint and other documents.
+And is a good fit for concolic execution
+because parsing files is likely to
+terminate and it only needs to consider
+input/output behavior rather than
+complicated and interactive system calls.
+SAGE has transitioned from research
+prototype to production tool.
+It's been used on production
+software at Microsoft since 2007.
+Between 2007 and 2013, SAGE was
+used remarkably often at Microsoft.
+For example, it's been run for
+more than 500 machine years as part of
+the largest fuzzing lab in the world.
+It's generated 3.4
+billion plus constraints,
+making it the largest
+SMT solver usage ever.
+It's been applied to hundreds
+of applications, and
+found hundreds of bugs that were missed
+by other bug finding techniques.
+For example, one third of all
+Win7 WEX bugs were found by SAGE.
+Bug fixes shipped quietly to one
+billion PC's around the world,
+saving millions of dollars both for
+Microsoft and the world.
+And SAGE is now used daily
+in Windows Office and
+all of the big Microsoft products.
+KLEE is another mature tool.
+In this case it grew
+out of the work on EXE.
+It symbolically executes LLVM bitcode.
+LLVM is a compiler framework that's
+now in regular use at Apple.
+It compiles source language programs to
+an intermediate representation called
+LLVM bitcode which is
+stored in a .bc file.
+And KLEE will run on the bc file.
+It works in the style of the basic
+symbolic executor that we saw before.
+Where it uses fork to
+manage multiple states.
+That is,
+rather than having an explicit work list,
+each time that it could go both directions
+on a branch it actually forks another
+version of itself which
+proceeds along that branch.
+And a separate tool manages
+all of the distinct copies of
+KLEE that are running at once.
+KLEE employs a variety of search
+strategies, primarily random path and
+coverage guided.
+And it mocks up the environment
+to deal with system calls and
+file access and so on.
+And you get it as part of
+the LLVM distribution.
+So looking at how KLEE actually works,
+in the original KLEE paper,
+published in 2008.
+They applied KLEE to Coreutils,
+which is the suite of small programs that
+runs on Linux and Unix distributions.
+So these are programs like mkdir and
+paste and sed and ls and things like that.
+What this graph is showing is
+the amount of coverage from KLEE
+generated tests compared to the manual
+test suite that comes with Coreutils.
+What this chart shows is
+that KLEE is better at
+testing than the manual test suite.
+And we make that determination by looking
+at the lines of code covered by tests.
+In particular the lines covered by
+KLEE tests when from them when we
+subtract the lines covered by manual
+tests we see that for all but
+nine programs KLEE covers more
+lines than the manual case.
+Here are a bunch of bugs
+that was found by KLEE.
+These are the command lines
+that produced the bugs,
+that caused these Coreutils
+programs to crash.
+Notably, the bugs involved
+very simple command lines, and
+very simple input files.
+And yet they went undetected for
+quite a long time before KLEE found them.
+So since these second
+generation tools of KLEE and
+SAGE, there have been
+further developments.
+One of them is the Mayhem system developed
+at Carnegie Mellon by Dave Brumley and,
+and his collaborators.
+And it runs on actual executables.
+That is binaries.
+Like KLEE it uses a breadth first
+search style search, but it
+also uses native execution, combining the
+best of symbolic and concolic strategies.
+And as an interesting twist,
+it will automatically generate
+exploits when bugs are found,
+to shine a light on the fact that these
+bugs could, in fact be security critical.
+In further developments
+from the Mayhem work,
+the same group produced Mergepoint,
+which uses a technique called veritesting,
+and in this case it combines symbolic
+execution with static analysis.
+What it does is use static analysis for
+complete code blocks.
+So it will analyze a straight
+line piece of code and in so
+doing basically convert it
+into a formula that can
+be used by an SMT solver to ask
+a question about the programs execution.
+It will use symbolic execution for
+hard to analyze parts of the program.
+In particular, loops which, for
+which it may be hard to determine
+how many times it will run.
+As well as, complex pointer arithmetic,
+and system calls, and so on.
+So this produces a better balance
+of time between the solver and
+the executor resulting in better bug
+finding, that is bugs are found faster and
+more of the programs are covered
+in the same period of time.
+Incredibly, Mergepoint found more
+than 11,000 bugs in 4,300 distinct
+applications in a Linux distribution
+including new bugs in highly tested code,
+like the Coreutils from KLEE.
+So there are many other
+symbolic executors.
+Cloud9 is basically a parallel KLEE.
+jCUTE and Java PathFinder
+are symbolic execution for Java.
+Bitblaze is a binary analysis framework,
+so
+like Mayhem it works
+on binary executables.
+And Otter is a symbolic execution
+framework for C, that is directing and
+that you can, tell it which line at
+the program you'd like to execute and
+it would try hard to get to those lines,
+when performing a search.
+Pex is a symbolic executioner for
+.NET programs.
+>> This unit delved into
+the details of symbolic execution.
+A powerful technology that can be used
+to find security critical bugs in
+real software.
+Symbolic execution can be viewed, on the
+one hand, as a generalization of testing.
+It uses static analysis
+to develop new tests that
+explore different program paths.
+We can also view it as
+a kind of static analysis.
+But one with very high precision and
+no guarantee of termination.
+And if it does terminate it's
+results are both sound and complete.
+Symbolic execution is used in practice
+today to find important bugs in
+production code.
+The SAGE tool is used
+heavily at Microsoft.
+And the Mergepoint tool regularly
+analyzes large Linux repositories.
+Symbolic execution tools of good
+quality are freely available.
+And we can expect that they,
+like static analysis tools,
+will penetrate more deeply into
+the main stream in the near future.
+

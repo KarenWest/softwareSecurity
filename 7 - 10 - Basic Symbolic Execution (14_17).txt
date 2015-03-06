@@ -1,0 +1,389 @@
+[SOUND].
+Now we'll look in greater detail
+at how symbolic execution works.
+We'll start with a typical
+programming language.
+Here we show a grammar of expressions,
+denoted by the letter e.
+Expressions consist of things
+like integers n, variables x.
+Expressions involving arithmetic
+operators like addition.
+And expressions involving comparisons,
+like disequality.
+To support symbolic execution, expressions
+also include symbolic variables.
+Which we denote with greek letters,
+like Alpha.
+Symbolic variables represent
+inputs to the program.
+These inputs could come from many sources,
+including reads from files or
+network sockets,
+memory mapped files or devices.
+Whereas normal tests must
+provide specific inputs.
+Symbolic execution models inputs using
+symbolic variables, and thus can explore
+how different executions are induced
+by different values of these variables.
+These values are discovered by solving for
+constraints generated during execution
+as we'll see in more detail shortly.
+>> Okay, now that we've defined
+our symbolic language we need to
+define its semantics.
+One way to do that is to make or
+modify a language interpreter
+that can compute symbolically.
+So normally a program's variables
+contain values, but for
+our symbolic interpreter they will also
+be able to contain symbolic expressions.
+Which are program expressions that
+make mention of symbolic variables.
+So as example normal values we have
+the integer five in the string hello.
+But as example symbolic
+expressions we have alpha plus 5.
+The string hello concatenated
+with some symbolic string alpha.
+The array index expression alpha plus beta
+plus 2 for indexing the array a and so on.
+So let's see how we use these symbolic
+expressions in an example execution.
+Here we have a simple
+straight line program.
+On the left-hand side we'll
+consider concrete memory,
+we'll look at how a concrete, that is
+normal execution of the program might go,
+and then we look at how it might go for
+our symbolic interpreter.
+So in the first line we perform the read.
+Let's say, for argument's sake,
+it reads the value 5.
+Next, we'll assign to y.
+What do we assign it?
+Well 5 plus the contents of x,
+which are 5, is 10.
+Next, we'll execute line three.
+Here we'll store 17,
+because 7 plus 10 is 17.
+And then finally we'll use z,
+17, to index the array a.
+Now notice here, we're assuming
+that a contains four values.
+So a sub 17 is off the end of the array.
+That is, it's an out of bounds access.
+Okay, now let's consider the symbolic
+execution of this program.
+Instead of returning a concrete value for
+x we will return a symbolic variable
+alpha and store it there instead.
+For y we can't store a value anymore
+because five plus alpha can't be
+further reduced, so instead y is assigned
+the symbolic expression five plus alpha.
+Next, we assign to z.
+Here, seven plus five plus alpha is
+12 plus alpha, so we store that.
+And then, finally, we use the symbolic
+expression, 12 plus alpha,
+to index z, and this could be an overrun.
+Of course, we just saw an example
+of one in the concrete execution.
+That is there is a solution for
+the expression 12 plus alpha
+that could create an index that,
+that is outside of a's bounds.
+We'll explain how we can
+find that in just a moment.
+Now as we saw with our overview example,
+program control can be
+affected by symbolic values.
+So if you branch on a symbolic expression.
+It could be that,
+depending on the solution of that,
+of the variables in that expression you
+could go either true or false or both.
+Here in this example we see that we
+read into x and then branch on it and
+so that's a branch on
+a symbolic expression.
+We represent the influence of symbolic
+values on the current path, that is
+the list of the branches we have taken,
+true or false, as a path condition pi.
+So as an example,
+line three is reached when the path
+condition is alpha is greater than 5.
+Line five, when alpha is greater than 5,
+and, because it's nested,
+alpha is less than 10.
+And line six,
+when alpha is less than or equal to 5.
+That is, we've taken the false
+branch in the case that we
+checked whether alpha was greater than 5.
+Alpha being the contents of x.
+Now whether a path is
+feasible is tantamount to
+a path condition being satisfiable.
+So here we list three path conditions for
+this program.
+It's a slight modification
+of the program we just saw,
+with a branch on line four,
+is x less than 3.
+So, we can see here that the path
+condition a, alpha greater than 5,
+alpha less than 3, is not possible.
+And, indeed this path
+condition is not satisfiable.
+There is no alpha such that
+both constraints hold.
+Now given a path condition, we can come up
+with a solution to the constraints in it,
+and these can be used as inputs
+to a concrete test case that
+will execute exactly that path.
+So, the solution to leach,
+reach line three could be alpha is 6.
+And a solution to reach line six,
+could be alpha is 2.
+Now assertions, like array bounds checks,
+are conditionals.
+So if we look at our original program,
+we can think of just prior to the index
+of the array a performing two
+checks to see whether the index expression
+z is within the bounds of the array.
+That is, is z less than 0, and
+is it greater than or equal to 4?
+If the answer is yes, we've gone out of
+bounds and we should abort the program.
+So we can think of our symbolic executor
+as inserting these extra statements, and
+then performing its normal process
+of generating a path condition.
+So along these first four lines,
+pi is true because there are no branches.
+Now to reach line five, it would have
+to be the case that 12 plus alpha,
+that is the symbolic expression we
+had stored in z, is less than 0.
+If we managed to get past this,
+that is we took essentially the else
+branch to get to the else case to
+get to line six, then we would have
+the negation of that path condition.
+To get to line seven, we would also
+have to check that z is greater than or
+equal to 4,
+that is 12 plus alpha is greater than or
+equal to 4, along with that negation.
+If that was not true, then the path
+condition wouldn't negate that as well,
+and to reach line eight,
+we would have this path condition.
+So, if either lines five or
+line seven are reachable; that is,
+paths reaching them are satisfiable,
+the path conditions are feasible.
+We have found an out of
+bounds array access.
+>> Whereas a normal execution must take
+either the true or false branch of
+a conditional, a symbolic execution
+could actually take both branches.
+This is possible because when a symbolic
+variable, or variables, appear
+in a conditional scarred expression, there
+could exist some solutions that would
+make the guard true, and
+some solutions that would make it false.
+As such, a symbolic execute, a symbolic
+executor could choose to go either,
+or both ways.
+How should it choose which and
+in what order?
+One point to make is that the executor
+doesn't immediately know whether the true
+or false branch or both is feasible,
+when it reaches a conditional.
+To know for sure it could invoke
+the solver to check the satisfiability of
+the path condition.
+If a path condition concatenated with
+the guard condition is feasible,
+then the true branch can be explored.
+Likewise if the negation of the guard
+is feasible then the false branch can
+be explored.
+However making calls to the solver,
+at each conditional can be expensive.
+So, one idea is to just pick on branch and
+go that way,
+delaying the feasibility check, at
+the risk of doing extra, unnecessary work.
+A related approach is to use concolic
+execution to determine the path to take.
+The idea here is to run the program
+concretely for actual inputs.
+But consider some of those inputs as
+if they were symbolic on the side.
+The concrete inputs which
+guarantee feasibility,
+determine which direction to go.
+The symbolic executor maintains symbolic
+versions of these expressions and
+the path conditional is usual.
+Which it then uses to
+generate subsequent tests.
+We'll say more about concolic
+execution a bit later.
+Okay, so now we can consider a symbolic
+execution algorithm as pseudo code, and
+it's very simple.
+First, we create the initial task,
+which is a triple.
+It consists of the program
+counter location, which is 0,
+the start of the program.
+The path condition pi, which starts
+out as empty, and the symbolic state,
+which also starts as empty.
+And we add that task onto the worklist.
+Now, while the worklist is not empty,
+we will pull some tasks from that
+worklist and we will execute it.
+Eventually we'll reach a point
+where that execution forks.
+And let's say the state at the point
+has the program counter at pc 0,
+the path condition at pi 0, and
+the symbolic state at sigma 0.
+And let's say the reason for
+the fork is a branch.
+Well, we're branching on p, at line pc 0,
+where the true branch is at pc 1 and
+the false branch is at pc 2.
+Well, in that case, what we'll do is
+we'll add the task pc 1, pie 0 and p,
+sigma 0 to the work list,
+as long as pie 0 and p is feasible.
+That is the current path condition
+when concatenated with the guard that
+contains symbolic variables.
+When that's feasible, then we have a
+legitimate task that we can execute and so
+we should add it to our list.
+We'll add the alternative, that is,
+going down the false branch in
+the case that not p is feasible when
+concatenated with the path condition.
+And notice here that we could add
+either or both tasks to the work list.
+So, we can keep on running until
+either the list becomes empty,
+in which case we've considered
+every path in the program.
+Or eventually, we get tired and terminate
+the program, say after some time out.
+Now, in a practical implementation,
+we have to consider not just
+the main program we're executing,
+but also libraries and native code.
+At some point, the symbolic executor will
+reach the edges of the application, and
+the interpreter won't be able
+to make further progress.
+So this may happen with a library, or
+the system calls, or assembly code, or
+something like that.
+So one thing we could do is,
+we could actually pull that code in
+two and symbolically execute it.
+So for example,
+if we're symbolically executing c code,
+we could symbolically execute the c code
+that implements the standard libraries.
+But real implementations of the standard
+libraries are often very complicated and
+they might involve assembly code and
+stuff like that.
+And so a symbolic executor will often
+get stuck running around loops and
+not making any progress
+getting out of that library.
+So you could use a simpler version
+of the library instead that's still
+semantically accurate.
+Or you could create a model of
+the code that you want to execute.
+For example, you could create a model
+of a RAM disc to model the kernel
+file system code, rather than trying to
+say symbolically execute the Linux kernel.
+So let's return to the idea of
+concolic execution I mentioned before,
+this is also called dynamic
+symbolic execution sometimes.
+And the idea here is, instead of
+running the program according to
+the algorithm that we just saw a moment
+ago, we run the program concretely, but
+we instrument it to sort of do
+symbolic execution on the side.
+That is, the instrumentation maintains
+some shadow concrete program state
+with symbolic variables.
+The initial concrete state is going
+to determine the path that we take so
+it could be randomly generated.
+But we will keep track of the choices
+we made when guards involve our
+shadow symbolic variables.
+So we can build up a path
+condition along the side.
+So, a concolic executor will explore one
+complete path at time, start to finish.
+And once it's done so it can determine
+the next path to explore by simply
+negating some element of
+the last path condition.
+And then solving for that path condition
+to produce concrete inputs for
+the next test.
+While we're symbolically executing
+using concolic execution,
+we'll always have the concrete
+underlying values to drive the path.
+But these turn out to be
+useful in other ways too.
+That is, the process of concretization
+is very easy in a concolic execution.
+And what I mean by concretization is
+replacing symbolic variables with
+concrete values that
+satisfy the path condition.
+Basically we're going to
+drop symbolic-ness and
+potentially miss some paths.
+But we're going to simplify our
+symbolic constraints by doing so.
+So this allows us, for
+example, to do system calls that
+might involve symbolic variables.
+We just pick reasonable
+concrete values for
+those variables and do the system calls.
+In so doing, we lose the symbolicness but
+we're able to continue to make
+progress in trying to find bugs.
+Replacing symbolic values
+can also be useful when so,
+SMT solver calls might be too complicated
+if we left all of the values in.
+

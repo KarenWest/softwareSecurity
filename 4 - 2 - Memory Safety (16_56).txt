@@ -1,0 +1,416 @@
+[SOUND]
+Memory safety is a property
+of a program execution.
+A program execution is
+memory safe if firstly,
+it only ever constructs valid pointers.
+Valid pointers are those returned by
+malloc, the standard heap allocator, or
+those created by legal language
+operations like ampersand or
+the address of operator,
+as well as point arithmetic.
+The second condition for memory safety is
+that a program does not use a pointer p to
+access memory that does not belong to p.
+This notion of belonging is something
+that we'll consider shortly.
+The first condition roughly corresponds to
+a property we can call temporal safety.
+The second is one we call spatial safety.
+We'll explain these terms now,
+considering spatial safety first.
+But before we do, one aside.
+Sometimes, we will speak about memory
+safe programs and memory safe languages.
+A program is memory safe if all of
+its possible executions, that is,
+executions over all possible inputs,
+are memory safe.
+A language is memory safe if all
+possible programs that can be
+written in that language are memory safe.
+Which sense we mean when using
+the term should be clear from context.
+Spacial safety means that accesses
+by a pointer should only be to
+memory that the pointer owns,
+which is to say that belongs to it.
+We conceptualize this idea by viewing
+a pointer as a triple, p, b, e.
+Here, p is the address of the memory
+that the pointer points to,
+b is the base of the memory
+region that the pointer owns, and
+e is the bounds or
+extent of that memory region.
+That is, the address of the end
+of that region that b starts.
+Dereferencing a pointer is allowed,
+which is to say is spatially safe,
+when p falls between b and e.
+The bounds on the memory region are
+determined by the argument to malloc or
+by the size of the ar,
+of the object whose address is taken.
+Pointer arithmetic only affects p,
+incrementing or decrementing that element,
+but not b and e.
+The bounds stay the same.
+This prevents one from dereferencing
+a pointer that by pointer arithmetic, for
+example, goes outside its bounds.
+Now let's look at some examples.
+Here we've declared a variable x.
+We assume that integers are size 4 on this
+platform, that is, 32 bits or 4 bytes.
+All right, next we take the address of
+x and store it into the variable y.
+Now, according to our definition,
+we can think of y,
+the pointer, as a triple, where p is the
+actual pointer, which is the address of x,
+b is the base of the memory
+region into which that points,
+which is also the address of x,
+and the extent is x plus 4.
+That is, x plus the 4 bytes
+that the variable consumes.
+Next, we store to z y plus 1.
+Now, pointer arithmetic increments
+the address by the number given,
+1 times the size of the memory.
+Hence our 4 bytes and so,
+p is incremented by 4, as is shown here.
+As we mentioned already,
+the base and extent are unchanged.
+Finally, we dereference
+y to assign the value 3.
+Now, y is perfectly legal to deference
+because the current pointer p is within
+the base, which is also the same address
+as p, and the bounds minus the size.
+The condition that needs to be satisfied
+is here, shown in the comment.
+On the other hand, dereferencing z
+is a violation of memory safety and
+that's because p is outside the bounds.
+That is, while it is greater
+than the lower bound b,
+it is now not less than or equal to
+the upper bound, x plus 4 minus 4.
+And this makes sense it's gone
+off the end of the memory region.
+Okay, let's consider another example.
+We have defined a struct foo
+that has two fields, a buffer,
+which is a character array of size 4,
+immediately followed by an integer.
+Okay, we'll first declare a value of
+struct foo and initialize it to cat and 5.
+Sticking the cat string there will serve
+to initialize the four characters to
+C-A-T and then the null terminator.
+Next, we'll take the address
+of that first field and
+store it into the character pointer y.
+Now in this case, p and b are again
+initialized to the start of that buffer.
+And because the buffer is 4 bytes,
+each character is 1 byte and
+the entire buffer is 4 bytes, then
+the extent is the starting address plus 4.
+Okay, next we can store
+into y at the third value,
+the third index, the character s.
+And this is going to be fine
+because the pointer that
+we've constructed basically adds 3 to y.
+And so, p is f.buf plus 3 and it's less
+than the bounds, so everything is fine.
+On the other hand,
+if we did y of 4, then this is
+no good because now we've incremented past
+the memory region associated with buf.
+And in effect, this is going to cause
+us to modify the field x, assuming
+there's no padding or, or something
+else the compiler has put in the struct.
+But for the purposes of our model,
+for memory safety,
+this is a memory safety violation
+whatever the compiler might end up doing.
+Here's a more complicated example,
+fully visualized to show you
+the relationships of all these pointers.
+So here we have a struct foo
+that has two fields, x and
+y, and we have a character pointer pc for
+pointer to character.
+We allocate one of these struct
+foos by calling malloc and
+we initialize its values.
+So we initialize x to 5, y to 256,
+and we initialize the pointer to the
+character to the constant string before.
+Now, if we look at the picture on the
+right, we can see that pf, it's a triple.
+The p part of it points to this buffer
+that's shown here in the middle that was
+returned by malloc, and you can see
+the first, the int x, which is 5,
+the int y, which is 256,
+and then we see another triple that
+represents the character pointer pc.
+The base and extent contain the string
+before with the null terminator, so
+that's why we see those pointers there.
+But the second to last line of
+the program, we've incremented pc by 3 and
+that's caused the p pointer
+to move to just before o,
+to point at the o character
+inside the string.
+We've also modified px.
+Sorry, we've taken the address
+px of the pf arrow x field and
+we've shown that there at the top,
+the upper right,
+to show that it's pointing to also
+the first field of that struct.
+Notice here though that the base and
+extent are different than they were for
+the struct pointer itself.
+And that's because by taking
+the address of x, x is an integer and
+that's of size 4.
+And so, the extent should only
+consider the memory for that field and
+not the memory of the entire struct for
+purposes of memory safety.
+A buffer overflow is a violation
+of spatial safety according to
+our definition.
+Let's have a look at this copy function.
+It takes two pointers, src and
+dst and the purported length,
+len, of those two pointers.
+And then byte by byte,
+it will copy from src to dst.
+Now, a memory safety violation will occur,
+i.e.
+a buffer overflow,
+if src is read past its legal extent.
+This could happen if len is greater than
+the extent of the pointer, pointed to by,
+of the region pointed to by src.
+At the same time, a buffer overrun could
+happen if dst is overrun and again,
+this could happen by
+writing to dst past its
+length because the len field is
+again too long for the dst argument.
+So, overrunning the bounds of the source
+or destination implies either src or
+dst is illegal or alternatively, that len
+is illegal, that is, it is too large.
+Format string attacks also exploit
+a violation of memory safety.
+We can think of the buf format string as
+defining the expected extent of the stack.
+Here in this example, there are three
+format specifiers for integers and
+this implies that we expect printf to
+be called with three pointer arguments.
+Sorry, three int arguments,
+x, y and z, say.
+Now, because in this particular case,
+we did not call them with those things,
+then when printf goes to access
+beyond the bounds of its stack frame,
+it would have violated memory safety
+because we can think of that stack
+frame as defining the legal extent of
+memory that that function printf can use.
+But that this format string
+has induced printf to
+read beyond the end of
+the allocated stack.
+So this is essentially
+a kind of buffer overflow.
+Now let's consider temporal safety.
+A violation of temporal safety occurs when
+a programs accesses
+memory that is undefined.
+Undefined memory is memory that
+has never been allocated or
+was previously allocated but is now freed.
+We also consider uninitialized
+memory to be undefined.
+While spatial safety ensures that we
+will access memory regions that we're
+legally allocated, temporal safety
+ensures that they are still allocated and
+initialized when
+the program accesses them.
+Thus, freeing a pointer with
+the free library call and
+then dereferencing it is
+a violation of temporal safety.
+Or returning the address of a callee's
+local variable to a caller,
+which then dereferences it,
+is also a violation of temporal safety.
+Our definition assumes that the memory is
+never reused and is conceptually infinite.
+As such, according to the model,
+one memory, once memory is freed,
+it becomes permanently inaccessible.
+Dereferencing pointers to freed memory
+is a temporal safety violation.
+Now, back to reality.
+Our definition thus rules out
+allocating memory to a pointer p,
+freeing that memory,
+reallocating it to another pointer q,
+but then dereferencing via the pointer p.
+Now let's look at some examples.
+Now, temporal safety implies that
+we will not have any dangling
+pointers because accessing a freed
+pointer would violate temporal safety.
+To see what I mean,
+let's look at this little program.
+First, we call malloc to allocate
+an integer and store it in the pointer p.
+We assign the contents of p to 5 and
+then we free p.
+At this point, it's no,
+p is no longer a legal pointer and so
+we should not be allowed
+to dereference it, but
+here we are attempting to by passing
+its contents to printf, a violation.
+Inside of printf, it will dereference p,
+but the memory that p
+pointed to is now no longer legal and
+therefore a temporal safety violation.
+Accessing uninitialized pointers
+is similarly problematic.
+Here we have an uninitialized pointer p,
+which we try to assign to, and
+violation of temporal safety.
+Integer overflows are allowed as long as
+they are not used to
+manufacture an illegal pointer.
+So, let's look at a function
+that illustrates how such
+an illegal pointer might be
+constructed from an integer overflow.
+So we start off with
+a short integer variable.
+These are assumed to be 2 bytes and so,
+the maximum unsigned value is 65,535.
+As a result, incrementing x by 1
+overflows and so, now x becomes 0.
+When we print x,
+it will print 0, perfectly memory safe
+even though an overflow has taken place.
+On the other hand,
+if we then tried to malloc using x as
+the length of the buffer to malloc,
+we would be allocating a size-0 buffer.
+Now, some memory some malloc
+implementations may check to see
+whether the argument is non-negative or
+positive only.
+But actually, few do and they will
+happily return back a size-0 buffer.
+As a result, when we assign to
+the first index of p some value like a,
+we have now violated memory safety.
+So, integer overflows happen often
+enough to enable buffer overflows,
+a violation of memory safety, often enough
+that we often think of them as their own
+independent source of bug, but what I'm
+attempting to show here is that intinger,
+integer overflows in and of themselves
+are not necessarily vulnerabilities.
+Instead, they are commonly used to exploit
+other vulnerabilities in the program.
+All of this discussion
+ultimately is about C and C++.
+Why?
+Well, because essentially every
+other high-level language you've
+heard of is memory safe.
+Here, I'm talking about object-oriented
+languages like Java, Python, C#, and
+Ruby, or functional languages like Scheme,
+Haskell, and
+O Caml, and even relatively new
+languages like Scala, Go, and Rust.
+In short,
+you get a big boost of security simply by
+using a modern language
+instead of using C or C++.
+Now that said,
+there is no doubt that C is here to stay.
+It is a big part of legacy systems and
+most programmers know how to use it.
+Therefore, it's no surprise that C and
+C++ are among the top five most popular
+programming languages even today,
+according to a recent
+study done by the IEEE.
+Can we have our cake and eat it too?
+That is, can we compile C so
+that it is memory safe?
+Research over the past 20 years
+has aimed to do just that.
+One way to do this is directly
+implement the memory safety model we
+just introduced.
+In particular, the compiler can introduce
+a fat pointer representation similar to
+our p, b, e triples.
+Then, it can enforce memory safety
+at runtime, just like Java, C# and
+other languages do.
+Unfortunately, most memory safe C
+implementations are too slow for
+production use.
+In some cases, they impose orders of
+magnitude overheads to normal execution.
+More performant approaches reject uncommon
+but per, popular C programming idioms.
+Fortunately, the situation is improving.
+CCured, for example, a system
+developed in 2004, could compile most
+C programs with few changes, but it would
+introduce high overhead in that case.
+This overhead could be reduced
+by making many refactorings to
+the program that ultimately
+the compiler was happy with.
+Softbound, a system
+developed starting in 2010,
+was able to do much better,
+requiring essentially no changes and
+inducing far less overhead
+than CCured in that case.
+On the horizon,
+Intel's MPX hardware extensions will
+permit implementing Softbound-like
+functionality, but in hardware.
+The result will be much
+better performance,
+perhaps to the point that memory safe
+C will finally become a reality.
+And this would be good for security.
+Imagine, no more buffer overflows,
+no more dangling pointer dereferences,
+no more format string attacks,
+an end to the eternal war in memory.
+

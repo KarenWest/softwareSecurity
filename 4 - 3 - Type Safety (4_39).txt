@@ -1,0 +1,124 @@
+[SOUND]
+As
+we mentioned earlier, modern languages are
+not just memory safe, they are type safe.
+What do we mean when we say that?
+In a type safe language,
+objects are ascribed a type.
+Like int, pointer to int,
+pointer to function, and so on.
+Type safety ensures that operations on
+the object are always compatible with
+its type.
+That is, they're not undefined.
+An example of undefined behavior is what
+happens when you're overrun a buffer in C.
+In this case, the behavior is undefined.
+The C standard would allow
+literally anything to happen.
+Here's a program that shows an example
+of a type safety violation that is
+not also a memory safety violation.
+It takes an integer pointer and
+casts it to a function pointer,
+which it then calls.
+Doing so is a legal memory access.
+But it uses that memory at the wrong type.
+No type safety.
+Type safety applies to so-called
+dynamically typed languages too.
+These are languages like Ruby or Python.
+For these languages,
+there is essentially one type called
+dynamic that all objects have.
+An operation on an object like a call or
+an index necessitates a coercion to see
+whether the object allows that operation.
+If not, it throws an exception,
+which while perhaps undesirable,
+is not undefined.
+Types are often used to enforce
+invariants about a program.
+Compatibility with operations
+like function calling and
+array indexing is one kind of invariant,
+but there are others.
+One common use of types is
+to enforce data abstraction.
+A module enjoys this property
+if it is able to keep its
+representation hidden from
+the rest of the program.
+As such, we should be able to change
+the internal representation of
+a module without
+the module's users knowing,
+as long as the semantics visible
+to those users is the same.
+Some languages have a special type
+systems specifically developed for
+enforcing security properties.
+A type correct program in such a language
+is sure to not violate that property.
+One example of such as language is JIF,
+which stands for
+Java with Information Flow.
+In JIF, types are augmented
+with security labels that
+describe policies protecting data.
+In this example,
+the label on the type of variable x
+says that Alice owns the data and
+Alice allows Bob to read it.
+The label on the type of
+y says that Alice and
+Chuck own the data, and Alice,
+again, allows Bob to read it.
+As such, the first assignment is legal,
+since y's policy gives more
+access than x's policy.
+Essentially, it is safe to
+reduce the level of access,
+which will happen when assigning to
+a variable with a stronger policy.
+On the other hand, the assignment of
+x to y is illegal because doing so
+would expand the allowed
+accesses of the data stored in x.
+The research community has developed
+many other interesting security type
+systems too.
+Now, if type safety is so great,
+why do people keep on using C and C++?
+Well, one reason is that C and
+C++ are often chosen for
+performance reasons, and type safe
+languages tend to have worse performance.
+This is because type safety is
+often assured by mechanisms like
+garbage collection, bounds checks,
+and abstract representations.
+These mechanisms make programming easier
+and programs easier to reason about, but
+they add overhead both in memory and
+in time.
+That said, a new generation
+of language is emerging that
+provide type safety while aiming for
+good performance.
+For example, Mozilla's Rust programming
+language permits a programmer to
+avoid the use of garbage collection
+in certain circumstances.
+And in any case, frankly, few programs
+require the extra performance that C and
+C++ provide.
+Programmer productivity due to programming
+convenience is often more important.
+And it certainly helps that type safe
+languages are more secure than C and C++.
+We can hope that that one day, the memory
+errors of C will be behind us and
+perhaps type safe languages
+will be the reason.
+

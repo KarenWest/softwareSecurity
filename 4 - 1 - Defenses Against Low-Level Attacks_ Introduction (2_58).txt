@@ -1,0 +1,77 @@
+[SOUND]
+In the previous module, we looked at
+several low-level vulnerabilities found in
+CE and C++ programs.
+And we looked at how these vulnerabilities
+can be exploited using techniques like
+stack smashing and format string attacks.
+These attacks had two elements in common.
+First, the attacker was
+able to determine or
+influence some input data
+that was used by the program.
+For example, the attacker might have input
+the data as part of a web request to,
+to a remote server.
+Second, the attacker was able to carefully
+crack that data to induce the program to
+access memory illegally, contrary to
+the intentions to the programmer.
+For example,
+the input might have been too big and
+thus would over run a buffer
+it was copied into.
+Or the input might have been ill-formed.
+Indirectly causing the program to read or
+write arbitrary locations on the stack or
+heap.
+In this module,
+we will look at how to defend against
+low level memory based attacks.
+First, we will see how low
+level attacks are violations of
+a property called memory safety.
+We will define the property carefully and
+show how various attacks violate it.
+The C and C++ programming languages
+are not memory safe by default.
+But we will briefly consider
+means of making them so.
+Next, we will look at
+some automatic means to
+defend against attacks that
+are memory safety violations.
+These defenses do not require
+changes to the source program.
+Instead, they affect how
+a program is compiled or
+how it is run by the operating system and
+the hardware.
+We will look at two defenses in
+particular, which are now quite common.
+Stack canaries and address space
+layout randomization, or ASLR.
+Unfortunately, these two
+defenses can still be overcome.
+In particular,
+they can be bypassed by a technique called
+return-oriented programming, or ROP.
+We will look at how ROP attacks work.
+And then we will look at a defense
+called Control Flow Integrity,
+or CFI, that can defeat ROP attacks.
+CFI is still an experimental technique,
+but it shows promise and
+so it is worth considering.
+None of these defenses is perfect,
+not even CFI,
+at defeating attacks on memory safety.
+As such, we conclude by
+considering a variety of rules for
+writing more secure C programs.
+Such rules are one example of more
+general secure development principles.
+We will consider these principles and
+elements of a secure development process
+in a future module of this course.
+

@@ -1,0 +1,309 @@
+[SOUND]
+The sequence of defenses
+we have considered so
+far, track a game of cat and mouse.
+First, to prevent stack smashing attacks,
+which involve injecting code
+into stack allocated buffer.
+Defenders make the stack nonexecutable,
+then attackers figured out that they could
+effect attacks without injecting new code.
+Just by jumping to libc.
+And in particular using
+the existing system command.
+To prevent this defenders
+attempted to hide the address of
+libc functions as well
+as the return address.
+By using address space layout
+randomization, or ASLR.
+However, attackers can
+effectively search for
+the hidden address on 32-bit systems
+even by using brute force techniques.
+Moreover, they can effect information
+leaks to send back the hidden address.
+One way to perform such a leak is
+to use a format string attack to
+reveal the contents of the EBP
+register pushed onto the stack.
+This register points to the stack and
+can thus reveal its basic location.
+Similar leaks can be used to
+recover heap addresses, and
+mechanisms aside from format
+string attacks can be used, too.
+For example, read based buffer
+overflows as in the Heat Bleed book.
+Now one idea to mitigate such problems
+is to simply not include ellipse code
+that the application does not need.
+For example, if the system library
+call is not needed, don't include it.
+Unfortunately, even this approach or
+the absence of information leaks.
+Is unlikely to work with the advent
+of what is now called return oriented
+programming, or ROP.
+So return oriented programming
+was invented by Hovav Shacham in
+2007 in an academic paper.
+And the idea is that rather
+than use a single say,
+libc function to run your show code.
+You can string together pieces of
+existing code, which he called gadgets,
+to do it instead and the challenge is
+to find the gadgets that you need and
+you need a way to string them together,
+So here's how you do it.
+First, gadgets are instruction groups
+that end with a return instruction,
+and the stack serves as the code.
+In particular, the esp.
+Or stack pointer acts as
+a kind of program counter and
+gadgets are invoked one after
+the other by a return instruction.
+And that's why each gadget ends
+with a return instruction.
+It basically is saying please
+send me to the next gadget.
+Gadgets will get their
+arguments by a pop and
+so on, which will also be
+stored on the stack between.
+The addresses of the gadgets themselves.
+So let's look at a simple example.
+In the upper right,
+we see a normal code sequence.
+The instruction move five
+into the edx register.
+And now we'll construct a gadget to
+perform this instruction instead, or
+I should say the equivalent
+of this instruction.
+Now suppose in the text segment
+in my program I happen to
+have the code sequence pop
+%edx followed by return.
+And address 17f.
+Maybe this is the final bit
+of an existing piece of code.
+Could be the middle of
+a piece of a function.
+Could be the end of a function.
+Could even be starting from the middle
+of an ad, of an instruction,
+that is interpreted differently in order
+to become a POP, and then a return.
+Doesn't matter.
+Okay, so I can set up the stack
+to be my sequence of instructions
+where the stack pointer pointing at
+the top acts as a kind of program counter.
+And I'll astern,
+assume that the instruction pointer
+is about the execute a return.
+So this is what normally would
+happen in stack smashing.
+We would.
+Hijack the return address,
+we would overrun a buffer so that function
+returned, the return address that we
+modified would go and do something else.
+So let's imagine we were
+in that situation now and
+the stack pointer is pointing to what
+maybe should have been the return address,
+but it's now instead a pointer
+to our gadget at 17f.
+In addition on the stack we
+also have the number five and
+we have a pointer to the next
+gadget after we execute this one,
+but we won't worry about
+what that gadget is.
+Okay, so the return is executed.
+That's going to cause us to pop off 17f,
+and jump to it, make the instruction
+pointer point to that location.
+So, now the stack pointer points to 5 and
+the instruction pointer points
+to the pop instruction.
+So, now when we execute that,
+we will pop 5 off the stack into edx.
+At this point the instruction
+pointer points to return.
+Return will pop off the top of
+the stack which we have arranged to
+point to our next gadget.
+This gives you an idea of how you can
+string different gadgets together.
+So let's illustrate that.
+Here's a code sequence
+of three instructions.
+We'll just look at how we execute
+these instructions normally.
+And then we will see the equivalent
+done using return oriented programming.
+So here we have the instruction pointer.
+It's going to load from
+the contents of the stack regis,
+the current stack pointer.
+So it'll be five into eax.
+The next thing that we'll do is we'll
+move esp minus eight which will be
+the value 404 into ebx.
+And then finally we will store
+the contents of eax five into
+the memory pointed to
+by the contents of ebx.
+That is location 404.
+Which we've also depicted in
+memory in the lower left.
+So, we'll now write five
+to that memory location.
+Now suppose this was part of our nefarious
+plan to take over the program, but
+we couldn't inject the code
+that I've shown here directly.
+Instead we need to string it
+together using gadgets, so
+here are some gadgets
+we could use instead.
+Suppose that at 17F we have a gadget
+like the one we saw before.
+Here we're popping into eax and then we
+have another gadget that pops into ebx and
+then finally we have a last
+gadget at 21a that at least at it
+start moves eax into
+the address stored at ebx.
+And we've also arranged the stack so
+the top of the stack is sort of
+the argument that we're going to pop.
+And then the pointer to the next
+gadget 20d and its argument 404 and
+then finally a pointer to
+the next gadget which is 21a.
+And so you can see each one of these
+gadgets is sort of corresponding to
+one of the instructions that
+we looked at a moment ago.
+Okay so let's start things moving.
+Will execute the pop instruction,
+which pulls out the contents of 5 and
+sticks them into ex.
+And then we return, which will pop 20d so
+that the instruction pointer goes to 20d.
+Now we will pop into ebx 404.
+And we will return,
+going to the next gadget, which is at 21a.
+Now we can execute that,
+which will load the contents of eax,
+which are 5, into the memory
+pointed to by ebx, which is 404.
+So we can think of return
+oriented programming as kind of
+like a ransom note but
+instead of cutting out letters from
+magazines you're cutting out
+instructions from the text segment.
+Now we've shown how to string gadgets
+together but we haven't said,
+"Well how do I know where
+the gadgets are in the first place?
+I need to find them to construct and
+exploit.
+What we can do is automate
+a search of the target binary for
+gadgets in advance of
+constructing the exploit.
+In particular we can
+disassemble the binary and
+hunt around for return instructions.
+Once we find a return instruction,
+we can move one instruction back
+to find what proceeds that.
+And eventually create a set of all of
+the possible gadgets in the program.
+Now you might rightfully be wondering
+are there sufficient gadgets that we
+can find using this method
+to do anything interesting.
+And the interesting thing is indeed.
+There are in fact enough gadgets to
+construct Turing complete programs,
+that is you can essentially do what you
+like in most interesting programs and
+this is especially true on the x86's dense
+instruction set because many gadgets can
+be found sort of within.
+Particular instructions that aren't on
+their designed instruction boundary but
+somehow are in the middle of them
+interpreting their bites differently.
+And in fact, Schwartz et al,
+in there USENIX Security paper have
+automated the gadget
+shellcode creation and, but
+on the other hand they don't need
+Turing completeness to do this.
+In fact, it gets even worse than
+the way I was describing it.
+You can imagine that by randomizing
+the location of the code,
+using something like ASLR,
+is going to make it hard for
+you to do return oriented programming.
+Many of the most recent published attacks
+are for 32-bit versions of executables.
+So how can we defeat ASLR to know
+where the gadgets will be for
+any particular program executable?
+And one answer is to use a technique
+called blind ROP that was introduced this
+year at the IEEE security and privacy
+conference in, this year being 2014.
+So the idea here is that if
+a server restarts on a crash but
+does not re-randomize.
+Then we can read the stack to leak
+stack canaries and a return address.
+We can find gadgets (at run-time)
+that effect a call to write.
+And then we can dump
+the binary to find gadgets for
+the shellcode using
+that write system call.
+So in other words, we take a few
+steps prior to the attack that I,
+the, the approach that I was suggesting
+before of knowing where the gadgets are in
+constructing your shellcode,
+to leak the binary so
+that we can then perform that step.
+String together the gadgets we need,
+inject them into the program,
+and perform the exploit.
+Blind ROP serves as the current
+challenge defenders must
+overcome to defeat memory based attacks.
+Blind ROP completely automatically
+managed to defeat stack canaries and
+even 64-bit ASLR by automatically
+constructing ROP style programs.
+Where will it end?
+The safest way to end the cat and
+mouse battle is to ensure memory safety.
+And the simplest way to do that is to
+use a memory safe programming language.
+However there is yet
+one more automated defense that could
+work which we will now consider.
+It is called control flow integrity.
+It is still experimental, but
+it holds significant promise, and
+maybe deployed in the near future.
+

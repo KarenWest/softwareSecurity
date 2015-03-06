@@ -1,0 +1,1658 @@
+KLEE: output directory = "klee-out-4"
+KLEE: WARNING: undefined reference to function: printf
+KLEE: WARNING: undefined reference to function: putchar
+KLEE: WARNING: undefined reference to function: puts
+KLEE: WARNING: undefined reference to function: sleep
+KLEE: WARNING: calling external: printf(3085925536, 11, 7)
+KLEE: WARNING: calling external: puts(3086285240)
+KLEE: WARNING: calling external: putchar(43)
+KLEE: WARNING: calling external: sleep(1)
+Maze dimensions: 11x7
+Player pos: 1x1
+Iteration no. 0
+Program the player moves with a sequence of 'w', 's', 'a' and 'd'
+Try to reach the price(#)!
++-+---+---+
+|X|     |#|
+| | --+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 1x1
+Iteration no. 0. Action: d. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 1x2
+Iteration no. 0. Action: s. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 1x3
+Iteration no. 1. Action: s. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+|X|   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 1x3
+Iteration no. 2. Action: d. Blocked!
+You loose
+Player pos: 1x3
+Iteration no. 2. Action: a. Blocked!
+You loose
+Player pos: 1x4
+Iteration no. 2. Action: s. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+|X|   | | |
+|X+-- | | |
+|     |   |
++-----+---+
+
+Player pos: 1x4
+Iteration no. 3. Action: a. Blocked!
+You loose
+Player pos: 1x5
+Iteration no. 3. Action: s. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+|X|   | | |
+|X+-- | | |
+|X    |   |
++-----+---+
+
+Player pos: 1x5
+Iteration no. 4. Action: a. Blocked!
+You loose
+Player pos: 2x5
+Iteration no. 4. Action: d. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+|X|   | | |
+|X+-- | | |
+|XX   |   |
++-----+---+
+
+Player pos: 2x5
+Iteration no. 5. Action: a. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 2x5
+Iteration no. 5. Action: s. Blocked!
+You loose
+Player pos: 3x5
+Iteration no. 5. Action: d. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+|X|   | | |
+|X+-- | | |
+|XXX  |   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 4x5
+Iteration no. 6. Action: d. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+|X|   | | |
+|X+-- | | |
+|XXXX |   |
++-----+---+
+
+Player pos: 5x5
+Iteration no. 7. Action: d. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+|X|   | | |
+|X+-- | | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 5x5
+Iteration no. 8. Action: s. Blocked!
+You loose
+Player pos: 5x5
+Iteration no. 8. Action: a. Blocked!
+You loose
+Player pos: 5x5
+Iteration no. 8. Action: d. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 5x4
+Iteration no. 8. Action: w. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+|X|   | | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 5x4
+Iteration no. 9. Action: d. Blocked!
+You loose
+Player pos: 5x4
+Iteration no. 9. Action: a. Blocked!
+You loose
+Player pos: 5x4
+Iteration no. 9. Action: s. Blocked!
+You loose
+Player pos: 5x3
+Iteration no. 9. Action: w. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+|X|  X| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 5x3
+Iteration no. 10. Action: d. Blocked!
+You loose
+Player pos: 5x3
+Iteration no. 10. Action: s. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 4x3
+Iteration no. 10. Action: a. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+|X| XX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 4x3
+Iteration no. 11. Action: d. Blocked!
+You loose
+Player pos: 4x3
+Iteration no. 11. Action: s. Blocked!
+You loose
+Player pos: 3x3
+Iteration no. 11. Action: a. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+|X|XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 3x3
+Iteration no. 12. Action: a. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 3x3
+Iteration no. 12. Action: s. Blocked!
+You loose
+Player pos: 3x3
+Iteration no. 12. Action: d. Blocked!
+You loose
+Player pos: 3x2
+Iteration no. 12. Action: w. 
++-+---+---+
+|X|     |#|
+|X|X--+ | |
+|X|XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 2x2
+Iteration no. 13. Action: a. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+|X|XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 2x2
+Iteration no. 14. Action: s. Blocked!
+You loose
+Player pos: 2x2
+Iteration no. 14. Action: d. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 2x2
+Iteration no. 14. Action: a. Blocked!
+You loose
+Player pos: 2x2
+Iteration no. 14. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 3x2
+Iteration no. 13. Action: s. Blocked!
+You loose
+Player pos: 3x2
+Iteration no. 13. Action: d. Blocked!
+You loose
+Player pos: 3x1
+Iteration no. 13. Action: w. 
++-+---+---+
+|X|X    |#|
+|X|X--+ | |
+|X|XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 3x1
+Iteration no. 14. Action: s. Blocked!
+You loose
+Player pos: 4x1
+Iteration no. 14. Action: d. 
++-+---+---+
+|X|XX   |#|
+|X|X--+ | |
+|X|XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 4x1
+Iteration no. 15. Action: s. Blocked!
+You loose
+Player pos: 4x1
+Iteration no. 15. Action: a. Blocked!
+You loose
+Player pos: 5x1
+Iteration no. 15. Action: d. 
++-+---+---+
+|X|XXX  |#|
+|X|X--+ | |
+|X|XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 5x1
+Iteration no. 16. Action: a. Blocked!
+You loose
+Player pos: 5x1
+Iteration no. 16. Action: s. Blocked!
+You loose
+Player pos: 6x1
+Iteration no. 16. Action: d. 
++-+---+---+
+|X|XXXX |#|
+|X|X--+ | |
+|X|XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 6x1
+Iteration no. 17. Action: s. Blocked!
+You loose
+Player pos: 6x1
+Iteration no. 17. Action: a. Blocked!
+You loose
+Player pos: 7x1
+Iteration no. 17. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+ | |
+|X|XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 7x1
+Iteration no. 18. Action: d. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x2
+Iteration no. 18. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+X| |
+|X|XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x2
+Iteration no. 19. Action: a. Blocked!
+You loose
+Player pos: 8x2
+Iteration no. 19. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+XX |
+|X|XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 8x2
+Iteration no. 20. Action: s. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x2
+Iteration no. 20. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+XXX|
+|X|XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 9x2
+Iteration no. 21. Action: a. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 10x2
+Iteration no. 21. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+XXXX
+|X|XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 10x2
+Iteration no. 22. Action: s. Blocked!
+You loose
+Player pos: 10x2
+Iteration no. 22. Action: a. Blocked!
+You loose
+Player pos: 10x2
+Iteration no. 22. Action: d. Blocked!
+You loose
+Player pos: 10x2
+Iteration no. 22. Action: w. Blocked!
+You loose
+Player pos: 9x3
+Iteration no. 21. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+XXX|
+|X|XXX| |X|
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x4
+Iteration no. 22. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+XXX|
+|X|XXX| |X|
+|X+--X| |X|
+|XXXXX|   |
++-----+---+
+
+Player pos: 9x4
+Iteration no. 23. Action: a. Blocked!
+You loose
+Player pos: 9x5
+Iteration no. 23. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+XXX|
+|X|XXX| |X|
+|X+--X| |X|
+|XXXXX|  X|
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 8x5
+Iteration no. 24. Action: a. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+XXX|
+|X|XXX| |X|
+|X+--X| |X|
+|XXXXX| XX|
++-----+---+
+
+Player pos: 8x5
+Iteration no. 25. Action: d. Blocked!
+You loose
+Player pos: 8x5
+Iteration no. 25. Action: s. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x5
+Iteration no. 25. Action: a. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+XXX|
+|X|XXX| |X|
+|X+--X| |X|
+|XXXXX|XXX|
++-----+---+
+
+Player pos: 7x5
+Iteration no. 26. Action: d. Blocked!
+You loose
+Player pos: 7x5
+Iteration no. 26. Action: s. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x5
+Iteration no. 26. Action: a. Blocked!
+You loose
+Player pos: 7x4
+Iteration no. 26. Action: w. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+XXX|
+|X|XXX| |X|
+|X+--X|X|X|
+|XXXXX|XXX|
++-----+---+
+
+Player pos: 7x4
+Iteration no. 27. Action: a. Blocked!
+You loose
+Player pos: 7x4
+Iteration no. 27. Action: s. Blocked!
+You loose
+Player pos: 7x4
+Iteration no. 27. Action: dKLEE: ERROR: /home/seed/projects/3/project3/maze-sym.c:107: ASSERTION FAIL: 0
+KLEE: NOTE: now ignoring this error at this location
+. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x3
+Iteration no. 27. Action: w. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+XXX|
+|X|XXX|X|X|
+|X+--X|X|X|
+|XXXXX|XXX|
++-----+---+
+
+You loose
+Player pos: 8x5
+Iteration no. 25. Action: w. Blocked!
+You loose
+Player pos: 9x5
+Iteration no. 24. Action: d. Blocked!
+You loose
+Player pos: 9x5
+Iteration no. 24. Action: s. Blocked!
+You loose
+Player pos: 9x5
+Iteration no. 24. Action: w. Blocked!
+You loose
+Player pos: 9x4
+Iteration no. 23. Action: d. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x4
+Iteration no. 23. Action: w. Blocked!
+You loose
+Player pos: 9x3
+Iteration no. 22. Action: d. Blocked!
+You loose
+Player pos: 9x3
+Iteration no. 22. Action: a. Blocked!
+You loose
+Player pos: 9x3
+Iteration no. 22. Action: w. Blocked!
+You loose
+You win!
+Your solution <                                      õ·>
+Player pos: 8x2
+Iteration no. 20. Action: a. Blocked!
+You loose
+Player pos: 8x2
+Iteration no. 20. Action: w. Blocked!
+You loose
+Player pos: 7x3
+Iteration no. 19. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+X| |
+|X|XXX|X| |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 7x3
+Iteration no. 20. Action: d. Blocked!
+You loose
+Player pos: 7x4
+Iteration no. 20. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+X| |
+|X|XXX|X| |
+|X+--X|X| |
+|XXXXX|   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x5
+Iteration no. 21. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+X| |
+|X|XXX|X| |
+|X+--X|X| |
+|XXXXX|X  |
++-----+---+
+
+Player pos: 7x5
+Iteration no. 22. Action: a. Blocked!
+You loose
+Player pos: 7x5
+Iteration no. 22. Action: s. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 8x5
+Iteration no. 22. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+X| |
+|X|XXX|X| |
+|X+--X|X| |
+|XXXXX|XX |
++-----+---+
+
+Player pos: 8x5
+Iteration no. 23. Action: a. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x5
+Iteration no. 23. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+X| |
+|X|XXX|X| |
+|X+--X|X| |
+|XXXXX|XXX|
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x5
+Iteration no. 24. Action: d. Blocked!
+You loose
+Player pos: 9x5
+Iteration no. 24. Action: a. Blocked!
+You loose
+Player pos: 9x5
+Iteration no. 24. Action: s. Blocked!
+You loose
+Player pos: 9x4
+Iteration no. 24. Action: w. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+X| |
+|X|XXX|X| |
+|X+--X|X|X|
+|XXXXX|XXX|
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x4
+Iteration no. 25. Action: d. Blocked!
+You loose
+Player pos: 9x4
+Iteration no. 25. Action: a. Blocked!
+You loose
+Player pos: 9x4
+Iteration no. 25. Action: s. Blocked!
+You loose
+Player pos: 9x3
+Iteration no. 25. Action: w. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+X| |
+|X|XXX|X|X|
+|X+--X|X|X|
+|XXXXX|XXX|
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x3
+Iteration no. 26. Action: d. Blocked!
+You loose
+Player pos: 9x3
+Iteration no. 26. Action: s. Blocked!
+You loose
+Player pos: 9x3
+Iteration no. 26. Action: a. Blocked!
+You loose
+Player pos: 9x2
+Iteration no. 26. Action: w. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+X|X|
+|X|XXX|X|X|
+|X+--X|X|X|
+|XXXXX|XXX|
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x2
+Iteration no. 27. Action: s. Blocked!
+You loose
+Player pos: 8x2
+Iteration no. 27. Action: a. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+XXX|
+|X|XXX|X|X|
+|X+--X|X|X|
+|XXXXX|XXX|
++-----+---+
+
+You loose
+Player pos: 10x2
+Iteration no. 27. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|X|X--+X|XX
+|X|XXX|X|X|
+|X+--X|X|X|
+|XXXXX|XXX|
++-----+---+
+
+You loose
+You win!
+Your solution <                                      õ·>
+Player pos: 8x5
+Iteration no. 23. Action: s. Blocked!
+You loose
+Player pos: 8x5
+Iteration no. 23. Action: w. Blocked!
+You loose
+Player pos: 7x5
+Iteration no. 22. Action: w. Blocked!
+You loose
+Player pos: 7x4
+Iteration no. 21. Action: d. Blocked!
+You loose
+Player pos: 7x4
+Iteration no. 21. Action: a. Blocked!
+You loose
+Player pos: 7x4
+Iteration no. 21. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x3
+Iteration no. 20. Action: a. Blocked!
+You loose
+Player pos: 7x3
+Iteration no. 20. Action: w. Blocked!
+You loose
+Player pos: 7x2
+Iteration no. 19. Action: w. Blocked!
+You loose
+Player pos: 7x1
+Iteration no. 18. Action: a. Blocked!
+You loose
+Player pos: 7x1
+Iteration no. 18. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 6x1
+Iteration no. 17. Action: w. Blocked!
+You loose
+Player pos: 5x1
+Iteration no. 16. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 4x1
+Iteration no. 15. Action: w. Blocked!
+You loose
+Player pos: 3x1
+Iteration no. 14. Action: a. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 3x1
+Iteration no. 14. Action: w. Blocked!
+You loose
+Player pos: 4x3
+Iteration no. 11. Action: w. Blocked!
+You loose
+Player pos: 5x3
+Iteration no. 10. Action: w. Blocked!
+You loose
+Player pos: 4x5
+Iteration no. 7. Action: s. Blocked!
+You loose
+Player pos: 4x5
+Iteration no. 7. Action: a. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 4x5
+Iteration no. 7. Action: w. Blocked!
+You loose
+Player pos: 3x5
+Iteration no. 6. Action: a. Blocked!
+You loose
+Player pos: 3x5
+Iteration no. 6. Action: s. Blocked!
+You loose
+Player pos: 3x5
+Iteration no. 6. Action: w. Blocked!
+You loose
+Player pos: 2x5
+Iteration no. 5. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 1x5
+Iteration no. 4. Action: s. Blocked!
+You loose
+Player pos: 1x5
+Iteration no. 4. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 1x4
+Iteration no. 3. Action: d. Blocked!
+You loose
+Player pos: 1x4
+Iteration no. 3. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 1x3
+Iteration no. 2. Action: w. Blocked!
+You loose
+Player pos: 1x2
+Iteration no. 1. Action: a. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 2x2
+Iteration no. 1. Action: d. 
++-+---+---+
+|X|     |#|
+|XX --+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 3x2
+Iteration no. 2. Action: d. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 3x3
+Iteration no. 3. Action: s. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+| |X  | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 3x3
+Iteration no. 4. Action: s. Blocked!
+You loose
+Player pos: 3x3
+Iteration no. 4. Action: a. Blocked!
+You loose
+Player pos: 4x3
+Iteration no. 4. Action: d. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+| |XX | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 5x3
+Iteration no. 5. Action: d. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+| |XXX| | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 5x3
+Iteration no. 6. Action: d. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 5x4
+Iteration no. 6. Action: s. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+| |XXX| | |
+| +--X| | |
+|     |   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 5x4
+Iteration no. 7. Action: d. Blocked!
+You loose
+Player pos: 5x4
+Iteration no. 7. Action: a. Blocked!
+You loose
+Player pos: 5x5
+Iteration no. 7. Action: s. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+| |XXX| | |
+| +--X| | |
+|    X|   |
++-----+---+
+
+Player pos: 5x5
+Iteration no. 8. Action: d. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 5x5
+Iteration no. 8. Action: s. Blocked!
+You loose
+Player pos: 4x5
+Iteration no. 8. Action: a. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+| |XXX| | |
+| +--X| | |
+|   XX|   |
++-----+---+
+
+Player pos: 4x5
+Iteration no. 9. Action: s. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 4x5
+Iteration no. 9. Action: d. Blocked!
+You loose
+Player pos: 3x5
+Iteration no. 9. Action: a. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+| |XXX| | |
+| +--X| | |
+|  XXX|   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 3x5
+Iteration no. 10. Action: d. Blocked!
+You loose
+Player pos: 2x5
+Iteration no. 10. Action: a. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+| |XXX| | |
+| +--X| | |
+| XXXX|   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 2x5
+Iteration no. 11. Action: d. Blocked!
+You loose
+Player pos: 1x5
+Iteration no. 11. Action: a. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+| |XXX| | |
+| +--X| | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 1x5
+Iteration no. 12. Action: a. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 1x5
+Iteration no. 12. Action: s. Blocked!
+You loose
+Player pos: 1x5
+Iteration no. 12. Action: d. Blocked!
+You loose
+Player pos: 1x4
+Iteration no. 12. Action: w. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+| |XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 1x4
+Iteration no. 13. Action: d. Blocked!
+You loose
+Player pos: 1x4
+Iteration no. 13. Action: s. Blocked!
+You loose
+Player pos: 1x4
+Iteration no. 13. Action: a. Blocked!
+You loose
+Player pos: 1x3
+Iteration no. 13. Action: w. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+|X|XXX| | |
+|X+--X| | |
+|XXXXX|   |
++-----+---+
+
+Player pos: 1x3
+Iteration no. 14. Action: s. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 1x3
+Iteration no. 14. Action: a. Blocked!
+You loose
+Player pos: 1x3
+Iteration no. 14. Action: d. Blocked!
+You loose
+Player pos: 1x3
+Iteration no. 14. Action: w. Blocked!
+You loose
+Player pos: 2x5
+Iteration no. 11. Action: s. Blocked!
+You loose
+Player pos: 2x5
+Iteration no. 11. Action: w. Blocked!
+You loose
+Player pos: 3x5
+Iteration no. 10. Action: s. Blocked!
+You loose
+Player pos: 3x5
+Iteration no. 10. Action: w. Blocked!
+You loose
+Player pos: 4x5
+Iteration no. 9. Action: w. Blocked!
+You loose
+Player pos: 5x5
+Iteration no. 8. Action: w. Blocked!
+You loose
+Player pos: 5x4
+Iteration no. 7. Action: w. Blocked!
+You loose
+Player pos: 5x3
+Iteration no. 6. Action: a. Blocked!
+You loose
+Player pos: 5x3
+Iteration no. 6. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 4x3
+Iteration no. 5. Action: s. Blocked!
+You loose
+Player pos: 4x3
+Iteration no. 5. Action: a. Blocked!
+You loose
+Player pos: 4x3
+Iteration no. 5. Action: w. Blocked!
+You loose
+Player pos: 3x3
+Iteration no. 4. Action: w. Blocked!
+You loose
+Player pos: 3x2
+Iteration no. 3. Action: a. Blocked!
+You loose
+Player pos: 3x2
+Iteration no. 3. Action: d. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 3x1
+Iteration no. 3. Action: w. 
++-+---+---+
+|X|X    |#|
+|XXX--+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 3x1
+Iteration no. 4. Action: s. Blocked!
+You loose
+Player pos: 3x1
+Iteration no. 4. Action: a. Blocked!
+You loose
+Player pos: 4x1
+Iteration no. 4. Action: d. 
++-+---+---+
+|X|XX   |#|
+|XXX--+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 4x1
+Iteration no. 5. Action: s. Blocked!
+You loose
+Player pos: 4x1
+Iteration no. 5. Action: a. Blocked!
+You loose
+Player pos: 5x1
+Iteration no. 5. Action: d. 
++-+---+---+
+|X|XXX  |#|
+|XXX--+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 5x1
+Iteration no. 6. Action: s. Blocked!
+You loose
+Player pos: 5x1
+Iteration no. 6. Action: a. Blocked!
+You loose
+Player pos: 6x1
+Iteration no. 6. Action: d. 
++-+---+---+
+|X|XXXX |#|
+|XXX--+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 6x1
+Iteration no. 7. Action: s. Blocked!
+You loose
+Player pos: 6x1
+Iteration no. 7. Action: a. Blocked!
+You loose
+Player pos: 7x1
+Iteration no. 7. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 7x2
+Iteration no. 8. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+X| |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 7x3
+Iteration no. 9. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+X| |
+| |   |X| |
+| +-- | | |
+|     |   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x3
+Iteration no. 10. Action: d. Blocked!
+You loose
+Player pos: 7x3
+Iteration no. 10. Action: a. Blocked!
+You loose
+Player pos: 7x4
+Iteration no. 10. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+X| |
+| |   |X| |
+| +-- |X| |
+|     |   |
++-----+---+
+
+Player pos: 7x5
+Iteration no. 11. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+X| |
+| |   |X| |
+| +-- |X| |
+|     |X  |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 8x5
+Iteration no. 12. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+X| |
+| |   |X| |
+| +-- |X| |
+|     |XX |
++-----+---+
+
+Player pos: 8x5
+Iteration no. 13. Action: a. Blocked!
+You loose
+Player pos: 8x5
+Iteration no. 13. Action: s. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x5
+Iteration no. 13. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+X| |
+| |   |X| |
+| +-- |X| |
+|     |XXX|
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x5
+Iteration no. 14. Action: s. Blocked!
+You loose
+Player pos: 9x5
+Iteration no. 14. Action: d. Blocked!
+You loose
+Player pos: 9x5
+Iteration no. 14. Action: a. Blocked!
+You loose
+Player pos: 9x4
+Iteration no. 14. Action: w. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+X| |
+| |   |X| |
+| +-- |X|X|
+|     |XXX|
++-----+---+
+
+Player pos: 9x4
+Iteration no. 15. Action: d. Blocked!
+You loose
+Player pos: 9x4
+Iteration no. 15. Action: a. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x4
+Iteration no. 15. Action: s. Blocked!
+You loose
+Player pos: 9x3
+Iteration no. 15. Action: w. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+X| |
+| |   |X|X|
+| +-- |X|X|
+|     |XXX|
++-----+---+
+
+Player pos: 9x3
+Iteration no. 16. Action: s. Blocked!
+You loose
+Player pos: 9x3
+Iteration no. 16. Action: a. Blocked!
+You loose
+Player pos: 9x3
+Iteration no. 16. Action: d. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x2
+Iteration no. 16. Action: w. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+X|X|
+| |   |X|X|
+| +-- |X|X|
+|     |XXX|
++-----+---+
+
+Player pos: 9x2
+Iteration no. 17. Action: s. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 10x2
+Iteration no. 17. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+X|XX
+| |   |X|X|
+| +-- |X|X|
+|     |XXX|
++-----+---+
+
+Player pos: 10x2
+Iteration no. 18. Action: d. Blocked!
+You loose
+Player pos: 10x2
+Iteration no. 18. Action: a. Blocked!
+You loose
+Player pos: 10x2
+Iteration no. 18. Action: s. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 10x2
+Iteration no. 18. Action: w. Blocked!
+You loose
+Player pos: 8x2
+Iteration no. 17. Action: a. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+XXX|
+| |   |X|X|
+| +-- |X|X|
+|     |XXX|
++-----+---+
+
+Player pos: 8x2
+Iteration no. 18. Action: d. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 8x2
+Iteration no. 18. Action: s. Blocked!
+You loose
+Player pos: 8x2
+Iteration no. 18. Action: a. Blocked!
+You loose
+Player pos: 8x2
+Iteration no. 18. Action: w. Blocked!
+You loose
+You win!
+Your solution <                                      õ·>
+Player pos: 8x5
+Iteration no. 13. Action: w. Blocked!
+You loose
+Player pos: 7x5
+Iteration no. 12. Action: s. Blocked!
+You loose
+Player pos: 7x5
+Iteration no. 12. Action: a. Blocked!
+You loose
+Player pos: 7x5
+Iteration no. 12. Action: w. Blocked!
+You loose
+Player pos: 7x4
+Iteration no. 11. Action: a. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x4
+Iteration no. 11. Action: d. Blocked!
+You loose
+Player pos: 7x4
+Iteration no. 11. Action: w. Blocked!
+You loose
+Player pos: 7x3
+Iteration no. 10. Action: w. Blocked!
+You loose
+Player pos: 7x2
+Iteration no. 9. Action: a. Blocked!
+You loose
+Player pos: 8x2
+Iteration no. 9. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+XX |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 8x2
+Iteration no. 10. Action: s. Blocked!
+You loose
+Player pos: 8x2
+Iteration no. 10. Action: a. Blocked!
+You loose
+Player pos: 9x2
+Iteration no. 10. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+XXX|
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 9x2
+Iteration no. 11. Action: a. Blocked!
+You loose
+Player pos: 10x2
+Iteration no. 11. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+XXXX
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 10x2
+Iteration no. 12. Action: a. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 10x2
+Iteration no. 12. Action: d. Blocked!
+You loose
+Player pos: 10x2
+Iteration no. 12. Action: s. Blocked!
+You loose
+Player pos: 10x2
+Iteration no. 12. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x3
+Iteration no. 11. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+XXX|
+| |   | |X|
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 9x4
+Iteration no. 12. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+XXX|
+| |   | |X|
+| +-- | |X|
+|     |   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x4
+Iteration no. 13. Action: d. Blocked!
+You loose
+Player pos: 9x4
+Iteration no. 13. Action: a. Blocked!
+You loose
+Player pos: 9x5
+Iteration no. 13. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+XXX|
+| |   | |X|
+| +-- | |X|
+|     |  X|
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x5
+Iteration no. 14. Action: d. Blocked!
+You loose
+Player pos: 8x5
+Iteration no. 14. Action: a. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+XXX|
+| |   | |X|
+| +-- | |X|
+|     | XX|
++-----+---+
+
+Player pos: 7x5
+Iteration no. 15. Action: a. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+XXX|
+| |   | |X|
+| +-- | |X|
+|     |XXX|
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x5
+Iteration no. 16. Action: d. Blocked!
+You loose
+Player pos: 7x5
+Iteration no. 16. Action: a. Blocked!
+You loose
+Player pos: 7x5
+Iteration no. 16. Action: s. Blocked!
+You loose
+Player pos: 7x4
+Iteration no. 16. Action: w. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+XXX|
+| |   | |X|
+| +-- |X|X|
+|     |XXX|
++-----+---+
+
+Player pos: 7x4
+Iteration no. 17. Action: a. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x4
+Iteration no. 17. Action: d. Blocked!
+You loose
+Player pos: 7x4
+Iteration no. 17. Action: s. Blocked!
+You loose
+Player pos: 7x3
+Iteration no. 17. Action: w. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+XXX|
+| |   |X|X|
+| +-- |X|X|
+|     |XXX|
++-----+---+
+
+Player pos: 7x3
+Iteration no. 18. Action: a. Blocked!
+You loose
+Player pos: 7x3
+Iteration no. 18. Action: d. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x3
+Iteration no. 18. Action: s. Blocked!
+You loose
+Player pos: 7x3
+Iteration no. 18. Action: w. Blocked!
+You loose
+Player pos: 8x5
+Iteration no. 15. Action: s. Blocked!
+You loose
+Player pos: 8x5
+Iteration no. 15. Action: d. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 8x5
+Iteration no. 15. Action: w. Blocked!
+You loose
+Player pos: 9x5
+Iteration no. 14. Action: s. Blocked!
+You loose
+Player pos: 9x5
+Iteration no. 14. Action: w. Blocked!
+You loose
+Player pos: 9x4
+Iteration no. 13. Action: w. Blocked!
+You loose
+Player pos: 9x3
+Iteration no. 12. Action: d. Blocked!
+You loose
+Player pos: 9x3
+Iteration no. 12. Action: a. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 9x3
+Iteration no. 12. Action: w. Blocked!
+You loose
+You win!
+Your solution <                                      õ·>
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 8x2
+Iteration no. 10. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x2
+Iteration no. 9. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 7x1
+Iteration no. 8. Action: a. Blocked!
+You loose
+Player pos: 7x1
+Iteration no. 8. Action: d. Blocked!
+You loose
+Player pos: 7x1
+Iteration no. 8. Action: w. Blocked!
+You loose
+Player pos: 6x1
+Iteration no. 7. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 5x1
+Iteration no. 6. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 4x1
+Iteration no. 5. Action: w. Blocked!
+You loose
+Player pos: 3x1
+Iteration no. 4. Action: w. Blocked!
+You loose
+Wrong command!(only w,s,a,d accepted!)
+You loose!
+Player pos: 2x2
+Iteration no. 2. Action: a. Blocked!
+You loose
+Player pos: 2x2
+Iteration no. 2. Action: s. Blocked!
+You loose
+Player pos: 2x2
+Iteration no. 2. Action: w. Blocked!
+You loose
+Player pos: 1x2
+Iteration no. 1. Action: w. Blocked!
+You loose
+Player pos: 1x1
+Iteration no. 0. Action: a. Blocked!
+You loose
+Player pos: 1x1
+Iteration no. 0. Action: w. Blocked!
+You loose
+
+KLEE: done: total instructions = 112829
+KLEE: done: completed paths = 309
+KLEE: done: generated tests = 306

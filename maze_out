@@ -1,0 +1,25 @@
+Maze dimensions: 11x7
+Player pos: 1x1
+Iteration no. 0
+Program the player moves with a sequence of 'w', 's', 'a' and 'd'
+Try to reach the price(#)!
++-+---+---+
+|X|     |#|
+| | --+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 1x2
+Iteration no. 0. Action: s. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Wrong command!(only w,s,a,d accepted!)
+You loose!

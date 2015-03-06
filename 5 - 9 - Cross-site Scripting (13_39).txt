@@ -1,0 +1,346 @@
+[NOISE].
+To work around the same origin policy,
+attackers can try to inject code using
+an attack called cross-site scripting.
+Unfortunately, this
+attack is quite common.
+For example, here is a CERT
+advisory about Huawei modems.
+Notice that, it says that the broadband
+modems include a web interface, and
+this web interface is vulnerable
+to a cross-site scripting attack.
+A cross-site scripting, or XSS attack.
+Aims to subvert the same origin policy.
+In particular, an attacker can
+construct a malicious script to try to
+trick a user's browser into running it as
+if the script came from a trusted origin.
+Doing so gives the script access
+to the sensitive content and
+pages from that origin.
+A cross-site scripting attack
+works by fooling the victim's site
+into sending the script
+to the user's browser,
+which will run it with the full
+privileges of the victim.
+Let's see how this can be achieved.
+There are 2 types of
+cross-site scripting attack.
+The first we'll talk about
+is called stored or,
+persistent cross-site scripting.
+In this attack, the attacker leaves their
+script on the vulnerable web server, for
+example bank.com.
+The server will later unwittingly
+send that script to your browser.
+Your browser, none the wiser,
+will execute it within the same
+origin as the bank.com server.
+Visualized it looks like this.
+First, we have the bad,
+website bad.com, and
+we have the vulnerable website bank.com.
+Step one, bad.com injects a malicious
+script to the bank.com website.
+Second, a client connects to the bank.com
+site, and bank.com unwittingly
+sends the malicious script along with its
+content back to the client's browser.
+The client's browser will then execute
+that malicious script as though
+the bank website intended to provide it.
+As a result, that script can do nefarious
+things like perform attacker actions,
+such as initiate a bank transfer, or
+steal secret data like document cookies
+to send back to the bad.com site.
+So in summary, the target is a user
+with a JavaScript-enabled browser who
+visits a user-influenced content page.
+That is a page whose content can be
+influenced by prior interactions with
+users, like the bad.com site.
+The attack goal is to run a script
+in the user's browser with
+the same access provided by
+the server's regular scripts, and
+in this way subvert
+the same-origin policy.
+To do this, the attacker needs the ability
+to leave content on the web server, for
+example, using an ordinary browser.
+The attacker might also have a website
+to collect stolen information.
+And the key trick here is that
+the server will fail to ensure that
+content uploaded to it's page does
+not contain embedded scripts.
+Let's look at an example of a cross-side
+scripting attack, the Samy MySpace worm.
+So MySpace was a social networking site.
+Prior to the rise of Facebook
+that was very popular, and
+it allowed people to
+create custom webpages.
+Samy embedded JavaScript
+in his MySpace page.
+MySpace attempted to filter these scripts,
+but in this case it failed.
+As a result, users who visited
+Samy's page ran the program,
+which made them friends with Samy,
+displayed, but most of all,
+Samy is my hero on their profile,
+installed the program in their profile so
+a new user who viewed the profile
+got infected, and as a result,
+Samy went from 73 friends to one
+million friends in 20 hours.
+And took MySpace down for
+a weekend, to boot.
+The second type of cross-site
+scripting attack is called reflected
+cross-site scripting.
+Here, the attacker gets you to
+send the bank.com server a URL,
+that includes in it some JavaScript code.
+The bank.com site will echo some or all of
+that script back to you in it's response.
+And your browser none the wiser will
+execute the script in the response with
+the same origin as bank.com.
+So here this is visualized.
+The browser will visit bad.com,
+the nefarious website.
+And it will send back a malicious page.
+The client will then click on
+a link on that malicious page,
+which will take it to bank.com.
+The link will contain
+some JavaScript code.
+Bank.com will then echo back the link
+in it's response to the user.
+And the browser will then execute
+the script as though the server meant to
+provide it.
+Once again the attacker can perform
+nefarious actions as a result.
+So the key here is echoed input.
+Reflected cross-site scripting
+attacks need to find instances of
+good web servers that will echo user
+input back in the HTML response.
+So, for example, here's an input from
+bad.com, where to the search term,
+it provides the term socks.
+When this goes to victim.com, and
+it sends the results back, notice
+that socks are included in the body.
+Now, the problem arises when.
+That input includes scripts, so here's an
+example script that's included in the URL.
+If that script is not filtered out,
+it will be included in
+the body returned from victim.com, and
+the JavaScript interpreter running in
+the user's browser will execute that
+script rather than simply print it out.
+And of course the script will
+execute within victim.com's origin.
+To summarize, a reflected XSS attack,
+targets someone who
+is using a JavaScript enabled browser
+to access a vulnerable web service.
+The service's vulnerability is
+that it echoes back part of
+the URLs it reviews in
+its output responses.
+The attacker goal is to run
+the attacker script as if it had
+the origin of the victim's site.
+The attacker does this by
+getting a user to click on
+a URL that contains JavaScript code.
+This code is then reflected in
+the server's response to the browser.
+And, so the browser runs the script
+as if it were from the origin server.
+The key, here is that the origin server
+reflects the attacker script, unchanged.
+This, indifferent reflection of
+the input points to the proper defense.
+Validate the input.
+In particular, the vulnerable
+server should either check or
+sanitize input from untrusted sources.
+One form of validation is sanitization.
+In particular a server can remove all
+executable portions of untrusted that
+is user-provided content that
+it could appear in HTML pages.
+For example, it might look for
+script tags and filter them out.
+Then instead of running the script,
+the browser will end up
+printing it in the document.
+This might look a little strange,
+but it will be harmless.
+Such filtering is often done in
+the comment sections of blogs.
+Commentors are permitted to provide rich
+content like bold face formatting or
+italics or underlying.
+And they can express this
+using various HTML tags.
+However, they are not permitted
+to include tags that would
+demarcate Java Script code.
+Blacklisting particular tags,
+like the script tag, and
+removing them from the input
+is a natural idea.
+The problem with it, is that there are
+many ways to introduce Java Script code.
+You may think you have them all,
+when you actually don't.
+For example, it turns out that you can
+embed JavaScript as XML encoded files or
+as a cascading style sheet,
+that is, CSS tag.
+Moreover, even if you
+found all of the tags that
+are specifically indicated
+as allowing scripts.
+There may be other ways of specifying
+code that is browser specific.
+In particular, browsers have often
+been known to try to be helpful, and
+render manged input.
+Such permissiveness is good for making
+busted websites look okay to a user,
+but it can be exploited
+by a clever attacker.
+For example, such permissiveness
+was the flaw that allowed Samy to
+evade the MySpace filter.
+Internet Explorer permitted splitting the
+JavaScript tag into two words, Java and
+Script, across two lines.
+Even though other browsers would not,
+interpret this as being a JavaScript tag.
+This split tag evaded the MySpace filters.
+A better validation approach
+is to use a white list.
+In particular, a site can allow
+a particular small set of tags.
+It can then check that the input
+only has those tags in it.
+Any other tags that appear well in
+that case the input is rejected.
+The same sort of white list applies to
+all elements of a page that could be
+affected by untrusted sources.
+Returning to our blog example, a white
+list filter could check that the urls or
+other user comments contain only bold
+face, italics, an underline tags, and
+no other tags.
+Or the blog could permit only a more
+limited language for providing comments.
+So rather than full HTML,
+it could allow, say, markdown.
+One note.
+We have just considered two different
+attacks with strikingly similar names.
+Cross-site scripting, and
+cross-site request forgery.
+What the attacks have in common,
+is that one site tries to
+act with the privileges of another site,
+hence the phrase, cross site.
+XSS works by exploiting the trust
+a browser has in data sent to it
+from a legitimate website.
+So, the attacker tries to manipulate
+what the site sends to the browser.
+CSRF exploits the trust a website has in
+data sent from a semi-trusted browser.
+So, the attacker tries to manipulate,
+what the browser sends to the site.
+In short, it's all about exploiting trust.
+The right defence is to reduce
+that trust as much as possible.
+In particular, by using input validation.
+This theme comes up again and
+again in web security, and indeed,
+in distributed system security generally.
+Let's finish off this unit
+with one more example.
+One popular framework for writing web
+applications is called Ruby on Rails.
+Server side web applications are written
+in the Ruby programming language, and
+the Rails framework makes it easy for
+these applications to work via the web.
+Parameters in web requests sent
+to Rails applications can be
+Ruby objects encoded in XML, or
+as a format called YMAL within XML.
+YAML is particularly desirable
+because it's easy to read and
+Ruby has good support for it.
+In particular, Ruby makes it easy to
+encode Ruby objects into YAML, and
+likewise, decode YAML
+strings into Ruby objects.
+When those Ruby objects are pre, represent
+integers or strings or enumerated types,.
+Then web app behavior
+proceeds as we might hope.
+However YAML can encode any object
+which it does by embedding Ruby code.
+Since the default YAML decoder can
+be used to decode arbitrary objects,
+it can thus decode arbitrary Ruby code.
+With a little work the decoder can be
+made to invoke the code of the objects it
+has just decoded.
+This means that an attacker can
+send a carefully crafted message to
+any Ruby on Rails application, and get
+it to run code on the attacker's behalf.
+Woah.
+Once again the problem here is
+accepting input without validating it.
+The problem is hidden from the application
+developers because the bug is in
+the Ruby on Rails framework and
+not the application.
+A fix to validate the input might
+be to reject YAML altogether, or
+to reject YAML-encoded
+objects that embed code.
+Of course, as with XSS,
+holes in the filters mean that
+vulnerabilities will persist.
+To conclude,
+web security introduces a plethora of
+vulnerabilities that application
+writers must guard against.
+All of them can be boiled down
+to mismatches with trust.
+If we cannot completely trust
+the source of some input, then we
+must validate that input so that it,
+to make sure that it cannot cause harm.
+When considering means of validation,
+checking is preferred to sanitization and
+whitelisting is preferred to blacklisting.
+In our next unit, we will see how input
+validation is just one instance of
+a general set of principles we should
+follow when designing secure applications.
+

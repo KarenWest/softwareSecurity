@@ -1,0 +1,219 @@
+[SOUND]
+So
+far we have talked about computer security
+generally, but what is software security?
+The subject of this class, in particular.
+Software security is a branch of
+computer security that focuses on
+the secure design and
+implementation of software.
+In other words, it focuses on avoiding
+software vulnerabilities, flaws and bugs.
+While software security overlaps with and
+complements other areas of
+computer security, it is distinguished
+by its focus on a secure system's code.
+This focus makes it a white box approach,
+where other approaches are more black box.
+They tend to ignore
+the software's internals.
+Why is software security's
+focus on the code important?
+The short answer is that software
+defects are often the root cause of
+security problems, and software security
+aims to address these defects directly.
+Other forms of security tend to ignore the
+software and build up defenses around it.
+Just like the walls of a castle,
+these defenses are important and
+work up to a point.
+But when software defects remain,
+cleaver attackers often find
+a way to bypass those walls.
+We'll now consider a few standard methods
+for security enforcement and see how their
+black box nature presents limitations that
+software security techniques can address.
+Our first example is security enforcement
+by the operating system or OS.
+When computer security was growing
+up as a field in the early 1970s,
+the operating system was the focus.
+To the operating system, the code of a
+running program is not what is important.
+Instead, the OS cares about
+what the program does, that is,
+its actions as it executes.
+These actions, called system calls,
+include reading or
+writing files, sending network packets and
+running new programs.
+The operating system enforces security
+policies that limit the scope of
+system calls.
+For example, the OS can ensure
+that Alice's programs cannot
+access Bob's files.
+Or that untrusted user programs
+cannot set up trusted services on
+standard network ports.
+The operating system's security
+is critically important, but
+it is not always sufficient.
+In particular,
+some of the security relevant actions of
+a program are too fine-grained
+to be mediated as system calls.
+And so
+the software itself needs to be involved.
+For example, a database management
+system or DMBS is a server that manages
+data whose security policy is specific to
+an application that is using that data.
+For an online store, for example,
+a database may contain security sensitive
+account information for customers and
+vendors alongside other records such as
+product descriptions which are not
+security sensitive at all.
+It is up to the DBMS to implement security
+policies that control access to this data,
+not the OS.
+Operating systems are also unable
+to enforce certain kinds of
+security policies.
+Operating systems typically act as an
+execution monitor which determines whether
+to allow or disallow a program action
+based on current execution context and
+the program's prior actions.
+However, there are some kinds of policies,
+such as information flow policies, that
+can not be, that simply cannot be enforced
+precisely without consideration for
+potential future actions,
+or even nonactions.
+Software level mechanisms can be
+brought to bear in these cases,
+perhaps in cooperation with the OS.
+We will consider information flow policies
+in more depth later in this class.
+Another popular sort of security
+enforcement mechanism is
+a network monitor like a firewall or
+intrusion detection system or IDS.
+A firewall generally works
+by blocking connections and
+packets from entering the network.
+For example, a firewall may
+block all attempts to connect to
+network servers except those
+listening on designated ports.
+Such as TCP port 80,
+the standard port for web servers.
+Firewalls are particularly useful
+when there is software running on
+the local network that is only
+intended to be used by local users.
+An intrusion detection system
+provides more fine-grained control
+by examining the contents of network
+packets, looking for suspicious patterns.
+For example,
+to exploit a vulnerable server,
+an attacker may send a carefully crafted
+input to that server as a network packet.
+An IDS can look for
+such packets and filter them out to
+prevent the attack from taking place.
+Firewalls and
+IDSs are good at reducing the avenues for
+attack and
+preventing known vectors of attack.
+But both devices can be worked around.
+For example, most firewalls
+will allow traffic on port 80,
+because they assume it
+is benign web traffic.
+But there is no guarantee that
+port 80 only runs web servers,
+even if that's usually the case.
+In fact, developers have invented SOAP,
+which stands for simple object
+access protocol, to work around firewall
+blocking on ports other than port 80.
+SOAP permits more general
+purpose message exchanges, but
+encodes them using the web protocol.
+Now, IDS patterns
+are more fine-grained and
+are more able to look at the details
+of what's going on than our firewalls.
+But IDSs can be fooled as well by
+inconsequential differences in
+attack patterns.
+Attempts to fill those gaps by using
+more sophisticated filters can
+slow down traffic, and attackers can
+exploit such slow downs by sending lots of
+problematic traffic, creating a denial of
+service, that is, a loss of availability.
+Finally, consider anti-virus scanners.
+These are tools that examine
+the contents of files, emails, and
+other traffic on a host machine,
+looking for signs of attack.
+These are quite similar to IDSs,
+but they operate on files and
+have less stringent performance
+requirements as a result.
+But they too can often be bypassed by
+making small changes to attack vectors.
+Now we conclude our comparison
+of software security to
+black box security with an example,
+the Heartbleed bug.
+Heartbleed is the name given
+to a bug in version 1.0.1 of
+the OpenSSL implementation of the
+transport layer security protocol or TLS.
+This bug can be exploited by getting
+the buggy server running OpenSSL to
+return portions of its memory.
+The bug is an example
+of a buffer overflow,
+which we will consider in
+detail later in this course.
+Let's look at black box
+security mechanisms, and
+how they fare against Heartbleed.
+Operating system enforcement and
+anti-virus scanners can do little to help.
+For the former,
+an exploit that steals data does so
+using the privileges normally
+granted to a TLS-enabled server.
+So the OS can see nothing wrong.
+For the latter, the exploit occurs
+while the TLS server is executing,
+therefore leaving no obvious
+traces in the file system.
+Basic packet filters used by IDSs can
+look for signs of exploit packets.
+The FBI issued signatures for the snort
+IDS soon after Heartbleed was announced.
+These signatures should work against basic
+exploits, but exploits may be able to
+apply variations in packet format such
+as chunking to bypass the signatures.
+In any case, the ramifications of
+a successful attack are not easily
+determined, because any exfiltrated data
+will go back on the encrypted channel.
+Now, compared to these, software security
+methods would aim to go straight to
+the source of the problem by preventing or
+more completely mitigating
+the defect in the software.
+

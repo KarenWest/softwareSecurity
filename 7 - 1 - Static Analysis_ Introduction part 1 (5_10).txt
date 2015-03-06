@@ -1,0 +1,140 @@
+[SOUND].
+A key element of a security conscious
+software development process is
+performing code reviews with
+the assistance of tools.
+Increasingly such tools employ
+a technology called static analysis.
+In this unit we'll look at
+static analysis in detail.
+We begin with an introduction.
+We'll look at what static analysis is and
+why it is useful.
+Then we'll look at how
+static analysis works.
+To understand the basics we will
+develop a flow analysis that tries to
+understand how tainted values
+flow around a program.
+Our goal is to find bugs.
+Then, we will look at how to increase
+the precision of the basic analysis by
+making it context,
+flow and path sensitive.
+We will finish up by filling
+in some missing details.
+We'll consider how an analysis
+handles more challenging programming
+language features.
+How it can be customized
+to different settings, and
+how it can be made more
+impactful in practice.
+Current practice for software
+assurance tends to involve testing.
+The idea here is to make sure that
+the program runs correctly on a set of
+inputs that seem relevant to
+the operation of the program.
+So, we provide those
+inputs to the program.
+The program produces some outputs.
+And an oracle that the tester
+constructs confirms that
+the outputs are the ones
+that are expected.
+So testing is great because,
+if a test fails,
+you have a concrete failure that you
+can use to help find what the issue is.
+And, really also to establish whether or
+not the failure is a true one.
+On the other hand, coming up with
+test cases actually running them.
+And doing them so that they cover all
+of the relevant code paths is very
+difficult and provides no guarantees.
+The no guarantee part is especially
+troubling for security tests.
+Because it only takes one failure,
+one failed code path to lead to
+a vulnerability that could
+take down an entire system.
+Another approach that's complimentary
+is to use manual code auditing and
+the idea here is to convince someone else
+on your software development team that
+the source code is correct.
+Now, the benefit is that humans,
+when they review code,
+can generalize beyond single runs.
+So they can do better than
+just single test cases.
+They can imagine executions in their
+head that maybe they haven't written
+test cases for.
+On the other hand,
+human time is very expensive
+especially compared to computer time.
+And once again, this is a difficult task
+that provides now guarantees of coverage.
+And of course,
+we are worried about security, and so
+the malicious adversary is going to
+exploit those things that we miss.
+So, static analysis to the rescue.
+The idea here is to use a computer program
+to analyze a program's source code
+without running it.
+So in a sense we're asking a computer
+to do what a human might have
+done during a code review.
+And the benefit here is
+much higher code coverage.
+The computer program, the static analyzer,
+can reason about many possible runs of
+the program, and in some cases even
+reason about all possible runs, and
+thereby provide a guarantee
+that the property that
+we've attempted to establish,
+hopefully a reasonable.
+An important security property is
+in fact true, all of the time.
+We also can reason about
+incomplete programs,
+like libraries, that would
+otherwise be challenging to test.
+Now, as it turns out, static analysis,
+surprise, surprise, has drawbacks too.
+For example, it can only tend to
+analyze limited properties rather than
+complete functional correctness.
+It may miss some errors or
+have false alarms for engineering reasons.
+And it may also be time consuming to run.
+Static analysis can have significant
+impact on a security oriented
+development process.
+Because static analysis can throughly
+check limited but useful properties and
+there by eliminate entire
+categories of errors,
+it frees up developers to
+concentrate on deeper reasoning.
+Static analysis tool usage can also
+encourage better development practices.
+Programmers who use tools start to
+develop programming models that
+avoid mistakes in the first place.
+Programmers also end up thinking about and
+making manifest their assumptions.
+For example, they will use annotations
+that tools understand in order to
+improve tool precision by specifying
+what they intend for a program to do.
+Static analysis tools are becoming
+a commercial reality.
+And so companies are starting
+to feel this impact today.
+

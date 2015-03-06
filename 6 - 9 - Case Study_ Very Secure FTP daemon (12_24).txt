@@ -1,0 +1,345 @@
+[SOUND].
+We're going to finish off this unit
+by looking closely at a program I
+think has been very well designed for
+security.
+It's called, appropriately enough,
+Very Secure FTPD.
+FTP stands for file transfer protocol.
+This is a protocol that was particularly
+popular prior to the rise of
+the worldwide web, but you can still
+find FTP servers around today.
+It is used to allow clients to upload and
+download files to and from remote servers.
+In the 90s and early 2000s there seemed to
+be a never ending parade of
+compromises to FTP server software.
+VS FTPD was written in response
+to this poor state of affairs.
+It is a very thoughtful design aimed
+to prevent and mitigate defects.
+At the same time,
+it aims to get good performance.
+For example, it's written in the C
+programming language rather than
+a higher level in typesafe
+language like Java.
+It's written and
+maintained by Chris Evans, and
+as far as I know, there has never been
+a recorded security breach against it.
+Let's start by considering
+the VSFTPD threat model.
+First we assume that clients are untrusted
+until they are authenticated.
+And once they are authenticated
+they are granted a limited trust.
+That is trust according to the user's
+file access control policy.
+For those files being served by FTP and of
+course all others should be inaccessible.
+The possible attack goals of of
+an adversary are to steal or
+corrupt resources.
+For example to download files
+that shouldn't be downloadable or
+to upload malware.
+Remote code injection to
+take over the server.
+The circumstances might be that
+a client attacks the server or that
+a client attacks another client, trying
+to snoop information or to corrupt it.
+All right, now let's look at some of
+the defenses employed by VSFTPD's design.
+The first offense is the use
+of a secure string library.
+Here on the screen we see the code for
+implementing all strings
+that are used by VSFTPD.
+The first element is the normal,
+zero-terminated C string.
+The next element is the actual
+length of the string.
+That is, it's what you would
+get if you'd called strlen.
+And the first element is well defined.
+That is,
+it actually has a zero terminator.
+The third is the size of the buffer
+that was returned by malloc.
+Now of course the length of the string
+might be far less than the length of
+the overall buffer.
+And so we need to track both of those.
+Particularly when we consider being
+able to concatenate strings together.
+To use VSFTPD secure strings, we simply
+need to replace all occurrences of
+where we would normally use a care
+star which is the normal care string.
+With a stuck, with a struct mystr.
+And we would replace things like strcpy
+with the equivalent function str_copy.
+Here we can see the str_copy function is
+implemented by a call to a private
+function private str alloc menchunk.
+The private function takes the p_dest,
+this is the mystr of
+the destination of the copy.
+And from the source, it takes
+the original C string buffer p_buf,
+as well as the declared link
+that that buff should have.
+Now, let's look at the code for
+private_str_alloc_memchunk.
+We can see that this code implements
+a number of defensive checks for
+the protection and security.
+The first check checks for
+integer overflow when we account for
+the added zero terminator that's
+going to be put on the end.
+If len plus one is less than
+len then that implies that it
+wrapped around and overflowed.
+Next, we make sure that we have
+sufficient space in the target buffer per
+p_str to contain the source.
+And if not, we free the old buffer and
+allocate a new one.
+And then finally, we copy in the source
+contents up to the declared length and
+we are sure to add the zero
+terminator at the end.
+The next defense that very
+secure FTPD employs that
+we'll consider is a secure
+system call library.
+And this addresses the common
+problem of error handling.
+Libraries often assume that
+arguments are well-formed.
+And clients assume that
+library calls always succeed.
+For example, consider malloc.
+What if the argument to
+malloc is non-positive?
+We saw earlier that integer overflows
+can induce this behavior and
+lead to buffer overruns if malloc accepts,
+say a zero for its argument.
+Another question is,
+what if malloc returns null?
+Oftentimes, a deference of null
+will cause a crash, which is safe.
+But on platforms without
+memory protection,
+a dereference can cause corruption and
+create security problems.
+The VSFTPD solution to this problem is
+to wrap system calls and make sure that
+the error checking happens in the wrapper,
+so that clients can't forget to do it.
+Here we see that the size
+argument is checked.
+It should not be greater than the maximum
+integer and it should not be zero.
+On the other hand we also checked
+that malloc does not return null.
+And if so,
+we kill the program immediately.
+As such, this routine is going to fail
+if it receives malformed arguments or
+runs out of memory.
+Another defense that VSFTPD uses
+literally is to minimize privilege.
+For example untrusted input is always
+handled by non root processes,
+thereby minimizing the amount
+of privilege they have.
+When root level actions are required.
+IPC is used by those processes to
+send a message to a root process to
+perform the few actions
+that require root access.
+During execution processes reduce
+their privileges as much as possible.
+Either running as a particular user.
+For example, the one whose files are being
+served, or by using the capabilities or
+the Lennox sitcom system
+call to reduce the set of
+system calls that the process
+can actually use.
+VSFTPD also minimizes
+a process' access to files, on
+the host system, by hiding all directories
+other than the one that's serving files.
+All of these things are a principle
+of least privilege, and
+minimizing the amount of root code tries
+to minimize the trusted computing base.
+So let's look visually
+at how VSFTPD operates.
+Here we have a server and a client.
+The client sends a TCP connection
+request to the server in an attempt to
+start an FTP session.
+Upon receiving this request,
+the server forks and
+execs to create a command processor.
+This command processor then forks
+again to create a login reader.
+And the login reader now
+runs at lower privilege.
+The client can then send the user and
+password to the login reader.
+And the login reader will
+then send the user and
+password request to the command processor.
+Which will, using its root privileges,
+check whether or
+not this user and password is in
+the system's password database.
+If so, the user is authenticated,
+and allowed to proceed.
+At this point, the command processor forks
+again, and creates a, another reduced
+privilege command reader and executor,
+that the client can then interact with.
+So the client could ask
+to change directories or
+to CHOWN a file that is change
+the ownership of the file.
+Because CHOWN is a privileged
+operation this is
+delegated to the root command processor.
+Eventually the client completes and
+logs out.
+In all of the processes associated
+with that client are cleaned up.
+Okay, so given this design,
+what attacks are possible?
+Well the first attack we might
+consider is one at login.
+Suppose that during the login process,
+the client tries to inject
+a string to overrun a buffer.
+Or perform some other malicious action.
+Well, in this case the login
+reader is white listing its input.
+It's only allowing user password and
+ignoring everything else.
+As a result, it limits the attack surface,
+making it hard for
+the client to penetrate the login reader.
+For that matter, the login reader
+has very limited privilege.
+It's not running as root.
+The authentication, in fact, is happening
+in the separate command processor process.
+As a result, this mutes the capabilities
+of any code that could be
+injected if there was
+a vulnerability in the login reader.
+Note that the client is not going to
+be able to communicate with the command
+processor directly.
+This is because of the way
+the connection is managed.
+And once again, the command processor,
+when it interacts with the login reader,
+accepts very limited input.
+So it's unlikely the client
+could fool the login reader into
+sending something malicious
+to the command processor.
+Okay, so
+let's imagine the client has logged in.
+What sort of attacks
+might the client attempt?
+Well, if they attempt the command reader,
+again, they're going to be
+limited in their capabilities.
+The command reader is not root.
+Though it does handle
+most of the commands,
+these commands are only at
+a lower level of privilege.
+Those that do require
+privilege go back and
+forth between the command processor and
+the command reader.
+If the client attempted to speak
+to the command processor directly,
+again that's not going to be allowed, and
+those commands that are exchanged between
+the command processor and
+the command reader are very limited.
+The last attack that we might
+consider is one client trying to
+attack another via the FTP session.
+So let's imagine how that can happen.
+The first client connects and
+creates a command reader or executor.
+And then the second client
+does the same thing.
+Now these two clients have sessions
+between their respective processes.
+These session are isolated.
+They're in separate processes.
+As a result, there is no way that
+the command reader can talk to
+the client that it's not designated for.
+There are a few other things
+to say about VSFTPD's design.
+Interestingly, it has
+a secure sockets option for
+encrypted connections, but
+it's not turned on by default.
+There's an interesting comment in the
+release notes for VSFTPD that says it's
+a massive quantity of code which is
+essentially parsing complex protocols.
+As such, it's potentially not trustworthy.
+And as it turns out the recent heartbleed
+bug shows that that was in fact the case.
+Also VSFTPD attempts to
+reduce its attack surface by
+trusting as few third party
+executables as possible.
+For example, it does not use the standard
+LS command for directory listings but
+instead constructs its own
+directory listings in its own code.
+The software development life cycles
+consists of some organization of
+roughly four phases.
+In this unit, we have carefully considered
+how security fits into the first two of
+these phases, requirements and design.
+In earlier units, we spent a lot of
+time considering implementation issues.
+And various security bugs and how to
+prevent them or mitigate their affects.
+Next, we're going to consider
+the last phase testing and assurance.
+In particular, we're going to discuss
+how to use automated code review to
+find security bugs using
+techniques like static analysis.
+We're also going to look at a technology
+called symbolic execution that forms
+the core piece of a technology called
+automated whitebox fuzz testing.
+This technology is very good at
+finding certain sorts of bugs.
+Finally, we'll look at the general
+practice of penetration testing.
+Which aims to find security
+problems in a completed system
+involving various tools employed by
+testers with their black hats on.
+

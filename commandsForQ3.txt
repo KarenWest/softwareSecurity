@@ -1,0 +1,7 @@
+in dir: seed@seed-desktop:~/projects/3/project3$
+
+export PATH=$HOME/klee-cde-package/bin/:$PATH
+
+llvm-gcc.cde -I../../../klee-cde-package/cde-root/home/pgbovine/klee/include --emit-llvm -c -g wisdom-alt-sym.c
+
+klee.cde -exit-on-error wisdom-alt-sym.o

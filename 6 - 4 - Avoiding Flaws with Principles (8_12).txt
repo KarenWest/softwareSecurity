@@ -1,0 +1,216 @@
+[SOUND]
+Once we've determined our
+normal requirements and
+our security requirements, we must design
+the software and we must implement it.
+Defects could be introduced in
+either of these two activities.
+Defects in the design are called flaws.
+And defects in the implementation
+are called bugs.
+The goal of the design phase from
+a security perspective is to avoid flaws.
+Now, while a lot of security
+related focus is on
+implementation bugs like buffer overruns.
+Flaws are equally important.
+According to security guru Gary McGraw
+in his book Software Security,
+roughly half of security-relevant
+software defects are flaws, not bugs.
+So getting the design right
+is extremely important.
+What I've just said may make it seem
+like there's a crisp distinction between
+the design and
+implementation of a piece of software.
+But that's not entirely true,
+rather design and
+implementation occur at many
+different levels of abstraction.
+For example, at the highest level we're
+concerned about a system's main actors.
+These might be elements like a web server,
+a database management system and
+a client's browser.
+Each running in it's own process and
+communicating with one another.
+The choice of programming
+language to use or
+framework is also a fairly
+high level design decision.
+At the next level down we're concerned
+with the internal design of each of
+these actors.
+A web server is going to consist
+of many different functions and
+objects, how should these be organized?
+And how do they interact?
+This is a question of design.
+At the lowest level we must decide
+how to represent data structures.
+How to implement a piece of functionality,
+for example, with one method or
+three and so on.
+When someone speaks generically about
+a software system's design he may be
+speaking about any or all of these levels.
+When speaking about it's implementation
+he might also be thinking about the lower
+level or maybe the lower two.
+However, we believe there is design
+happening at the lower levels and
+the choices made there effect security.
+So in speaking about design
+we mean all three levels, and
+which in particular,
+should be clear from context.
+The software design process aims to
+produce a software architecture according
+to good principles and rules.
+This is an iterative process.
+We first put down our initial design.
+And then we perform a risk
+based analysis of that design.
+As a result, we may determine that
+the design needs to be improved.
+And so, we apply our principles and rules
+and then improve until we are satisfied.
+A principle is a high-level design goal
+with many possible manifestations.
+While a rule is a specific practice that
+is consonant with sound design principles.
+Now the difference between
+these two can be fuzzy,
+just as the difference between design and
+implementation is fuzzy.
+For example, there is often a principle
+underlying specific practices.
+Principles may also sometimes overlap.
+The software design phase tends
+to focus on principles for
+avoiding flaws and less on rules which
+are more part of the implementation phase.
+We can group our set of software design
+principles into three categories.
+The first category is prevention.
+These sorts of principles aim to
+eliminate software defects entirely.
+For example, the Heartbleed bug
+would have been prevented by using
+a type-safe langauge, like Java,
+which prevents outright buffer overflows.
+The second category of
+principle is mitigation.
+These principles aim to reduce the harm
+from exploitation of unknown defects.
+That is, we can assume that
+some defects will escape our
+elimination during
+the implementation phase.
+But if we design our software in
+the right way, we may make it harder for
+an adversary to exploit these defects
+in a way that's profitable to him.
+As an example we could run each
+browser tab in a separate process.
+So that exploitation of one
+tab does not yield access to
+data that is stored in another tab because
+it is isolated by the process mechanism.
+The third category of principle
+is detection and recovery.
+The idea here is to identify and
+understand and
+attack, potentially undoing its
+damage if we're able to recover.
+As an example, we can perform monitoring
+of the execution of our program.
+To try to decide whether
+an attack has taken place or
+might be in the process of taking place.
+And we could perform snapshotting
+of various stages of
+our software's execution.
+In order to revert to a snapshot if
+we discover later that an attack has
+corrupted our system.
+So now, without further ado, here are the
+core principles we have identified for
+constructing secure software.
+First, favor simplicity and
+in particular use fail-safe defaults and
+do not expect expert users.
+Next, trust with reluctance by employing
+a small, trusted computing base and
+granting a component the least privilege
+it needs to get its work done.
+Ensuring least,
+least privilege may involve promoting
+privacy and compartmentalizing components.
+Next, defend in depth.
+Avoiding reliance on
+only one kind of defense.
+The word depth also means
+depth of attention.
+By employing community resources,
+such as hardened code and vetted designs.
+Finally, monitor and trace to be able
+to detect and diagnose breaches.
+Our principles are strongly
+influenced by a set of
+principles put forth way back in 1975.
+By Jerome Saltzer and
+Michael Schroeder in their paper,
+Protection of Information
+in Computer Systems.
+It's amazing to see how well
+these principles have kept up.
+Despite systems, languages,
+applications all
+being different today compared
+to what they were in 1975.
+Here are the principles suggested
+in section one of the Saltzer and
+Schroder paper.
+Where those in green
+are identified as principles and
+those in blue were considered
+by the authors as relevant.
+But imperfect in their
+application to computer systems.
+Comparing our principals to the classic
+ones, there is substantial overlap.
+Some of the classic principles
+have been regrouped or
+renamed and some expanded in scope.
+We have added monitoring in support of
+forensics because successful attacks
+are inevitable.
+And you need a way to diagnose and
+improve on past failures.
+Saltzer and Schroder may have been
+also concerned about this, but
+in their paper were more
+focused on prevention.
+Finally I have dropped their
+principle of complete mediation,
+that states simply that all
+security relevent actions.
+Must be mediated if policies
+on them are to be enforced.
+I don't think of this as a design
+principle because all designs that
+lack it are insecure by definition.
+In that sense, it is a requirement,
+not a principle.
+By comparison, a design could lack all
+the other principles and still be secure.
+But achieving security with such
+a design would be very difficult and
+would be very hard to maintain.
+Okay.
+Next we will dig into these different
+design principles, organized by category,
+and starting with favor simplicity.
+

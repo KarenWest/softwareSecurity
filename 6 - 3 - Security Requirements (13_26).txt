@@ -1,0 +1,368 @@
+[NOISE].
+When considering the overall requirements
+for the software that we want to build,
+we must also consider its
+security requirements.
+Normal software requirements are about
+what the software should do.
+Security requirements outline the security
+expectations of the software's operation.
+And these come in two flavors.
+First, there are the security-related
+goals or policies.
+For example, a policy for
+our online bank application might be
+that one user's bank account
+balance should be private.
+That is, no other user should
+be able to figure out what it
+is without proper authorization.
+Second, we may have requirements
+concerning the mechanisms we use to
+enforce security.
+For example, we may require that for
+password based authentication,
+passwords must be strong.
+And the database storing
+those passwords must not be
+accessible to any program other than
+the authenticating login program.
+Now let's dig a little deeper and
+explore different sorts of policies and
+mechanisms a designer might employ.
+There are three classic types of policy.
+Confidentiality policies, integrity
+policies and availability policies.
+Confidentiality policies are sometimes
+further broken down into privacy and
+anonymity requirements.
+Required security mechanisms often
+address three sorts of activities.
+Authentication, authorization and
+auditability.
+Let's look at each of these
+elements more closely.
+First, we'll consider the three kinds
+of security policy beginning with
+privacy and confidentiality.
+Privacy and confidentiality are ensured
+when sensitive information is
+not leaked to unauthorized parties.
+We typically refer to this
+property as privacy for
+individuals, and confidentiality for data.
+Sometimes we also refer to it as secrecy.
+As an example, for
+our online bank the bank account status.
+Which includes the bank account balance,
+should only be known to the account
+owner and not to any other parties.
+A violation of privacy or
+confidentiality could occur directly,
+or could occur by a side channel.
+For example, it might be possible to
+manipulate the system to directly
+display Bob's bank account balance to
+Alice, and thereby violate the policy.
+But it might also be possible to learn
+that Bob has an account at the bank,
+because there is a shorter
+delay on login failure.
+That is a poorly designed login
+system might take a long time to
+go through the database to find whether or
+not a user has an account.
+On the other hand,
+if the user does have an account,
+the returned login failure
+may occur more quickly.
+Another sort of confidentiality
+policy is anonymity.
+This is a specific kind of privacy.
+As an example, we could say that
+non-account holders should be able to
+browse the bank informational
+site without being tracked.
+And having their identity
+compromised by the bank,
+or the advertisers that
+the bank works with.
+In this case, the adversary is not users
+outside the banking system itself, but
+instead the bank and
+maybe third party advertisers.
+In the other examples,
+we considered the account holders or
+malicious third parties as the ad,
+adversaries.
+The next kind of security policy that
+we'll consider is an integrity policy.
+The idea here is that sensitive
+information should not
+be damaged by computations acting
+on behalf of unauthorized parties.
+For example, only the account owner can
+authorize withdrawals from her account.
+If some other party were able
+to affect an account withdrawal,
+that would violate the integrity
+of the bank account balance.
+Once again, violations of integrity
+can be direct or indirect.
+For example, we may be able to
+specifically withdraw from the account,
+because the account system does not
+properly authorize such actions.
+Or, there may be a way of confusing
+the system into, into doing it.
+For example,
+by using a cross-site request forgery.
+The third sort of security policy
+we'll consider is availability.
+In this case,
+availability means that the system is
+responsive to requests made to it.
+For example, we may want a user to always
+be able to access her account balance for
+queries and withdrawals.
+We do not, on the other hand,
+want a denial of service
+to be able to take place.
+In this case, an attacker is able to
+overwhelm a site with useless requests,
+and thereby, prevent the site from
+servicing the reasonable ones.
+Another way of having a denial
+of service attack is simply to
+cut off access by the network to the site.
+Once we've defined the security policies
+we have in mind for an application.
+We have to think about how we're
+gong to enforce those policies.
+Leslie Lamport defined the gold
+standard as the three sorts of
+mechanisms often provided by a system
+to perform this sort of enforcement.
+These mechanisms include authentication,
+authorization and audit.
+And of course, gold comes from the first
+two letters of each of these actions.
+A-U, from the periodic table.
+The Gold Standard is both
+a requirement and a kind of design.
+In particular, the sorts of policies that
+you are considering may determine how,
+what sort of authorization
+mechanism you need to use.
+For example,
+if you're using user versus user policies,
+like in our online banking system.
+We need to have an authentication and
+authorization mechanism that distinguishes
+the actions of different users.
+The kinds of users that we consider may
+determine how we authenticate them.
+Okay.
+Let's consider the first element of the
+Gold Standard, which is authentication.
+The goal of authentication is
+to determine the subject of
+a particular security policy.
+In particular, many policies
+require a notion of identity.
+In order to authorize a particular action,
+we need to know who is
+performing that action.
+By who, we also mean a principal.
+That is, it could also be a human being.
+Or it could be some service or
+a computer program.
+Either way,
+we need to identify that actor and
+determine whether the proposed
+action is continent with our policy.
+So, the question that
+authentication tries to answer is,
+is the user who he says he is?
+That is, a principal that claims
+to be a particular identity.
+Can we tell whether or
+not that claim is true?
+We might do this in several ways.
+First of all, we might try to see whether
+the claimed user knows something that
+only the real user would know.
+This is the theory behind passwords.
+Only the real user should know his or
+her password.
+And therefore, if the password
+is entered correctly we must be
+dealing with the real user.
+Another approach is to base it
+on something that the user is,
+like a biometric.
+So for a human user we might check
+a retinal scan or a fingerprint.
+Another idea is to base authentication on
+something the user has, like a smartphone.
+We might assume that a particular
+smartphone phone number is only in
+the possession of a particular user.
+And therefore, communication via
+that phone will be to that user.
+Authentication mechanisms that employ
+more than one of these factors,
+are called multi-factor
+authentication methods, or MFAs.
+As a common example, a bank may
+employ passwords as a first factor.
+And then send a text of a special
+code to a user's smart phone,
+asking the user to enter that code
+before authentication is complete.
+The next element of
+the Gold Standard is authorization.
+Authorization defines when a principal
+may perform a particular action.
+For example, Bob is authorized
+to access his own account, but
+he is not authorized to
+access Alice's account.
+There are a wide variety of
+security policies that involve some
+sort of authorization.
+For example, the policy we just saw,
+is a user based, access control policy.
+That is, accesses defined in terms of
+the users performing particular actions,
+like Alice or Bob.
+Access control policies
+could also be role based.
+For example, a bank teller or
+a bank manager may be allowed
+to perform certain things.
+And different individuals may at
+different times fulfill that role.
+Policies could even be originator based.
+For example, Bob could originate
+a policy that allows Alice to
+withdraw a fixed amount of
+money from his account.
+The final element of
+the Gold Standard is audit.
+The idea here, is to retain
+enough information to be able to
+determine the circumstances of a breach or
+misbehavior.
+Or, to establish that a breach or
+misbehavior did not in fact occur.
+Such information is often
+stored in log files.
+In order to be trustworthy, we must
+protect these files from tampering.
+As an example, every account-related
+action may be logged locally, and
+then mirrored at a separate
+site to avoid tampering.
+These logs could be used for
+example, to confirm or
+refute a claim that Bob might make that
+a withdrawal took place from his account.
+How should you determine what
+your security requirements are?
+There could be many processes
+that you could employ.
+First, forces external to your
+particular project may come into play.
+There may be laws or
+regulations governing applications of the
+kind that you are setting out to write.
+For example, if you are writing
+an online health record database for
+use in the US, you must consider the
+privacy requirements mandated by HIPAA,
+the Health Insurance Portability and
+Accountability Act.
+Or, if you're writing a financial
+management application,
+you may need to consider the implications
+of Sarbanes-Oxley, also known as SOX.
+You may also be encouraged to implement
+security requirements in line with
+your organization's values.
+For example, if you work at
+a consumer advocacy organization,
+you might have a strong inclination
+to protect user privacy.
+Security policy requirements might
+also arise from the exercise of
+threat modeling and
+architectural risk analysis.
+After considering the likely
+adversaries and their goals and
+capabilities, you might identify
+resources that you should protect.
+You might also draw insight from prior
+attacks that you have observed or
+experienced, to know more about what
+resources are security relevant.
+And how they might be compromised.
+And thereby define policies or mechanisms
+aimed at thwarting potential attacks.
+A particularly fruitful activity
+can be the design of abuse cases.
+In traditional software
+engineering processes,
+use cases are stories describing how
+software or software features can be used.
+As such,
+they illustrate functional requirements.
+Abuse cases on the other hand,
+illustrate security requirements.
+In particular, they identify things
+that a software system should not do.
+Considering our online bank
+application once again.
+An example use case might be
+that the system allows bank
+managers to modify
+an account's interest rate.
+An abuse case would be a user who is
+able to masquerade as the manager, and
+thereby change the interest
+rate on his own account.
+What process might you use
+to come up with abuse cases.
+One approach is to start with likely
+scenarios and patterns from known attacks.
+And then think of
+cases in which an adversary can
+break a security requirement.
+And adversary's power is
+determined by the threat model.
+And the violation of the requirement
+could be due to a failure of
+an assumed security mechanism.
+For example, suppose we were
+assuming a co-located attacker.
+Then an abuse case might be that
+the attacker steals the password file,
+which is within his capabilities
+as being co-located.
+And thereby learns all of the passwords.
+He might be able to do this because
+the password file is unencrypted.
+Another abuse case might be
+a snooping attacker that is able to
+capture a users message and
+then replay it.
+If the banking application cannot tell
+replayed messages from the originals,
+then the replay might have
+negative consequences.
+For example, it could affect a repeated
+transfer of funds from an account.
+Such replayed messages might be
+prevented by including a nonce, or
+other unique identifier in the message.
+

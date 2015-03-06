@@ -1,0 +1,187 @@
+[SOUND]
+The final category of buffer overflow
+style attack we will consider is
+called a format string attack.
+It is named for the format strings
+used by the printf family of
+library functions in
+the standard C library.
+A format string is typically the first or
+one of the first arguments to
+a printf style function and
+the remaining variable number of arguments
+comprise the data to be printed.
+Format strings use what are called
+format specifiers to indicate how
+data should be formatted.
+For example, the code snippet shown
+here prints out a record consisting of
+an individual's name and age.
+The first format specifier applies
+to the first argument following
+the format string, and the second
+specifier applies to the second argument.
+In this case, the first argument is
+a string and the second is an integer.
+There are also many other
+kinds of specifiers too.
+Now, let's see how a simple
+misunderstanding of how
+format strings should be used,
+can lead to a serious vulnerability.
+Now, we might wonder,
+what's the difference between
+this function and this function?
+We can see that on the first two
+lines the functions are identical.
+They allocate a character
+buffer on the stack.
+And they call fgets to read into it.
+The difference is on the third line.
+The first function calls %s as
+a format string prior to printing buf.
+Whereas the second function forgoes
+using a format string altogether and
+just places buf there.
+Now we might think to ourselves,
+buff is just a string in both cases.
+So why do I need the format string?
+Well, the important part is that buff
+might itself contain format specifiers.
+In the first case,
+if it does, those specifier will
+just be printed out to the screen.
+In the second, those will be interpreted.
+If the attacker controls the format
+string then the interpretation of
+those format specifiers
+can work to his advantage.
+So let's look at how printf is implemented
+and see how that might happen.
+Here we see a call to printf.
+It's going to print out i and its address
+using the %d and %p format specifiers.
+The first is for printing an integer.
+The second is for printing out a pointer.
+Here's what the stack might look like with
+the top most address range to the right,
+and the stack growing from
+right to left as usual.
+We can see the arguments on the stack.
+First of all, the &i argument.
+The i argument.
+And the format string,
+pushed in reversed order.
+Printf takes a variable
+number of arguments and
+pays no mind to where
+the stack frame actually ends.
+It presumes that when you called it,
+you passed in at least the number of
+arguments specified in the format string.
+Here we have %d which
+corresponds to the argument ten.
+And here we have %p that
+corresponds to the argument &i.
+So everything is well.
+Now let's go back to our
+vulnerable function.
+Suppose we passed in
+the format string %d %x.
+And notice that there are no
+additional arguments provided.
+In this case,
+the stack will look as follows.
+We'll have just pushed the format
+string argument and that's all.
+Now when printf goes to interpret that
+string, it will read from the caller stack
+rame, frame the %d portion and then we'll
+read again for the %export portion.
+Let's think about some other format
+strings and what might happen.
+This format string will print out the four
+bytes above the saved instruction pointer.
+Why is that?
+Well it turns out that printf ignores
+any spaces between the percent and
+the format character that's
+used in the specifier.
+In this case%d.
+In this case, it's going to print out
+the byte pointed to by this stack entry.
+So it's going to look
+one pass the saved eip,
+interpret that four bytes as a pointer,
+go to that memory address and
+then print out the entire content
+until it reaches an ultimanator.
+This will print out a series of
+stack entries as integers and
+this format string will print in,
+print them out as hex.
+Now here is the really terrible one.
+This one will actually write the number
+three toward the address pointed to by
+the stack entry.
+Why is that?
+Well, %n is a format specifier that is
+used to write the progress that printf has
+made in printing out to the output stream.
+In this case,
+it will have printed 3 characters, 100,
+and so it will print the number 3 to
+whatever the argument is on the stack.
+It's expecting to receive an integer,
+right, for corresponding to the %n.
+But it's not actually going to get one.
+Instead it's going to override
+the stack entry instead.
+And as you might suspect,
+this is going to allow the attacker to do
+a remote code injection
+in certain circumstances.
+So you might ask yourself, why is a format
+string attack like a buffer overflow.
+Well, we should think of it as
+a buffer overflow in the sense that
+the stack itself can be
+viewed as a kind of buffer.
+That is, all of the arguments defined
+by a function define a kind of
+buffer and bounds.
+The size of that buffer is
+determined by the number and
+size of the arguments
+passed to the function.
+So providing a bogus format string
+thus induces the program to
+overflow the buffer as
+defined by the arguments.
+This vulnerability has been around for
+quite a while and continues to happen
+despite people knowing about it.
+Now that we have seen the wide variety of
+buffer overflow style attacks that exist,
+it's time to trade our black hat for
+a white one.
+To see about how to defend against them.
+In our next unit we will step back and
+look more carefully at what
+these attacks have in common.
+Then we will look at a variety
+of different defenses and
+evaluate their effectiveness.
+In essence, we will chronicle the cat and
+mouse game played by attacker and
+defender over the last couple of decades.
+By the end,
+we will see that unfortunately,
+when programming in C the attacker
+still largely has the upper hand.
+Fortunately, it is far more difficult
+today to generate an exploit than it
+use to be, and new methods for
+avoiding buffer overflow
+vulnerabilities are being developed.
+

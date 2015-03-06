@@ -1,0 +1,26 @@
+KLEE: output directory = "klee-out-2"
+KLEE: WARNING: undefined reference to function: strcpy
+KLEE: WARNING: undefined reference to function: strlen
+KLEE: WARNING: undefined reference to function: write
+KLEE: WARNING: calling external: write(1, 3086171624, 55)
+Hello there
+1. Receive wisdom
+2. Add wisdom
+Selection >Enter some wisdom
+KLEE: ERROR: /home/seed/projects/3/project3/wisdom-alt-sym.c:60: memory error: out of bound pointer
+KLEE: NOTE: now ignoring this error at this location
+EXITING ON ERROR:
+Error: memory error: out of bound pointer
+File: /home/seed/projects/3/project3/wisdom-alt-sym.c
+Line: 60
+Stack: 
+	#0 00000116 in sym_gets (buf=3086404832) at /home/seed/projects/3/project3/wisdom-alt-sym.c:60
+	#1 00000152 in put_wisdom () at /home/seed/projects/3/project3/wisdom-alt-sym.c:80
+	#2 00000276 in main (argc=1, argv=3085978400) at /home/seed/projects/3/project3/wisdom-alt-sym.c:123
+Info: 
+	address: 3086404960
+	next: object at 3086874784 of size 4
+		MO69[4] (no allocation info)
+	prev: object at 3086404832 of size 128
+		MO160[128] allocated at put_wisdom():  %wis = alloca [128 x i8]                        ; <[128 x i8]*> [#uses=3]
+

@@ -1,0 +1,271 @@
+[SOUND]
+So lets begin by going over
+the basics of the world wide web.
+The world wide web consists roughly
+speaking of two sorts of participants,
+clients and servers.
+And clients and
+servers interact with one another.
+So clients consist of things like laptops,
+and desktops, and
+mobile phones, all of which are interested
+in content that's provided by servers.
+And these are things like
+shopping web sites, Amazon for
+example, like information web sites,
+Wikipedia, blogs, things like that.
+So the client runs a browser,
+this is Internet Explorer, or Chrome, or
+Firefox, and at the server,
+one runs a web server to run the content.
+And web servers are like Apache, HTTPD.
+Engine X, IIS by Microsoft and so on.
+The server often maintains
+a database which keeps track of
+the information that it's serving.
+And the client might also
+maintain a bunch of private data
+that's relevant to the interaction that
+it's having with the server over the web.
+The database is often a separate entity,
+logically and sometimes even physically.
+So, for example,
+a database might be MySQL,
+that's a particular database management
+system, or Postgres or SQL Server.
+Much of the user data is stored
+as part of the browser or
+might be stored as files that
+the browser later has access to.
+When the browser interacts
+with the web server,
+it does it via what's called
+a universal resource locator, or URL.
+And we see one here.
+this is the URL for my home page
+at the University of Maryland.
+So the first part of
+the URL is the protocol,
+here http,
+which we'll talk about in a minute.
+The second part is the address of
+the host that is serving the content,
+where on the internet the server is.
+And this is translated into
+an internet protocol or
+IP address by the domain main service or
+DNS.
+So when the user types in www.cs.umd.edu,
+this address is provided to DNS.
+Which will then look it up and
+return back an IP address,
+which is just a 32 bit integer.
+In this case it's 128.8.127.3.
+With this information, the browser knows
+that it should connect to this Internet
+address using the HTTP protocol.
+The remaining part of the URL is
+the path to the particular resource that
+the client is interested
+in the server providing.
+Here it's till the end of UH/index html,
+if we
+look at just the last part, the index.html
+part, we can see that it's a file.
+It's static content because of the suffix
+html, so basically the server's just
+going to acquire this file and
+return it back to the client.
+Because it's hyper text,
+HTML, the browser will render
+that file on the browser screen.
+And the user can interact with it,
+clicking on links and
+filling in forms and so on.
+Another sort of URL might have
+a different final file, a different path.
+So in this case, delete.php.
+And the content of that path is different.
+PHP is a program written in
+the PHP programming language and
+the content is actually determined
+by running the program.
+PHP runs at the side of the server and
+it will query the database
+to acquire information.
+So if the database changes because
+other users interact with it.
+Then the next time you go to delete PHP,
+you might get different
+content shown in your browser.
+So this is a dynamically generated file.
+It's content that's created on the fly.
+Now sometimes URLs also have what
+are called arguments that direct.
+How, the server is going to do
+the rendering for dynamic content,
+how it's going to produce the page that's
+ultimately returned back to the client.
+So, here we have a couple of arguments,
+F, which is set to joe123, and W,
+which is set to 16.
+Okay, so
+the browser communicates with the web
+server using the protocol
+that's specified in the URL.
+And, the most common one,
+the one we'll focus on is HTTP and
+this stands for
+hypertext transfer protocol.
+It's a so-called application layer
+protocol when using the OSI network stack
+protocol, and it runs on top of TCP,
+the transmission control protocol.
+Which can exchange collections of
+data that reliably across across
+a network even an unreliable one.
+So what will happen is that a user
+might be viewing a web page and
+click on the web page.
+And as a result an HTTP
+request will then be
+sent to the server that
+was specified in the URL.
+Associated with that button click.
+This URL is accompanied by headers
+in the actual HTTP Request.
+And we'll look at those in a moment.
+And there are two types of requests,
+Get and Post requests.
+Get requests are such that all of
+the data is in the URL itself.
+This data being the data that determines
+what file or, or content is returned.
+Importantly, it will not change
+the contents of data that's stored on
+the server.
+It will only cause those contents
+to produce a file that is
+sent back to the client.
+A post, on the other hand,.
+Which can happen by filling
+in a form field and
+then submitting it may allow
+the server's state to be changed.
+In other words it may have side effects.
+So here's an example of an HTTP GET
+request, and in this case it is to.
+reddit.com, and
+we can see at the very top the URL and
+most importantly, the first two lines,
+say that it's a get request and
+it's going to the R Security path,
+using HTTP version 1.1.
+And it's going to get it from
+the host www.reddit.com.
+Another interesting field,
+another interesting header I should say
+that's shown here is the User-Agent field.
+And this typically identifies a browser,
+so this is what the server can use for
+example, to provide content
+that depends on the browser.
+Like when you go to download a Open Source
+program and it knows that you're running.
+On a MAC, it will know this by looking
+at the User-Agent field in the header.
+Okay, so
+lets suppose we are at this site, and
+we follow that link and this content
+is then showed to us in our browser.
+And we want to click on this worst DDos
+attack of all time link that's shown here.
+Okay, when we do that, it will generate
+an HTTP request that goes to ZDnet.com,
+and gets the URL that we clicked on.
+Notice here something different
+from the last header,
+the set of headers we looked at.
+There's a so called Referrer field.
+And this indicates the web page
+that was clicked on in order to
+generate the current HTTP request.
+And this can be useful for
+the server to know whether or
+not the request was
+generated from content.
+Say, that it produced,
+rather than from content that
+somebody just typed into the browser.
+And this does have security ramifications.
+We'll look at those more a bit later.
+Now lets look at an HTTP Post request.
+So here we're posting on a site
+called Piazza.com, which is
+a course management site that allows you
+to have online discussions and so on.
+Here we can see the,
+the request at the very top
+has post as the request type,
+along with the URL again.
+And we can see the host is piazza.com.
+Much of the rest of
+the request looks similar.
+Here's one part that's different.
+The very end includes data that is
+explicitly part of the request content.
+So for example, these are.
+this, part of the request might
+be populated by form fields that
+are filled in by a user, for
+example when responding to a blog post.
+So you can see here, at the very right,
+a bit of HTML, interesting.
+Perhaps it has to do with and so on, that
+someone might have typed into a text box,
+that then got included in this post
+request when they clicked submit.
+On the other hand you can still also have
+content included in the URL just like you
+might for a get request.
+Okay so once you've submitted
+a request now you're going to
+get back a response that
+the browser is going to render.
+And what is the response look like?
+Well, it will contain a status code,
+some headers, and then the data.
+As well, it will contain some cookies.
+We'll talk a whole lot
+more about cookies later.
+But roughly speaking, these represent
+state that the server would like
+the browser to store on its behalf, that
+helps maintain the notion of a session.
+Or other sorts of memories that
+the server would like to have,
+and, in terms of interactions
+with the client later on.
+So here's an example response.
+At the very top we can see the http
+version, the status code and
+the reason phrase.
+So here the status was 200, which means
+that it could find the page that we
+asked for, hence okay for
+the reason phrase.
+Then a whole bunch of headers.
+And finally the data at the very end.
+You can see here, set cookie,
+as part of the header.
+These are those cookies that
+I speaking about before.
+And you can see things like,
+at the very end,
+content type text html, that indicates the
+type of the data that's being provided.
+The browser can then use this content
+type specifier to know what to do with
+the data, how to render it.
+One the, the user's browser window.
+

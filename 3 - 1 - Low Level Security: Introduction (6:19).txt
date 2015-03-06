@@ -1,0 +1,170 @@
+[SOUND] In this unit, we will
+consider low level software security,
+which is a concern for systems written
+in the C and C++ programming languages.
+We will begin by considering
+the infamous buffer overflow attack,
+which low level software is
+vulnerable to in particular.
+What is a buffer overflow?
+A buffer overflow is a bug that affects
+low level code, typically written in C and
+C++ with significant
+security implications.
+Normally a program with
+this bug will simply crash.
+But an attacker can alter the situation
+and cause the program to do much worse.
+Allowing the attacker to steal private
+information to corrupt important data and
+even to run code of his choice.
+It is worth studying buffer overflows for
+several reasons.
+First, they are still relevant today.
+C and
+C++ are used to write a lot of software.
+And that software often has
+buffer overflows vulnerabilities.
+Second, during their long
+history attackers and
+defenders have played a game of cat and
+mouse.
+As defenders address one weakness,
+attackers find a way to work around it.
+We will find it instructive to
+understand the technical
+details of that long history.
+To see how the attack works and
+how to defend against it.
+Lessons we learn here will be relevant
+to other software weaknesses.
+So, let's dig in a little bit
+further to the relevance and
+history of buffer overflows.
+First, this chart shows that C and
+C++ are still very relevant today.
+The chart comes from a recent study
+done by IEEE spectrum magazine.
+To come up with their ranking,
+they looked at new and
+active open source projects
+hosted on sites like GitHub.
+And also looked at Google keyword
+searches among other data.
+Considered altogether,
+the evidence puts C and
+C++ as two of the top three
+languages used today.
+Therefore, any vulnerabilities
+particular to these languages, as buffer
+overflows are, are quite relevant to
+a good understanding of cyber security.
+What software is written in C and C++?
+Some examples include operating system
+kernels, high performance servers,
+such as, web servers and
+data base servers.
+And embedded systems which appear in cars,
+airplanes, industrial control systems and
+even the Mars Rover.
+These systems are all
+of critical importance.
+They are the platform for
+computing and they drive our economy and
+ourselves from here to there.
+A successful attack on these systems
+has tremendous consequences.
+The first buffer overflow
+attack occurred in 1988 and
+was carried out by a student
+named Robert Morris.
+This attack was a part of a self
+propagating computer worm that replicated
+itself across the internet,
+once it compromised one system it
+would gain a foot hold there and try to
+launch an attack against other systems.
+The attack worked in part by
+sending a special string to
+a server called fingerd that was
+vulnerable to a buffer overflow.
+This string contained code that
+would help carry out the attack.
+In the end, the attack infected
+a significant portion, around 10%,
+of the massive internet.
+Causing a tremendous amount of
+damage due to denial of service.
+Morris was eventually caught and
+had to pay a fine,
+serve three years probation and
+carry out 400 hours of community service.
+Since the Morris worm many other
+worms have been developed.
+Some of which have
+exploited buffer overflows.
+One example is CodeRed
+which came out in 2001.
+It exploited the vulnerability in
+Microsoft's IIS web server and
+spread rapidly across
+the much larger internet.
+In fact the worm was one of the elements
+that prompted Bill Gates, then chairman
+of Microsoft, to write his now famous memo
+exhorting the company to take security far
+more seriously and to develop a platform
+for trustworthy computing systems.
+Unfortunately for
+Microsoft, another big attack occurred
+in 2003 with the SQL slammer worm
+infecting a huge number of machines,
+running Microsoft's sequel server.
+The infections took place
+in a matter of minutes.
+Changing the culture and
+practices at a huge organization
+like Microsoft takes time.
+Microsoft has made significant strides
+since that time, and many of the practices
+and ideas that we will consider in this
+course are ones that they developed.
+Or that they have taken to heart.
+Now buffer overflows are pernicious.
+As evidence, consider that in early
+2014 a buffer overflow vulnerability was
+discovered in the code of the X11 server,
+which was an early leader for
+standardized support for
+graphical desktop displays and
+it forms the foundation of
+remote desktop technology today.
+That bug that was discovered in 2014
+had been latent in the source code for
+more than 20 years.
+And indeed, despite the increased
+knowledge of how dangerous buffer
+overflows are and
+the attention paid toward defending them,
+the number of reported
+vulnerabilities continues to rise.
+So, here's what we'll do.
+For the rest of this unit we will
+learn how buffer overflows work and
+then learn various ways
+to defend against them.
+For a complete understanding, we'll
+need to learn how a compiler produces
+executable code from C source programs.
+And how the operating system and
+architecture work together
+to run these programs.
+We'll see that knowing these details
+an attacker can exploit bugs and
+how the program utilizes memory
+in order to attack that program.
+In general security often
+requires a whole systems view.
+And our study here will
+be an example of that
+

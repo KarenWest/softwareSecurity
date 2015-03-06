@@ -1,0 +1,296 @@
+[SOUND]
+Okay, so
+let's finish up this discussion of our
+tainted flow analysis by seeing how to
+scale it up to a more complete
+language and problem set.
+So far we've considered scalar values or
+pointers treated as blocks.
+But we haven't considered
+dereferences through pointers and
+how those affect the tainting.
+In this example,
+we have character pointers a and
+b, which were assigned strings as normal.
+But we also have p and q,
+which are pointers to pointers.
+That is, p is a pointer to a string,
+as opposed to a string itself.
+What the example is going to do is assign,
+hi to a, p will point to
+a variable, q will alias p, that is,
+it will also point to a the variable.
+Then via q we assign b, which is
+a tainted value we read from fgets,
+and then we print through
+p which aliases with q.
+So what we can see here is because
+of the aliasing of p and q,
+that is, because they both
+point to the same memory,
+when we assign through q the value in b,
+we effectively make p tainted.
+But what we're going to see is that
+without care our analysis won't
+realize this.
+So here on the first line,
+we have the assignment as usual.
+Here on the second line,
+we're going to take the address of a.
+And so now we're concerned with beta,
+which is the taintedness of
+the contents that p is pointing to,
+rather than of p itself.
+So we're going to create
+that flow constraint, and
+likewise that flow constraint, and
+here's another one that we do as normal.
+And finally,
+we do the assignment through q.
+Now, star q refers to the character
+pointer that q points to, whose
+label is gamma, and b refers to what is
+returned by fgets, whose label is omega.
+So omega will flow into gamma
+through this assignment.
+And then we print via star p.
+So once again, what p points to,
+that character string,
+it has beta as its label.
+And so it is going to go to untainted.
+Okay.
+Well, here's a problem.
+A solution exists,
+even though the assignment to q of p
+is going to affect the contents of p.
+And therefore, this is actually an error
+that our analysis will fail to uncover.
+So what do we need to do to fix this.
+Well, we need a way of
+identifying when flow can
+happen through assignments via aliases.
+And we do this by, when we assign
+pointers to pointers, we create edges
+that go both ways between the flow
+labels of the things that they point to.
+So here we show the constraint gamma
+goes to beta when we assign p to q.
+So not only do we go beta to gamma,
+we also go gamma to beta.
+And actually, we should do the same thing
+with the assignment on the second line.
+That is, we should have an edge from beta
+to alpha, but I just haven't shown it
+here to keep one fewer constraint
+from cluttering the slides.
+Okay, with this extra constraint,
+a solution no longer exists.
+We can see now that tainted
+can flow to untainted, and so
+therefore, we've caught the error.
+So again, the idea is that an assignment
+via a pointer flows both ways.
+That is, it anticipates that this,
+through an alias,
+we could assign a value that
+would create a flow later on.
+And the flow both ways allows
+that assignment to be captured.
+Unfortunately, this can
+lead to false alarms.
+So we have a couple of choices for
+reducing them.
+One is, if we know that an assignment
+through an alias can never happen, for
+example because the alias
+is labeled as const,
+then the backward flow is not needed and
+we do not need to include the edge.
+Or we could just drop
+the backward flow edge anyway,
+anticipating that
+an assignment will not happen.
+That's problematic, whether or
+not that's guaranteed by the type system.
+So effectively, this is trading
+a false alarm for a missed error.
+And different analyses make different
+choices about this question.
+Another sort of hidden flow that might
+happen is what's called an implicit flow.
+And that's illustrated by
+an example we'll develop now.
+So, here's a copy function that takes
+a tainted character pointer source, and
+copies it to a destination
+character pointer.
+And we can see that this is illegal,
+because the tainted characters in src
+should no be able to flow to the untainted
+expectations of the characters in dest.
+So this flow is not allowed, and
+therefore the analysis should flag that.
+Okay, now let's look at this program,
+which, as it turns out,
+implements exactly the same function,
+though in a very inefficient manner.
+What it does is for each character
+that's considered in the source array,
+it will iterate through all possible
+values that character could have.
+So j will consider all
+possible character values.
+If that value matches the one that's in
+the source, that's the if statement of
+source sub i is equal to j,
+then we simply assign j to dst.
+This will be legal because j is untainted.
+But then we've missed a flow,
+because even though the character was not
+directly assigned from src,
+the same value of that character was.
+And so the information contained inside
+of src is certainly copied to dst, and
+therefore the information is leaked.
+So, we can perform what we
+call information flow analysis
+to discover when such
+implicit flows happen.
+Data did not flow, but
+the information did.
+We can discover this by
+maintaining a second label that we
+call the program counter label.
+And it represents the maximum,
+in the lattice,
+taint, affecting the current position
+of the program counter in the program.
+Assignments will generate
+constraints involving the pc.
+So x equals y will
+produce two constraints,
+one between the labels of y and
+x as usual, and another saying that
+the pc label must be able to be
+upper bounded by the label of x, so
+that a flow does not leak
+through the assignment of x.
+And this will allow us to
+track information flows like
+the one we just saw.
+So here's a,
+an example with an implicit flow in it.
+It resembles the prior one,
+but it's simpler,
+it doesn't have the loop and so on.
+Here, we have a tainted source and
+an untainted destination.
+Actually we'll infer what
+the taintedness is of the destination.
+So we branch on the source,
+which is tainted, and
+then based on whether the source
+is zero or not, we assign to dst.
+So if the source is zero,
+then dst will contain the same value as
+the source, otherwise it will contain one.
+So information is clearly
+flowing from src to dst,
+though data is not, because information
+about src can be recovered by looking at
+the value of dst after the program runs.
+So let's see what the constraints
+look like that we would generate.
+At each of the assignments,
+dst equals 0 or
+dst equals 1, we just have an untainted
+constant 0 flowing into alpha as normal.
+And also for 1.
+And also here for
+the 0 portion of the dst plus equals 0.
+Okay, now let's consider the constraints
+according to the pc label.
+We've labeled each of the lines in
+the program with a relevant pc.
+The first line that can
+be executed is guard.
+Then either the then branch,
+or else branch, or pc 2 and 3.
+And then finally,
+the final assignment, pc4.
+Now, the first thing that we will consider
+are the extra constraints that result from
+the assignment statements due to the pc.
+In particular, here, we have to create
+a constraint, alpha is less than or
+equal to pc2, because alpha is
+the variable to which we're assigning and
+the current program counter
+at that assignment is pc2.
+Likewise, for the else case,
+we do alpha is less than or
+equal to pc3, the program counter there.
+And then finally, the last assignment
+is alpha is less than or equal to pc4.
+So what are the program counter
+values at these different locations?
+Well, pc1 is the first line that's
+executed in the program and
+has not been influenced by any tainted
+data, so it starts as untainted.
+However pc2 and
+3 are result of branching on src.
+That is, they can only be reached because
+we have branched on the src variable, and
+src is tainted.
+And therefore, we need to bump the program
+counter label to tainted in both cases.
+Once we have exited the conditional and
+we're back on the line with pc4,
+the program counter label can be untainted
+again, because it doesn't make any
+difference which direction we took when we
+branched on src we will always reach pc4,
+and so the value of the guard src has no
+influence on it, and it can be untainted.
+Looking at all of these constraints,
+we can see whether there is a solution to
+them, and we can see that the solution
+requires alpha to be tainted.
+So this is discovering the implicit flow,
+that is that the tainted source
+is tainting the destination.
+So, should we always track
+information flow constraints?
+Well, tracking them with a pc label
+can sometimes lead to false alarms.
+In this program,
+the dst value is always going to be 0,
+no matter what the value of src is,
+and so there is no information leak.
+And yet, the assignments to dst will
+be tainted according to the use of
+the pc label, and
+therefore it will produce a false alarm.
+Extra constraints due to the pc
+label can also hurt performance.
+As it turns out, the copying example
+we saw before is pathological.
+Developers typically don't write
+programs like this, and generally,
+implicit flows have little overall
+influence in well written programs.
+So as an engineering question,
+oftentimes implicit flows are not
+tracked in industrial analyses.
+One point though, is that if you're
+analyzing untrusted programs, for example,
+mobile code that's being downloaded by
+your browser or some other system, that
+you run locally, there is a greater chance
+that an adversary will maliciously exploit
+this weakness in your analysis to try to
+taint information, or perhaps leak it.
+However, this situation aside, tainting
+analyses tend to ignore implicit flows.
+

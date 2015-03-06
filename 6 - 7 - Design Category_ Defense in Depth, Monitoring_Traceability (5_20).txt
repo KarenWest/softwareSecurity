@@ -1,0 +1,141 @@
+[SOUND]
+The secure design principle
+of Defence in Depth aims to
+increase security through diversity.
+The idea is not to rely on a single
+defense or even a single kind of defense.
+That way if one defense is overcome there
+is still another one to get passed.
+This principle can mitigate damage from
+an attack or can prevent it altogether.
+An example application of Defense in Depth
+would be to do all of the following.
+Use a firewall to prevent access to
+all network ports other than that of
+the outward facing web server.
+Encrypt all sensitive data like employee
+records when stored at rest, for
+example on the hard drive.
+And use a type safe language to write the
+web server to prevent various classes of
+attack like buffer overruns.
+A less diverse defense might
+rely on one of these, but
+not all of them and then be vulnerable
+if the defense was bypassed.
+One common application of Defense in
+Depth is to the authentication process.
+Now, we know that passwords
+can be chosen poorly and
+possibly guessed by adversaries, thereby
+bypassing the intent of authentication.
+Passwords can also be stolen.
+Now, one way to defend against
+a stolen password is to
+encrypt the password database
+that keeps those passwords.
+But to do so
+would assume that compromise is possible.
+A company may think that all of
+their outer defenses, firewalls, and
+secure software, and fully patched
+systems should keep adversaries out.
+But this is probably a bad assumption.
+And therefore an extra defense of
+encrypting the password database is
+a good idea.
+That's what should have happened for
+the RockYou attack back in
+2009 when RockYou was compromised and
+their password database was stolen.
+All of the passwords were stored
+in plain text exposing all of
+that information to attackers.
+Now another sort of Defense in Depth
+is the use of community resources.
+The idea here is to depend
+not only on yourself but
+to depend on a diversity of people
+toward solving the security problem.
+One way to do that is to use hardened
+code, perhaps from other projects.
+For example, rather than rolling
+your own crypto libraries you could
+use libraries implemented by others,
+and tested and assured over time.
+On the other hand, you shouldn't
+just trust them out of the box.
+You probably want to test that
+they will meet your needs and
+ensure that you're using them properly.
+Another way to use community
+resources is to vet designs publicly.
+This is typically what happens
+with modern cryptosystems.
+Instead of trying to keep
+the algorithm that is used hidden,
+the designers of the algorithm make it
+public so others can comment on it and
+potentially find mistakes.
+Finally, stay up on recent threats and
+research.
+There's a broad security community
+that is tracking the state of
+affairs in security today.
+So NIST is a good place for standards.
+OWASP, CERT, and
+Bugtraq have vulnerability reports.
+SANS Newsbites has a great collection
+of the latest top threats.
+And of course, the latest and
+greatest research in long term trends and
+technology can be found in academic and
+industry conferences and journals.
+Now let's look at a failure to
+use community resources, and
+that is using broken
+crypto implementations.
+So it turns out that getting
+crypto right is hard.
+Not only should you not design your own
+algorithms, you probably should not
+implement them yourself because there
+are many things that you could get wrong.
+For example, for a long time modern
+implementations of RSA had a timing
+channel that could be exploited to steal
+the entire key through remote experiments.
+It's also the case that people have
+used cryptosystems incorrectly.
+For example, not generating keys
+with sufficient randomness.
+The important thing is to use
+vetted implementations and
+algorithms, and
+be sure that you are using them correctly.
+The final design principle in our
+list is monitoring and traceability.
+This principle is an acknowledgement
+that there is no perfect security and
+eventually all systems
+will succumb to an attack.
+As such, we need to design systems
+that allow us firstly to discover when
+an attack has taken place and secondly to
+figure out how the attack succeeded so
+that we can try to stop it the next time.
+A way to satisfy both aims is to have
+the system log relevant information during
+it's operation.
+Such logs will contain things
+like transactions processed,
+failed log in attempts, and
+other unexpected events.
+The logs produced by a system can
+then be aggregated with other logs of
+systems on an enterprise's network.
+And together when considered, all of
+these can aid the diagnosis of attacks.
+Software like splunk can be used for
+aggregation.
+

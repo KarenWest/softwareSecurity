@@ -1,0 +1,276 @@
+[NOISE].
+How do we know that the system is secure?
+Well, we must understand its
+behavior in the settings and
+environments it was
+designed to operate in.
+Our first design principle aims
+to help this understanding.
+In particular, we want to keep the system
+as simple as it possibly can be.
+Ideally, it can be so
+simple it's obviously correct.
+The goal of simplicity applies
+to all aspects of the system,
+from the external interface to
+the internal design and to the code.
+Favoring simplicity is consonant with the
+classic principal, economy of mechanism.
+And its goal is to prevent attacks from
+being successful by avoiding defects in
+the first place.
+Security expert Bruce Schneier described
+the principal of favored simplicity very
+well when he said we've seen security bugs
+in almost everything: operating systems,
+application programs, network hardware and
+software, and
+security products themselves.
+This is a direct result of
+complexity of these systems.
+The more complex a system is,
+the more options it has,
+the more functionality it has,
+the more interfaces it has,
+the more interactions it has, and
+the harder it is to analyze its security.
+One way to favor simplicity
+is to use fail-safe defaults.
+Some configuration or usage choices affect
+a system's security, like the length of
+cryptographic keys or the choice of a
+password or which inputs are deemed valid.
+When building a system with security
+in mind the default choice for
+these different configurations
+should be the secure one.
+For example, the default key
+length when a user is asked to
+choose a key length should be the best
+known secure key length of that time.
+For example, today 2048-bit RSA
+keys are what's recommended.
+Default passwords should not be allowed.
+Many systems are penetrated because
+administrators fail to change the default
+password, that password is published
+in publicly available manuals and
+therefore adversaries are able to learn
+it, guess, and penetrate the system.
+By instead making it so
+that it's impossible to run a system with
+a default password but instead the system
+must be assigned one by the user.
+This sort of attack no longer is possible.
+Also, favoring whitelisting over
+blacklisting is a more failsafe default.
+In particular, we list things we know for
+sure are secure and
+by default do not trust everything else,
+as opposed to list the things we
+know are insecure and assume everything
+else is secure, which inevitably it isn't.
+As a recent example of a failure
+to apply a fail safe default,
+consider the recent
+breach of healthcare.gov.
+In this case it was possible
+because the server was connected to
+the internet with a default
+password still enabled.
+Another recent incident where
+a fail-safe default could have
+played a role was
+the breach of Home Depot,
+in which tens of millions of credit
+card records were eventually stolen.
+John Pescatore,
+a cybersecurity expert, suggests that
+application whitelisting technology
+would have prevented the attack.
+Whitelisting is a technology that prevents
+applications from running unless they
+are included in the whitelist.
+Now, while people have complained
+that white listing is impractical for
+client-side machines, like user laptops,
+whitelisting on servers and
+single function appliances has proven
+to cause near zero business or
+IT administration disruption.
+And therefore, there's no good excuse for
+not employing it.
+Another principle that favors simplicity
+is to not expect expert users.
+Instead, software designers should
+consider how the mindset and abilities of
+the least sophisticated of a system's
+users might affect that system's security.
+One clear goal is to favor simple user
+interfaces to make it easier for users to
+do the right thing and hard for them to do
+something that could compromise security.
+For example, in a user interface,
+the natural or
+obvious choice should
+be the secure choice.
+Even better, you could avoid
+choices entirely, if possible,
+when it comes to security.
+Another good idea is to not have users
+make frequent security decisions.
+Otherwise, they may succumb
+to user fatigue and
+just click yes, yes, yes, allowing
+insecure activities to take place.
+Finally, it might be a good
+idea to design interfaces that
+help users explore
+the ramifications of their choices.
+For example, if they set a certain
+access control policy for
+accessing their personal information
+on a social networking site,
+it would be useful to allow them to see
+their data from the point of view of
+other users on the site
+adhering to the policy.
+For example, to see how the public
+might view the data as opposed to
+a close friend.
+Another way that users inevitably
+interact with software systems is
+by using passwords.
+These are a very common authentication
+mechanism, where the goal is for
+the password to be easy for
+the true user to remember but
+hard for an adversary to guess.
+Unfortunately, this assumption turns
+out not to be true in many cases.
+That is, hard to guess passwords
+are often hard to remember.
+To work around this problem,
+users often repeat passwords.
+That is,
+they memorize a difficult password for
+an adversary to guess, but then use that
+password repeatedly on different sites.
+Unfortunately, what that means is that if
+one site's password database is breached,
+then the adversary could
+try to use that password to
+access the same user's
+account on a different site.
+Adversaries often employ password
+cracking tools to attempt to
+guess passwords on breached
+password databases.
+Such databases are often encrypted and so
+these tools help guess what
+the encrypted passwords might be.
+One example is John the Ripper, another,
+Project Rainbow, and many others.
+These are the top ten
+worst passwords of 2013.
+As you can see,
+many of them are extremely simple so
+as to be easy to remember but as a result,
+not particularly hard to guess.
+A recent idea for solving the password
+problem is the password manager.
+A password manager is a piece of software
+that stores a database of passwords for
+a user, indexed by the site
+that those passwords apply to.
+This database is encrypted by
+a single master password that
+is chosen by the user.
+This password serves as the key.
+The password manager is responsible for
+generating very complicated,
+hard-to-guess passwords per site.
+The software then fills in these passwords
+when the user locally enters their
+master password.
+There are several benefits
+to this approach.
+First, the user only needs to
+remember a single password.
+Second, the user's password at
+any given site is hard to guess.
+As such, the compromise of a password
+at one site does not permit immediate
+compromise at other sites because the
+passwords at each site will be different.
+On the other hand, password managers
+do not solve the problem of having to
+protect and
+remember a strong master password.
+Another idea for improving passwords is to
+use a so-called password strength meter.
+The idea here is to give the user
+feedback on the strength of
+the password when they are entering it,
+possibly by providing a graphical
+depiction of that password strength.
+The idea of strength is to measure
+the guessability of that password.
+Research shows that password strength
+meters can work to improve the strength of
+passwords, but the design of
+the strength meter must be stringent.
+For example,
+it must force unusual characters and
+not allow users to enter passwords
+that it would deem to be weak.
+Now, an even better solution
+is to not use one or
+the other of these two ideas but
+to combine them together.
+In particular, a password manager
+makes one security decision that is
+the choice of the master password,
+not many.
+And, the password meter allows users
+to explore the ramifications of
+the various choices they are making by
+visualizing the quality of the password.
+Moreover, password meters do not
+permit poor choices because they
+enforce a minimum score.
+Phishing is a kind of attack in which
+a user is tricked into thinking he
+is dealing with a legitimate site or
+email, when in fact he is dealing with
+a fraudulent one that is part of the scam.
+The user is then tricked
+into installing malware or
+performing other actions
+harmful to himself.
+We can view phishing as a failure of
+a site to take its users into account.
+In particular, it's relying on the user
+to properly authenticate the remote site.
+Internet email and web protocols were
+not designed for remote authentication.
+While cryptographic solutions
+are possible, they're hard to deploy.
+What we would like is to use a hard to
+fake notion of identity,
+like public key cryptography.
+There are many competing systems but
+no universal solution as yet.
+If you'd like to learn more
+about how computers and
+humans should work together to
+ensure security, I encourage you to
+check out Jen Golbeck's course on
+usable security, which is part of our
+Specialization in Cybersecurity, hosted
+by the Maryland Cybersecurity Center.
+Jen is the director of
+the Human Computer Interaction Lab and
+a professor in the College of Information
+Studies at the University of Maryland.
+

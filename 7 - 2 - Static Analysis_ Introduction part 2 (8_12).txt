@@ -1,0 +1,213 @@
+[SOUND] What is Static Analysis?
+Well to answer that question, let's first
+ask a different question, which is,
+what can static analysis do?
+A classic static analysis
+problem is The Halting Problem.
+It asks, can we write
+an analyzer that can prove, for
+any program P and inputs to it,
+whether P will terminate?
+The problem is depicted
+visually as follows.
+We start with the program P.
+We feed this program and
+its input to our analyzer.
+And it determines whether or
+not P terminates.
+To solve the halting problem,
+we have to build such an analyzer.
+The question is, whether doing so
+is even possible.
+As it turns out, the answer is no.
+It has been proved,
+that the halting problem is undecidable.
+That is to say, it is impossible to
+write a general analyzer that can
+answer the halting question for
+all programs and all inputs.
+While we cannot establish
+termination behavior,
+maybe we can establish other
+security relevant properties.
+For example,
+perhaps we can use static analysis to
+prove that all array
+accesses are in bounds.
+If we could do this we could eliminate a
+large source of memory safety violations.
+That is, buffer overruns.
+Unfortunately, this question
+is undecidable too.
+As is essentially every
+other interesting property.
+We can prove this claim by showing that
+an analyzer for array bounds checking
+could be used to decide the halting
+problem, which we know is undecidable.
+And as such, array bounds checking
+must also be undecidable.
+Here's some more example
+questions that are undecidable.
+That all such properties are undecidable
+follows from Rice's theorem.
+Is an SQL query constructed
+from untrusted input?
+Is a pointer dereferenced
+after it is freed?
+Is accessing a variable a possible
+source of a data erase?
+And of course,
+there are many other such questions.
+So let's look at how the halting
+problem can be viewed as equivalent to
+the question of whether
+an array index is in bounds.
+This is a kind of proof by
+transformation that interesting program
+analysis problems are equivalent
+to the halting problem.
+So first, let's take all indexing
+expressions ai in the program and
+convert them to exit instead.
+So we here,
+see here what that transformation is.
+We replace ai with first the bounds check.
+Is i greater than or equal to 0,
+or less than the length.
+And if so, do ai is normal,
+otherwise exit.
+And now, an array bounds error
+is instead a termination.
+Next, we'll change all program exit points
+to instead be out of bounds accesses.
+So, if the program would just exit
+normally by completing the main function,
+for example.
+Or, if it would call the exit command or
+throw an exception that's never caught.
+Then those exit points we would
+put a indexed by a length plus 10.
+That is an index that's out of bounds.
+Okay now we take this transform program
+and we pass it to our analyzer that we
+hypothesize can perfectly check whether or
+not an array access is in bounds.
+If the array bounds
+checker finds an error,
+well then the original
+program must have halted.
+On the other hand,
+if it claims there are no such errors,
+the original program does not halt.
+But this is a contradiction with
+the undecidability of the halting problem,
+because we've now shown that an array
+bounds checker can decide the halting
+problem, which as a problem we
+have decided is undecidable.
+So does this mean that static
+analysis is impossible?
+Well, not exactly.
+What it means is that perfect
+static analysis is not possible.
+Useful static analysis is perfectly
+possible, on the other hand,
+despite the fact that the analyzer
+may fail to terminate itself or
+emit false alarms, which are claimed
+errors that are not really errors.
+Or have missed errors where
+the analyzer reports no problems but
+in fact, the program is not error free.
+Now as a practical matter, because
+non-terminating analyses are confusing
+to users, tools that exhibit only false
+alarms or missed errors are the norm.
+In particular these tools fall somewhere
+between sound and complete analyses.
+So, let's go into what I mean by that.
+Soundness is a property that states
+if an analysis says that x is true,
+then x is actually true.
+So what it's saying is that, when analysis
+says these are the things that I say,
+they're contained in the true things.
+And of course, this means that a trivially
+sound analysis is one that says nothing.
+Completeness is such that if X is true,
+then the analysis says that X is true.
+So here are the things that I say, and
+true things are contained within them.
+So trivially complete
+analyses say everything.
+A sound and
+complete analysis is such that the things
+I say are all of the true things.
+And of course what we have shown is that,
+for
+problems like the halting problem, such
+sound and complete analyses do not exist.
+You have to sacrifice either one or
+the other.
+You can go one of two ways.
+You could have a sound analysis which
+says that if the program is claimed to
+be error free, then it really is.
+Alarms do not imply erroneousness.
+A complete analysis is one that says
+if the program is claimed to erroneous,
+then it really is.
+Silence does not imply error freedom.
+So essentially, the most interesting
+analyses are neither sound nor
+complete, and not both, but they usually
+lead toward soundness or completeness.
+Because perfect static analysis
+is impossible in general,
+our goal is simply to make
+a tool that is useful.
+Doing so is as much art as it is science.
+In particular, there are many
+different elements of an analysis that
+trade off with one another.
+A practical tool must decide which
+elements are most important.
+Some of these elements are the following.
+A precise analysis aims to model
+program behavior very closely.
+To make the most informed decision
+about whether it has found a bug, so
+as to avoid false alarms.
+A scalable analysis will
+successfully analyze large programs,
+without unreasonable resource
+requirements, so that is space and time.
+Often times scalability is
+a direct tradeoff with precision.
+An understandable analysis takes
+its human user into account.
+For example, the analysis is designed so
+that alarms are easy to understand and
+are actionable.
+An analysis that enjoys all
+three features is easier to
+reduce if its focus is clean code.
+The intuition is that
+code that is hard for
+a human to understand, is also hard for
+a tool to understand and vice versa.
+As such, it may be reasonable to issue
+false alarms or run more slowly.
+When doing so is because of confusing or
+convoluted code patterns.
+In this way we can view
+such poor performance of
+the static analyzer positively.
+If programmers clean up their code
+they will reduce the total number of
+false alarms and
+perhaps improve the running time.
+While also making their code easier for
+humans to understand.
+

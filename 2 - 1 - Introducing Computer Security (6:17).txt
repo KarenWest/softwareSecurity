@@ -1,0 +1,178 @@
+[SOUND]
+Computer security,
+more recently known as cyber security,
+is an attribute of a computer system.
+The primary attribute that system
+builders focus on is correctness.
+They want their systems to behave as
+specified under expected circumstances.
+If I'm developing a banking website,
+I'm concerned that when a client specifies
+a funds transfer of say $100 from one of
+her accounts, then $100 is indeed
+transferred if funds are available.
+If I'm developing a word processor, I'm
+concerned that when a file is saved and
+reloaded, they do get back my
+data from where I left off.
+And so on.
+A secure computer system is
+one that prevents specific
+undesirable behaviors under
+wide ranging circumstances.
+While correctness is largely
+about what a system should do,
+security is about what it should not do.
+Even when there is an adversary who's
+actively and maliciously trying to
+circumvent any protective measures
+that you might put in place.
+There are three classic security
+properties that systems usually attempt
+to satisfy.
+Violations of these properties
+constitute undesirable behavior.
+These are broad properties.
+Different systems will have
+specific instances of some of
+these properties depending
+on what the system does.
+The first property is confidentiality.
+If an attacker is able to manipulate
+the system so as to steal resources or
+information such as personal attributes or
+corporate secrets,
+then he's violated confidentiality.
+The second property is integrity.
+If an attacker is able to modify or
+corrupt information keep by a system, or
+is able to misuse
+the systems functionality,
+then he's violated the systems integrity.
+Example violations include the destruction
+of records, the modifications of
+system logs, the installation of unwanted
+software like spyware, and more.
+The final property is availability.
+If an attacker compromises a system so
+as to deny service to legitimate users,
+for example, to purchase products or
+to access bank funds, then the attacker
+has violated the system's availability.
+Few systems today are completely secure,
+as evidenced by the constant stream of
+reported security breaches that
+you may have seen in the news.
+In 2011, for example,
+the RSA corporation was breached.
+I'll say more about how in a moment.
+The adversary was able to steal sensitive
+tokens related to RSA's SecureID devices.
+These tokens were then used to break
+into companies that use SecureID.
+In late 2013, Adobe corporation was
+breached, and both source code and
+customer records were stolen.
+At around the same time, attackers
+compromised Targets point of sale
+terminals, and were able to steal around
+40 million credit and debit card numbers.
+And these are just a few
+high profile examples.
+How did the attackers
+breach these systems?
+Many breaches begin with
+the exploitation of a vulnerability in
+the system in question.
+A vulnerability is a defect that
+an adversary can exploit through carefully
+crafted interactions to get
+the system to behave insecurely.
+In general,
+a defect is a problem in the design or
+implementation of the system such that
+it fails to meet its requirements.
+In other words,
+it fails to behave correctly.
+A flaw is a defect in the design while
+a bug is a defect in the implementation.
+A vulnerability is a defect that affects
+security relevant behavior rather than
+simply correctness.
+As an example,
+consider the RSA 2011 breach.
+This breach hinged on a defect in
+the implementation of Adobe Flash player.
+Where the flash player should benignly
+reject malformed input files,
+the defect instead allowed the attacker
+to provide a carefully crafted input
+file that could manipulate the program
+to run code of the attacker's choice.
+This input file could be embedded
+in a Microsoft Excel spreadsheet so
+that flash player was automatically
+invoked when the spreadsheet was opened.
+In the actual attack,
+the adversary sent such a spreadsheet
+to an executive at the company.
+The email masqueraded as
+being from a colleague so
+the executive was beguiled
+into opening that file.
+This sort of faked email is called a spear
+phishing attack, and it's quite common.
+One the spreadsheet was opened
+the attacker was able to silently install
+malware on the executive's machine,
+and from there, carry out the attack.
+This example highlights an important
+distinction between viewing
+software through the lens of correctness
+and through the lens of security.
+From the point of view of correctness,
+the flash vulnerability is just a bug,
+and all non trivial software has bugs.
+Companies admit to shipping their software
+with known bugs because it will be
+too expensive to fix them all.
+Instead developers focus on bugs that
+would arise in typical situations.
+The bugs that are left, like the flash
+vulnerability, come up rarely and
+users are used to dealing
+with them when they do.
+If doing something causes their software
+to crash, users quickly learn that,
+that something is not something to do and
+they work around it.
+Eventually, a bug is so burdensome on
+many users that a company will fix it.
+Now, on the other hand, from the point of
+view of security, it is not sufficient to
+judge the importance of a bug only
+with respect to typical use cases.
+Developers must consider
+atypical misuse cases,
+because this is exactly
+what the adversary will do.
+Whereas a normal user might
+trip across a bug and
+cause the software to crash, an adversary
+will attempt to reproduce that crash,
+understand why it is happening, and
+then manipulate the interaction to
+turn that crash into an exploitation.
+In short, to ensure that a system
+meets its security goals,
+we must strive to eliminate bugs and
+design flaws.
+We must think carefully about those
+properties that must always hold no
+matter what, and ensure our design and
+implementation does not contain defects
+that would compromise security.
+We must also design the system so
+that any defects that do inevitably
+remain are harder to exploit.
+

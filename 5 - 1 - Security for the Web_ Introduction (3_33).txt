@@ -1,0 +1,92 @@
+[SOUND]
+So far, we have focused on
+programs written in C and C++.
+We've examined how vulnerabilities in
+programs written in these languages can
+lead to attacks that violate memory safety
+resulting in remote code injection or
+theft of sensitive data.
+We've also looked at various
+defenses against these attacks.
+One effective defense is to use
+a memory safe programming language.
+In this unit, we turn our
+attention to internet security,
+focusing on applications that
+are a part of the world-wide web.
+While many web applications
+are implemented in type safe languages and
+thus avoid memory safety issues,
+they have their own sets of problems.
+These problems go by names like
+SQL Injection, Cross-site Scripting,
+Cross-site Request Forgery,
+and Session Hijacking.
+Interestingly, the issues underlying
+web vulnerabilities are sometimes very
+similar to memory vulnerabilities.
+For example, SQL injection, SQL injection
+and Cross-site Scripting arise because,
+like buffer overflows,
+the application's failure to
+properly validate its input results in
+it treating data as if it were code.
+The modern web, sometimes called web 2.0,
+brings in the additional
+complication of mobile code.
+In particular, when you visit a website,
+code from that site will be silently
+downloaded to your machine and then run.
+Well, how do you insure that this
+code does not violate the security of
+other programs running in your browser or
+on your machine?
+The outline for this unit is as follows,
+first, we will look into the technical
+details of the basic world-wide web.
+We will see how typical web applications
+are structured at the client and
+at the server.
+We'll examine http, the hypertext
+transfer protocol, which client and
+servers use to communicate.
+We'll see how improper
+interaction with the database on
+the server can enable an attack
+called Sequel Injection.
+Next, we'll look at how web
+applications implement ephemeral,
+that is short-lived non-persistent state.
+Such state is useful during
+a long-lived session.
+Typically, ephemeral state is implemented
+using hidden form fields and cookies.
+Unfortunately, sloppy use of these
+features can lead to attacks such as
+Session Hijacking and
+Cross-site Request Forgery or CSRF.
+With these attacks, an adversary
+can take over a user's account or
+manipulate an application to act for that
+user, but in the adversaries interests.
+Finally, we'll look at so-called web
+2.0 which characterises the modern web.
+The modern web makes heavy use
+of mobile code often written in
+the language JavaScript.
+JavaScript programs originated
+a server but run at the client.
+Running code at the client
+creates new possibilities for
+attack, one of which is called
+Cross-site Scripting, or XSS.
+With XSS, a user is tricked into running
+code he thinks is from a trusted web site,
+but in fact it's from a malicious source.
+Throughout the unit we will look at
+various defenses to these attacks.
+One common theme of all of
+the defences should be familiar.
+Validate your input So, let's begin by
+looking at the basics of the web 1.0
+

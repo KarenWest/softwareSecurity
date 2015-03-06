@@ -1,0 +1,981 @@
+[SOUND] I'm very pleased to
+have with me today Eric Ames.
+He is a penetration tester
+at a company called FusionX.
+And we're going to talk to him today
+about what he does at FusionX and
+about penetration testing.
+So Eric welcome.
+>> Thank you.
+>> So tell us how how did you get
+involved in computer security?
+And maybe you can say a bit
+more about your background.
+>> Okay.
+So in school I majored in computer
+engineering computer science like.
+Program focusing on, on development.
+Thought I wanted to be a developer.
+I worked for a couple years in a large
+scale software project with about 30 other
+developers, and decided that doing that
+full time was not necessarily for me.
+And so I, I had an opportunity
+to get involved as a junior
+security guy with another company, and
+I was the low man on the totem pole.
+So I was they called me the virus boy.
+[LAUGH] The guy that
+responded to virus incidents.
+And I did that for a little while.
+And at the same job they needed someone
+to look at the security of the printers.
+That was, that was sort of a low
+man on the totem pole kind of job.
+So I started my,
+my career penetration testing,
+penetration testing printers, and
+what can you do with a printer.
+And so after, after playing with it
+a while I was man-in-the-middling
+my printers and, and bringing
+people's documents on my screen and
+things like that, so that's kind of
+where I got into the field a little bit.
+And then the next job, subsequent jobs
+got me a little, little bit closer and
+closer to what i wanted to do.
+>> So, now, you work at FusionX.
+Maybe you can tell us a little bit
+about what the company does, and
+what you do in particular at the company.
+>> Okay.
+So, FusionX specializes
+in penetration testing.
+really, my bosses don't even necessarily
+like the words penetration testing right
+now because they feel like it's
+perhaps a little bit watered down.
+There's no real universal agreement
+on what standard a penetration test
+has to meet.
+So they would probably call
+themselves cybersecurity exercise,
+or cybersecurity assessment,
+or something like that.
+But it's the basic idea
+of a penetration test.
+Where we go in and
+we're simulating an advanced adversary
+trying to do whatever that adversary
+want to do to their organization to.
+It could be stealing personal
+information or financial secrets or
+company-sensitive information
+of some kind.
+And then, me, I'm one of the,
+the penetration testers in that company.
+So I will travel sometimes,
+sometimes I'll work remotely.
+But a lot of times I'm working on trying
+to break into an enterprise in some way.
+Could be through spear fishing or,
+or applications vulnerabilities or
+network vulnerabilities, but
+somehow I'm trying to break in.
+And then once I'm in pivot to find
+something that would tackle want to find.
+>> Got it.
+So
+maybe you can say a bit more
+about the steps involved in
+a penetration testing engagement, right.
+Your company does, provides this service.
+So then another company comes along and
+says hey we'd like you guys to
+come do a penetration test say on our,
+our network running various applications.
+What are the steps of for
+performing that penetration test?
+And what do you do?
+>> I think the first step is probably just
+agreeing on the scope of, of the test.
+Trust is so
+important because they're basically hiring
+you to break into their network and
+if they can't trust you, they're not
+[LAUGH] you're not going to get anywhere.
+So I think settling on a scope and
+rules of engagement would
+probably be the first step.
+Once we get into the technical part of it,
+I would say reconnaissance,
+where your targets are.
+A lot companies, especially big companies,
+don't even necessarily know everywhere
+that they're on the internet.
+So, part of it,
+before you can start, really,
+is finding out where they are and
+getting kind of the lay of the land.
+Then I would say, kind of, kind of comes
+a enumeration slash scanning phase.
+Exploitation phase.
+And I would say those
+two are not necessarily,
+I do all of the enumeration and
+then all of the exploitation.
+I think if I find a vulnerability,
+I'll go with that vulnerability and
+see where it takes me.
+So I probably would do
+enumeration exploitation.
+What I would call probably exfiltration.
+Getting the info, once I compromise
+the machine, getting all the, the valuable
+information off of that machine that could
+help then to pivot to somewhere else.
+So it could be maybe I've gotten
+passwords off of a machine I
+want to reuse his password somewhere else.
+So I would say those phases enumeration,
+exploitation, exfiltration,
+and, and pivoting kind of come in chunks,
+and then I,
+I repeat that process until I
+have the goodies that I want or
+the assessment ends, and
+then I say it finishes off with reporting.
+>> So in, in those different phases
+that you discussed I imagine you,
+a bunch of it is manual sorts of stuff.
+Where you're, you know,
+you're typing stuff into website consoles.
+You're trying out to see whether
+they might be vulnerable to
+cross site scripting or directory
+traversal, or something like that.
+But I imagine other parts of it
+involve automation and tools.
+So I wonder if you could tell us a bit
+about the tools that you use and
+maybe the higher level techniques that
+you employ out your penetration tests.
+>> Okay.
+So we we try not to do too
+much automated scanning.
+But we,
+we do have a bunch of tools that we like.
+Part of what we try to do is when
+we're simulating an, an adversary.
+We don't necessarily want to rush
+in there with Nessus, or another
+noisy vulnerability scanner because
+that can give you away very quickly.
+And, and part of what we want to
+test is how far can we get before we
+get detected by their IDS or
+whatever kind of defenses that they have.
+So we like to do more surgical,
+manual type of testing.
+That said, I, I like I love, I love
+doing web application penetration tests.
+I love Burke Suite.
+It's one of my favorite tool for that.
+Zap also works well.
+I like Burke Suite a little better,
+but Zap is nice.
+>> Is Burke Suite, remind me,
+is that open source?
+Or is there only professional
+versions of that?
+>> There is a free
+version that is limited.
+But the professional version
+is relatively cheap.
+I believe it's in the range of,
+of $200 a year or something like that.
+So for a company, it's not much.
+For an individual, it might be a bit much.
+But that's probably the professional
+version of Burke Suite is one of my
+favorite tool, otherwise Zap.
+And a lot of the manual testing.
+We talked about Bad Store before.
+That's a great example.
+Where you can go through and, and
+manually, one at a time and usually
+this gets well under people's radar.
+Try out SQL injection, and
+cross site scripting, and
+command injection, and hacks like that.
+I also like Metasploit not so much for
+the automated exploit packages like but,
+but overflows I feel like in Metasploit
+are maybe not as useful as they once were.
+They're not as up to date.
+People don't share their,
+their exploits as it, much as they used.
+I like the auxiliary modules, though.
+There's a lot of good auxiliary
+modules that will help.
+sh, [LAUGH]
+I can't think of any right now.
+But there, there's a, there's a million
+of those that I, I like to use a lot.
+So I'd say those are common tools,
+oh, and map I use all the time.
+We try to scale back and map so
+it's not to be detected.
+So we won't throw it 1,000 ports
+at once or 65,000 ports at once.
+We might throw it at ten ports that we
+know two seconds between packets just to
+see very slowing in style
+that's on a network.
+>> You, you bring up an interesting point
+which is sort of the difference between
+a penetration test that is really,
+completely, and
+totally simulating an adversary.
+And a penetration test that maybe
+is not so worried about stealth.
+And is, is more brute forcing a system to
+try to see whether it's
+going to fall over.
+And be susceptible to certain
+sort of vulnerabilities.
+So, I could imagine, for example, a,
+a developer of a web application might
+use something like Nessus,
+which you mentioned, to see whether or
+not their site would be susceptible and
+you know that would be great.
+And then later when a, a, corporation or
+or whatever is trying to assess
+their overall posture with all of
+their different that you have
+an IDS system like you said.
+You have host firewalls, you,
+you have printers, you know, whatever.
+You want to see,
+how does the entire network stand up?
+And that includes detection.
+So you have to worry about being stealthy.
+>> That's, that's a good point.
+Once in a while I will get to a customer
+that just is completely overwhelmed.
+And they have no idea what's
+going on on their own network.
+And for a customer like that,
+we would recommend.
+We try not to give [LAUGH] brand names,
+but
+Nessus is like as good as any where it's,
+it's a good, it's a good starting point.
+If you run Nessus and
+you have 50 critical vulnerabilities,
+you're probably not even ready for
+a penetration test yet.
+It, it, it's something that a company or
+an organization can buy on their own and
+run on their own.
+And just get, cover the basics.
+And once Nessus comes back fairly
+clean then maybe its time to think of
+an penetration test.
+But up until that point,
+you're going to get so
+many results its not going
+to be valuable I think.
+So, I wonder if you can
+tell us about some of the,
+the more common mistakes that get
+found during penetration tests and
+maybe some of the, the more infrequent
+mistakes that, that you tend to find.
+>> Sure.
+Default passwords are very, very common.
+It happens all the time.
+I find a lot of open shares,
+SMD shares, NFS shares,.
+Web servers that serve up
+sensitive information.
+FTP, anonymous FTP servers that
+serve up sensitive information, and
+by and that I usually mean passwords,
+maybe private
+encryption keys C4 injections very common.
+Cross site scripting is very common.
+And then going a level deeper
+it'd be a flat network.
+I did a penetration test once at a hotel
+where I sit down at a concierge desk and
+plug in.
+And I was at the hotel's
+main domain controller.
+You know it was all it was all,
+it was all connected together.
+So, so by being on, you know, the office
+area of one hotel I can get to the same.
+As our inner corporate network world
+their, their sensitive information is.
+That's an in, example of a flat network.
+So it's just a whole design problem.
+And that's, that's very common.
+Or maybe just reusing passwords so
+extensively that,
+that if you get the admin password on
+one machine, you've got the password,
+admin password for
+every machine in the whole organization.
+Those'll be all common ones.
+Less common.
+>> It's interesting the, the I,
+just to, I'm sorry to interrupt.
+>> It's all right.
+>> The, the, how many of
+the things that you listed are not
+sort of application level vulnerabilities.
+They're the ways that people
+use their applications.
+By, as you were saying,
+using for passwords.
+Or organizing their site so
+that maybe URLs can be guessed, and
+secret information could be taken out.
+Because they haven't put say,
+a web access control policy in.
+And they're relying on what
+they thought was secrecy, that,
+that wasn't really there.
+is, is that accurate?
+Is, is a lot of stuff really can be fixed
+with configuration rather than, say,
+software upgrades or, or
+changing software itself?
+>> Hm.
+I, I, you're right,
+I focus mostly on, on network and
+not on software specific vulnerabilities.
+I think those are the things that allow us
+to to pivot from one to another more easy.
+>> I think, you know, getting that initial
+foothold is probably the hardest part of
+any penetration testing.
+Getting that first level of access
+where you have something that you
+can then turn around and
+go somewhere else.
+And a lot of those
+are software vulnerabilities.
+Maybe cross-site scripting.
+I'd say SQL injection more often, command
+injection is great when you can get it.
+Directory traversal,
+maybe you could upload a web backdoor and
+get get a a shell that way.
+So, I'd say the application
+level vulnerability is sort of
+get me in the door.
+And maybe these configuration network
+vulnerabilities allow me to go from
+that level to the next level.
+>> Before you get to the infrequent ones.
+Another thing I observed in what you were
+saying before with the hotel example.
+That you were able to,
+to plug into the network.
+One of the things we talk about in
+the course is having a threat model.
+Where you think carefully about what
+you think your adversary can do.
+And I think a mistake that people make and
+maybe you can tell me what you think
+about this, is that they don't explicitly
+consider who their adversary is.
+They don't think that the adversary has
+this capability or this capability.
+I wonder to what extent, say a hotel
+thinks that, well somebody, anybody could
+plug into your network and if they do,
+what sort of capabilities will they have?
+Are they still protected?
+Whereas if they had thought more carefully
+about who their potential adversaries
+were, maybe the risk of those potential
+adversaries, they might have done more to,
+to protect themselves.
+>> Yeah.
+I, and this gets into sort of the,
+the human causes of vulnerabilities.
+I mean, I think there's a temptation
+to look at it as, as all technical.
+And that this problem, this problem,
+this problem, fix these problems.
+And then everything is solved and
+we're all happy.
+But there's always a human cause.
+And a lot of times there
+is sometimes it's ego,
+that no one could ever hack in
+to our systems, it's so great.
+And sometimes it's, it's ignorance of,
+we don't necessarily have anything
+that an adversary would want.
+Why would they want to attack us,
+it's just this small company?
+But every company has something.
+[LAUGH] You know, every company's
+CEO probably has some email that he
+doesn't want on the front
+page of the paper.
+ever, everybody's got something.
+Or even if it's just the, the,
+the horsepower of your machines.
+You know,
+you have something to offer an adversary.
+So, I, I think there is that is
+a very frequent thing we run across.
+That people underestimates what
+they have to offer a criminal and
+then also overestimate their own defenses.
+And so one thing that we,
+as a penetration test, we try to go and
+to do a little bit is the shock and awe.
+You know, we try to go in there and,
+and get them spun on their heels and
+get their heads spinning so
+fast after a couple of weeks that
+they're ready to sign us for more work.
+And that's, it's, it's,
+I don't think it's unique to our company.
+I think it's every penetration testing
+company kind of like, likes to do that.
+So then, then hopefully their eyes open up
+and say, wow, we need, we need more help.
+It's more business for us, and also it's,
+it's good for them in the long run,
+because now they're aware of problems
+that they had ignored before.
+>> I, I, one that that occurs
+to me is that while company,
+I imagine big companies have their
+own penetration testing teams.
+You know, I'm sure Google has in-house
+folks, security folks that are,
+are doing penetration testing.
+Maybe smaller companies can't afford it.
+But that bigger companies might
+nevertheless benefit by having an outside
+group come in, because they don't have
+the same blinders on, and they don't have
+the same biases due to the corporate
+culture that an outside group might have.
+And they might come at the problem
+a little differently, and
+therefore find things that the company
+itself just was unable to see.
+>> Yeah, I,
+I've been in both situations working for
+a small company now or working as, as a
+very small unit of a large company before.
+And in my experience it's, it's not even,
+if, if you're that guy working for
+a large company it's not even that
+you don't want to find these large
+vulnerabilities or maybe you're not even,
+you're not able to.
+It's, I feel like as an outsider,
+you maybe get a little more respect and
+a little more freedom.
+>> Mm.
+>> Whereas, if you worked for
+the organization,
+oh yeah you're always complaining.
+[LAUGH] It's not that bad.
+And I, I think your, your comments maybe
+get a little more swept under the rug if
+you work for that company.
+Or there's other political,
+competing interests, that maybe
+have a louder voice than you do.
+Whereas I think,
+if you come at it from the outside and
+you get buy in at a high enough
+level within their organization.
+You get buy in from an executive level,
+then those guys,
+the executives can say,
+they're going to do the test and
+you're not going to put these
+artificial restrictions on them.
+And we're going to find
+out what we find out.
+So if you want to know the real,
+the real deal.
+That is a very common thing I've seen
+in my career, where you're maybe doing
+a penetration test for some middle
+manager who doesn't want to look bad.
+So he will artificially limit your scope.
+And the results are not realistic.
+So I think as a pen tester,
+one of your jobs when you set that rules
+of engagement and try to set that scope in
+the beginning, it's in everybody's
+interest if you push a little harder.
+Because you don't want to get to the end
+and have an artificial limited scope, and
+then, and then you don't find very much,
+and everybody thinks the whole thing was
+a waste of time, and nobody's happy.
+So what you want to do is,
+you really want to push them in that
+direction in the very beginning, saying,
+look we really want, it's important
+that we simulate a real scenario.
+So we don't want to be dismissed later on,
+when they say,
+well that wasn't realistic to start with.
+>> And they, and
+you certainly you guys, neither you nor
+the customer wants to be in a position
+where the penetration test was yo-,
+successful.
+But then later on an adversary was able
+to penetrate because you were unable to,
+you were not allowed to find the thing,
+the way in that the adversary choose.
+>> Sure.
+Exactly.
+>> So, let's let's go back.
+I, I interrupted you before.
+Maybe you could talk about some of the,
+maybe surprising or
+unusual things that you found during
+penetration testing engagements.
+>> Okay.
+[LAUGH] You know one example I thought of
+was that, you know, one time I, I was just
+opening up a listener on my, I had it was
+an internal network penetration test.
+And I connected my,
+my laptop to the internal network.
+And I had a a listener.
+I think it was for a part of
+a Metasploit Exploit I was running.
+And I just sort of had a port listening.
+I think port 443.
+And arbitrarily a host on their
+internal network connected to me and
+tried to authenticate to my server
+with domain administrator credentials.
+So just by, by listening he connected
+to me and he gave me the password of
+the domain administrator, which was,
+you know, made things very easy for me.
+I, I like, when, [LAUGH] at the Pentester,
+I like it when they connect to me and
+just give me their password
+without me asking for it.
+So that was unusual.
+I was going to say before.
+And I kind of alluded
+to this a little bit.
+I think the age of, of buffer
+overflows from Metasploit that is,
+are point-and-click and get you admin
+access, those days are going away.
+And, and it's pretty rare
+that scenario comes up now,
+where I run into a device and there's a
+perfect exploit for either Metasploit or,
+or somewhere else already coded and
+all ready to work.
+We, we don't do a lot of that.
+That, that,
+I think that was more ten years ago, and
+now it's a little more manual testing and,
+and configuration problems.
+>> Okay I wonder if you could say a little
+bit, maybe from your experience or
+from from those you work with about what
+else aside from penetration testing.
+Secure, security conscious organizations
+do to make the security of
+their systems better.
+You know,
+if you go to a penetration test and
+the company that you're testing actually,
+you know, does a, a good job.
+>> Mm-hm.
+>> Do you know anything about what,
+what did they do to,
+to create such a secure network?
+>> Sure.
+I, I think what you do is,
+is you plan defense in depth.
+You, you plan, you plan for
+a situation where someone in
+your organization is going to click on
+an email link that they shouldn't have.
+Someone has, you,
+you're not going to be able to get
+everyone to not fall for a phishing scam.
+Someone's going to click on it.
+So one user will get compromised.
+Then what?
+Does that user's workstation, for
+example, have the same password, local
+administrative password as every other
+user workstation or
+every other server, even.
+So that kind of thing, the flat network
+thing that I alluded to before.
+How, how good is network segmentation
+if one person's say some,
+an employee at a bank clicks on an email.
+Is that on the same network as their ATMs?
+Or, or customer accounts numbers,
+for example?
+So I, I think it's planning your
+network in such a way that one
+compromise doesn't, isn't, doesn't mean
+game over for your whole organization.
+>> Got it.
+I wondered if you could say a little about
+what you perceived to be, and
+maybe this is related to,
+to the limitations of penetration testing.
+What should companies expect to get out of
+it and what maybe shouldn't they expect to
+get out of it and
+therefore they need to look elsewhere?
+>> Okay.
+The limitations I think.
+A penetration test is usually not,
+in fact it's never going to be
+an exhaustive catalogue of all
+vulnerabilities on your network.
+The necessarily,
+they're limited by time and money and
+how much the customer wants to spend.
+So you're going to find a representative
+subset of vulnerabilities,
+you're not going to find
+all vulnerabilities.
+But if you kind of look at the root
+causes of these vulnerabilities, say you
+find five incidences of default passwords,
+that's probably not every instance of
+default password on their entire network,
+but there is a, a, a problem of process.
+Why were these devices at deployed with
+default passwords in the first place?
+Why, is there, is there some kind of
+process or testing or something that they
+can do to ensure this doesn't keep
+happening over and over again?
+because even if they fix those five,
+if five new ones are deployed next,
+next year.
+You're in the same boat.
+So yeah, the, that, the limit is
+you're not going to find everything.
+And, and you can't.
+I don't know any penetration
+testing company that gives co,
+companies a their customers a guarantee.
+Where once we can test you,
+you'll never get hacked again.
+It would be a.
+[LAUGH] It wouldn't be [CROSSTALK]
+a very good business model.
+>> I would think that such a guarantee
+would be predicated on nothing about
+the network ever changing again,
+which would be violated the next day.
+>> Sure.
+>> Right.
+>> Because the moment you
+stick a new printer on the network or
+you install a new software module I mean,
+you, you might have introduced
+a new vulnerability and
+that's something the penetration
+testing team could not have found.
+>> Right.
+>> I wonder if you can say a little
+bit about undergraduate education and
+advanced training.
+I mean you mentioned your background was
+as a developer and then you sort of.
+After your schooling learn these skills,
+sort of on the job and grew and
+grew in, in in your expertise.
+Do you think that undergrad,
+that, that path was fun and
+everyone should take it or should
+undergraduate and graduate education, or
+maybe training, do more to support
+penetration testing as an industry?
+>> When I was in school there was
+no penetration testing class.
+It wasn't an option.
+Maybe I would have gone a different
+way had that been an option or
+had even, it wasn't honestly even on
+my radar at that point in my life.
+I think it's great that, that it's
+starting to come up more and more.
+I think it's very helpful.
+I think but it's,
+it's going to be based, you know,
+a student's ability to get a job
+in the field is really going to be
+based on how much they've
+individually learned from it.
+I, I think, I've been in roles before
+where I've been involved in a,
+I was the, the lead at, at my last company
+for the penetration testing team so
+I was involved in hiring decisions, and.
+We haven't seen,
+we didn't see a lotta people with,
+with undergraduate focuses
+in penetration testing.
+I, I still think a lot of colleges are
+catching up by adding that to curriculum.
+But we saw a lot of certifications like
+CEH and CISSP and things like that.
+And I found that, that I really wasn't.
+At least speaking for
+the certifications, I really wasn't that
+impressed with people that had them.
+While there were multiple choice tests,
+and
+people who passed them had not
+necessarily ever even Endmap.
+They just, they just passed
+a multiple choice test about it.
+And I think.
+Putting my hiring hat on.
+I'll be very interested to talk
+to somebody who had a degree in
+penetration testing.
+That would definitely get them
+interviewed, would get them in the door.
+But then they would still have
+to convince me that they,
+they, they retained the material.
+They know it.
+They use it.
+They're familiar with it.
+I think every penetration
+testing manager has something.
+Whether it's some kind of written test or,
+or technical interview.
+Or hands-on exercise, we all,
+we've all got something.
+Because there's no, that, that we've seen,
+there's no golden standard that when
+everyone has this certification that means
+they're golden and are, are qualified.
+>> I mean I, I would worry
+frankly that just like any other
+aspect of computer science and technology
+that such a standard, if you had it,
+would be invalid in just a few years time.
+Right, I mean if you look
+at the rise of the web, or,
+you even were just mentioning sort of this
+shift from, away from buffer overflows.
+I mean, I think in general people are much
+better about patching these days.
+A lot of the culprits of buffer overflows
+are getting those patches out faster.
+And so
+we've moved away from that as a problem.
+And now these new sorts of problems
+with web based vulnerabilities,
+with mobile devices are coming up.
+>> Mm-hm.
+>> So my, my impression,
+i'm just thinking about this course that
+we're offering on software security.
+A lot of it is about how does,
+how does computing work?
+Ho, how does the, the net work?
+How does the web work?
+And where are these strange interactions?
+Where are there opportunities to make
+mistakes that attackers can exploit?
+So if you want to be a good PT tester,
+you have to really understand how
+people build things a certain way, so
+that you can take advantage of
+the mistakes that they commonly make.
+is, is my own impression.
+>> Agreed.
+>> Okay fantastic.
+[LAUGH] Okay so
+I guess just one last question which is
+having worked in this, this field for, for
+quite a while in penetration testing and
+in computer security generally.
+How have things changed over time?
+You've, you, like you said,
+ten years ago it was one thing.
+Now it's something else.
+If you look over that arc
+of the past ten years, and
+maybe you look ahead to the next five.
+How do you see things changing as
+far as computer security goes?
+>> You know, ten years ago I thought
+I was in the golden age of hacking.
+And then it just only got blown up
+more and more and more since then.
+I, I wish I could paint a, a idealistic
+future where security is solved.
+I, I personally don't
+feel that's the case.
+I think I kind of got to this
+a little bit before, but
+I think there are human reasons
+why security is a problem.
+It's not just technical reason.
+There's, there's ego.
+There's fear of looking bad.
+There's ig, ignorance of the problem.
+There's not wanting to hear bad news.
+There's, sometimes there's it's political
+problems within the organization.
+Maybe the chief information security
+officer reports to the CIO.
+And the CIO's primary objective is
+just keeping everything running,
+keeping everything smooth.
+And he doesn't want to hear the problems,
+they don't get reported up.
+So I've, I've seen a lot of things and
+I think these things are going to
+continue to be problems because they're,
+they're human nature, a lot of them.
+>> Right, unless there's some strong I
+guess what you're saying there's sort of
+an incentive problem.
+That right now the incentives
+are still in favor of people
+minimizing the engagement of
+pretending there's no problem.
+Because they're not getting called on it.
+If something bad happens,
+somehow they're not losing their jobs or
+they're able to get away with it.
+And as a result this, this kind of
+stuff is just going to keep happening.
+They, they're not willing
+to take stronger measures.
+>> I think there's,
+it's going to diverge more and more.
+I think there's going to be a subset
+of people who have had have a terrible
+incident or they're particularly,
+their mindset is strictly pro security for
+whatever reason.
+And I think,
+I don't know if that's the 10% or 20%.
+But I think they're going to get better.
+And they're going to be
+aggressive about it.
+And they're going to be better in,
+in three years than they are today.
+I think the rest are, are just going to
+kind of keep their heads down.
+Not try to ruffle the boat and, and
+just kind of, kind of coast along.
+And, and hope that there's no problems.
+and, [LAUGH] there,
+there may be some problems.
+>> Yeah, yeah.
+Well, I, I know so
+here at Maryland in our cyber security
+center we have several people that look at
+sort of the public policy and economics
+and, and that sort of angle of things.
+And.
+It,
+there, there,
+it's very challenging, right.
+I mean, the legislature for
+example, has for
+many years claimed that they want to pass
+some sort of comprehensive legislation and
+they've just never been able to
+do it because the downsides of
+restricting what people can do with
+security just seemed to be too high.
+And yet since that time we've had,
+you know, breaches of Home Depot and
+Target and had lots and lots of people's
+personal information be disclosed which
+is a drag on the economy and
+so I don't know.
+Until, until things, I,
+I guess I agree with you,
+until things get bad enough only
+a certain set of maybe those who
+were directly affected are going
+to be motivated to change.
+And the question is when is the sea change
+going to happen where people will pay
+attention to all the work that
+people like yourself and,
+and folks here at our center are,
+are trying to do.
+>> Yeah, it's hard to, it's hard to know.
+Yeah, I think.
+I, I think it's got to
+come from the top down.
+And I think the fact that we are seeing
+these things in the paper now,
+whereas we weren't seeing them
+in the paper five years ago.
+But you have that Target
+in the paper everyday, and,
+and Home Depot in the paper and all these,
+these cyber attacks in the paper now,.
+If nothing else, the ignorance level is,
+is falling a little bit.
+Where people don't think, people no longer
+think that if there's no real threat.
+so, so we do have that going for us.
+Whereas they are willing to take things
+a little bit more seriously now and, and
+hopefully dig a little deeper and
+make the changes they have to.
+This is not easy.
+And, and when we go in and
+do a penetration test, we tell people,
+you're not going to be better next month.
+You know, you're not going to
+be really better in six months.
+It takes a couple of years to
+get all the organization in
+the right, the organization right,
+to get the network right,
+to get the software right,
+to get the, the processes right.
+it, it takes a while.
+It's a hard problem.
+>> Well, I think that's an excellent
+note on which to end, so thank you
+very much for for joining me for this
+interview and for sharing your insights.
+>> All right.
+No problem.
+I had a good time.
+>> Great.
+

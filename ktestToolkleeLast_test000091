@@ -1,0 +1,6 @@
+ktest file : 'klee-last/test000091.ktest'
+args       : ['maze-sym.o']
+num objects: 1
+object    0: name: 'program'
+object    0: size: 28
+object    0: data: 'sddwddddsddw\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'

@@ -1,0 +1,281 @@
+[SOUND]
+Before we can talk about
+how buffer overflows work,
+we need to review some details about how
+you run a program on a modern computer.
+For understanding buffer overflows,
+we're particularly interested in how
+programs are laid out in memory.
+We will consider where the program code
+and its data are located in memory.
+We will look at the call stack and
+how it stores arguments and
+local variables of functions
+when they are called.
+We will look at some of the metadata
+that is stored amongst this program data
+to make it easier for
+the compiler to generate code that can
+be used in different circumstances.
+For example, no matter which
+function calls which other function.
+In our discussion we focus on the Linux
+operating system process model running on
+an Intel X86 32 or 64-bit processor.
+While the details differ for
+different operating systems and
+architectures, the concepts that
+we will consider are very similar.
+All programs are stored in memory.
+A program when it begins
+running is called a process.
+And that process is given memory by
+the operating system in order to run.
+Here, we depict the process
+as address space.
+At the bottom is address 0, the lowest
+address, and at the top is the address at
+four gigabytes which is the highest
+address on a 32 bit system.
+The process' view of memory
+is that it owns all of it.
+As far as it can tell,
+it's the only program running on a system.
+In reality, these are virtual addresses
+that the operating system and
+processor map to actual physical
+addresses for the memory on the machine.
+At the bottom of the address base
+is the text segment or code.
+Here we see some x86 instructions that
+might make up the code of our program.
+Just above the text segment is the data
+segment, and it has two parts.
+The first is the initialize data area.
+So here we see a variable y
+that's initialized to 10.
+And above that is
+the uninitialized data area.
+Here, the variable x that's
+not initialized at all.
+All of this data is known at compile time,
+so
+the compiler can determine where it goes
+and specify as much in the executable.
+At the top of the address space
+comes the command line arguments and
+environment variables, and
+these are set when the process starts.
+Just below them is the stack, the stack
+is what holds local variables along with
+metadata that the program uses to call and
+return from functions.
+Above the data segment is the heap.
+This is the area that Malik manages.
+All of this data is organized and
+managed at run time.
+That is, how it behaves depends on what
+the program does, what it interacts with,
+what input files it reads or
+writes and so on.
+Now we've turned the picture on it's side,
+so the lowest address is to the left and
+the highest address is to the right,
+and we'll use this orientation for
+most of the rest of the slides.
+Here again we see this stack and
+the heap depicted, and
+we also show the direction that they grow.
+As more memory is needed in the heap, it
+grows towards the higher addresses, where
+as more memory is needed for the stack, it
+grows downward toward the lower addresses.
+While the program is running,
+it maintains a stack pointer which
+indicates the top of the stack.
+When the program issues
+a push instruction,
+it will move the stack pointer
+after pushing the value.
+Now suppose that after running for
+a while, the function that had
+pushed these values returns.
+In that case, we expect that the function
+will pop a large portion of the stack off,
+removing all of its local variables and
+arguments.
+We'll see how this works
+exactly in a minute.
+The Compiler emits the instructions
+that adjusts the stack at run-time.
+Likewise code, that is the implementation
+of malloc, keeps track of the heap.
+The memory that the heap uses
+is apportioned by the OS, but
+the individual data that's stored
+inside the heap is managed by malloc.
+For now, we're going to focus on the stack
+because that's the target of the first
+attack that we'll consider.
+The next question is, how does a program
+use the Stack while it is running?
+As mentioned earlier,
+the Stack is used to support calling and
+returning from functions.
+We'll now look at the details.
+In particular, we'll look at
+what data we need to store, and
+where we'll put it when
+calling a function.
+We'll also look at what has to
+happen when a function returns.
+That is, what data needs to be
+restored and where to get it from.
+Now let's consider the basic stack layout.
+Here we see a simple function, func, that
+takes three arguments, arg1, arg2, and
+arg3, and has two local variables,
+loc1 and loc2.
+Below we see the depiction of
+the memory of the process.
+The highest addresses are to
+the right as usual, and
+we see a depiction of the caller's data.
+That is, the caller of this function.
+When the caller goes
+to call this function,
+it's going to push the arguments
+in reverse order of the code.
+So remember, the stack grows
+from the right to the left.
+That is,
+the top addresses to the bottom addresses.
+So we see then that arg3 comes first,
+then arg2, then arg1.
+That is,
+the opposite order of the program.
+Now, the local variables of the functions
+are al, are accessed on the stack as well.
+And they are stored in the order that
+they appear in the program text.
+That is, first loc1, and then loc2.
+There are a couple bits of information
+that are stored in between,
+and we'll see what these are in a moment.
+Now, suppose the compiler is generating
+code to access these variables.
+So here we show that within
+the function it wants to
+increase the value of loc2 by one.
+How will it do this?
+Well, in order to do it, it needs to
+know where loc2 is stored on the stack.
+Suppose for argument's sake that it's
+stored at this particular address,
+how will the program know that?
+Well, if we think about it,
+if this function could be called from
+many different places in the program,
+the actual address of loc2 could differ
+depending on who called the function.
+Therefore, the compiler could not know
+this address at compile time, and
+it's going to need to do something else.
+Fortunately, the compiler always knows
+the relative address of this variable.
+That is, it's always 8 bytes before
+the question marks here on the stack.
+Stepping back, we can think of all of
+this stuff that's highlighted in blue
+as the stack frame for the function.
+The arguments and the local variables
+plus these extra question marks that
+we'll get to in a minute.
+Now, because we want to know how to locate
+local variables, and for that matter how
+to locate arguments, we need a reference
+point within the Stack frame.
+We'll call that the Frame pointer.
+Typically, compilers store the Frame
+point in the ebp register.
+Therefore, the compiler knows that no
+matter where this function is called from
+it will always be 8 bytes distant from
+the current value of the frame pointer.
+Now let's see how we implement
+returning from functions.
+Here we see main which is called
+the function func that we were just
+looking at, and we see the stack frame for
+func here at the bottom of the slide.
+Here's the caller's data
+from main that we saved.
+Now, when we called func, main was using
+the frame pointer, just as func is,
+to access its own local variables.
+When we return from func,
+main is going to want to use the same
+frame pointer that it had before so
+that when it goes to access its variables
+it's going to the right addresses.
+So the question is, how do we save and
+restore the frame pointer so
+that this works properly?
+Well, let's think about how main is
+going to call func in the first place.
+What it will do is it will push
+its three arguments, arg3,
+arg2, arg1, here hey, 10, minus 3.
+It'll push some other data
+that we'll see in a minute.
+At this point,
+the stack frame pointer is right here.
+Now what we can do is we can save main's
+frame pointer right on the stack.
+At this point, we can update the frame
+pointer to be the current stack pointer.
+And now when the func
+function starts to run,
+it will push its local variables
+after the current stack pointer.
+And here we are from where we started.
+The next question is,
+how do we resume at the same place that
+we were in in main when we called func?
+Here's what's going on.
+As main is running,
+the instruction pointer,
+eip, is moving through the different
+instructions that implement main.
+Now it goes to call func.
+When it goes to call it, the instruction
+pointer is going to move up and
+start executing these
+different instructions.
+So what we want is to resume back to where
+we were when we called the function.
+Well, we can play the same trick
+that we did with the frame pointer,
+we can store the instruction pointer just
+before calling the function on the stack.
+Now, when we go to return, we just have
+to set the instruction pointer to 4
+off of the current frame
+pointer in the call e.
+In summary, when calling a function,
+we push arguments onto
+the stack in reverse order.
+Then we push the return address, and
+then we jump to the function's address.
+Within the called function, we push
+the old frame pointer onto the stack.
+We set the new frame pointer value to
+be where the stack is right now and
+then push the local variables in order.
+Finally, when returning, we reset the
+previous stack frame by updating the frame
+pointer, and then we simply jump back
+to the instruction pointer that we
+saved on the stack which is four
+more than the current frame pointer
+

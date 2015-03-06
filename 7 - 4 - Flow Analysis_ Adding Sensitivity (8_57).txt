@@ -1,0 +1,224 @@
+[MUSIC]
+Now let's consider improving our
+analysis by adding sensitivity,
+which increases the analyses precision.
+Here's another example.
+We have the same printf and
+fgets prototypes as before.
+And we have the same start to the program.
+We read into the name variable from fgets.
+But, we've now changed the program to
+branch so that in the true branch,
+we assign x to name.
+And in the false branch,
+we assign x the value hello.
+Finally, after the branch concludes,
+we print out x.
+So, let's imagine that
+we execute our program.
+We'll consider one statement at a time to
+consider the constraints that
+that statement will generate.
+The first statement generates
+tainted as less than or
+equal to alpha,
+just like the example we saw a moment ago.
+Next we consider the conditional.
+If we were to take the true branch
+then assigning name to x causes us to
+generate the constraint that alpha
+is less than or equal to beta.
+On the other hand if we were
+to take the false branch,
+we would take an untainted value, the
+cause then hello, and assign it to beta.
+Finally we print out the result,
+because x's qualifier is beta, beta
+is going to flow into the assumption of
+the argument of printf that is untainted.
+Not considering that third constraint,
+we can see that these four constraints
+are still unsolvable, and therefore we
+still have a potentially illegal flow.
+And this makes sense, because if
+the true branch were ever executed,
+we would in fact use something read from
+the network as a format string for printf.
+Now let's drop the conditional.
+It's a very similar program.
+Except in this case,
+when we assign to name, we immediately
+overwrite it with the constant hello.
+If we go through the program,
+it turns out we will generate
+exactly the same set of constraints.
+In this case however, those constraints
+really mean something very different.
+Because we are sure that the second
+assignment to x will overwrite the value
+assigned in the first case, rather than
+being assigned in alternative to it.
+As such, these constraints will complain
+that there is an error, when in fact,
+there is none.
+And therefore,
+the analysis has produced a false alarm.
+So the problem here is that our
+analysis is flow insensitive.
+Each variable has one qualifier
+which abstracts the taintedness of
+all values that it will ever contain.
+On the other hand, a flow sensitive
+analysis would account for
+variables whose contents change.
+Each assigned use of a variable would
+effectively have a different qualifier.
+So, for example, x's qualifier at line
+one would be given the name alpha-1, but
+x's qualifier at line two would
+be given the name alpha-2.
+As such, solutions for
+alpha-1 and alpha-2 can differ.
+We could even implement such
+a flow sensitive analysis by
+transforming the program to assign
+to a variable at most once.
+And this is converting
+the program to what is
+called static single assignment form or
+SSA.
+So here is our example again,
+but reworked to be in SSA form.
+Notice that we have replaced the single
+variable x with two variables, x1 and x2,
+where each one has a distinct qualifier
+name, in this case beta and gamma.
+If we look at the constraints the program
+generates, the first one is the same.
+But now the second one assigns
+to the qualifier variable for
+x1, and the third assigns to
+the qualifier variable for x2.
+These are now different qualifier names.
+And as such,
+we can see that there is no alarm.
+That is, we can set gamma to be untainted,
+and alpha and
+beta to be tainted, and
+these are good solutions to the program.
+And so, no problem exists.
+Now let's consider a variation of our
+example with multiple conditionals.
+First, if x is true,
+we assign to y the constant string hello.
+Hello is untainted and
+y's qualifier variable is alpha, so
+we produce the constraint,
+untainted is less than or equal to alpha.
+In the else branch, we assign to
+y the tainted output of fgets, so
+we produce the constraint,
+tainted is less than or equal to alpha.
+On the next line, if x is true,
+we call printf with y.
+Now printf expects an untainted argument.
+And y has qualifier variable alpha, and
+flows into that untainted argument.
+And so we produce the constraint,
+alpha is less than or equal to untainted.
+However, we can see that these
+constraints have no solution.
+But, that this lack of a solution is,
+in fact, a false alarm.
+Why?
+Well, the two constraints that create
+the problem are impossible to execute in
+the same program.
+That is, if x is false,
+then we will execute the else command,
+which produces the first constraint.
+But if x is false, then we will not
+execute the second command that
+does the printf, which would have
+produced the other constraint.
+Conversely, if x was true, we would not
+have generated the tainted less than or
+equal to alpha constraint.
+And we would have not have created the
+problem that made the solution impossible.
+So the issue here is that
+the constraints that we
+consider that produced the problem
+are not corresponding to a feasible path.
+An analysis that is past sensitive
+considers path feasibility when
+determining whether or not there is
+a potential problem in the program.
+So to illustrate this,
+we've labelled some of the statements in
+the program in the little
+code snippet on the right.
+When x is not 0, the program
+will follow the path 1-2-4-5-6.
+When x is 0, it will follow the plat,
+the path 1-3-4-6.
+The path that leads to the problem
+that we saw a moment ago is 1-3-4-5-6,
+but this path is infeasible.
+A path sensitive analysis
+will rule out such a path
+by qualifying each constraint
+with a path condition.
+So instead of just generating
+the constraint, untainted is less than or
+equal to alpha, it will instead include
+the condition that says this constraint is
+only valid when x is not equal to 0.
+On the other hand,
+the constraint tainted is less than or
+equal to alpha is only
+valid when x equals 0.
+When determining whether
+constraints have a solution,
+the path conditions will be considered.
+We'll see that only the first and third
+constraints should be considered together
+on the one hand, and in this case
+alpha does have a solution: untainted.
+Or, only the second constraint should
+be considered on the other hand and
+again, alpha has a solution but
+a different solution.
+And therefore there is
+no alarm in the program.
+If flow and
+path sensitivity are so useful,
+is there any reason not to use them?
+It would seem that the added precision
+is important for avoiding false alarms,
+which would otherwise arise
+by conflating flows or paths.
+But both sensitivities make the flow
+analysis problem harder to solve.
+For example,
+flow sensitivity increases the number of
+variables the analysis considers, and
+thus increases the number of nodes in
+the constraint graph that we must solve.
+Path sensitivity requires the use of
+predicates to distinguish different paths,
+which means we must
+employ more general and
+expensive solving procedures
+to make use of them.
+In short, the added precision decreases
+performance, which ultimately hurts
+scalability, limiting the size
+of programs we can analyze.
+This trade-off is sometimes managed by
+employing a demand driven analysis,
+which adds precision only as needed and
+where it's needed.
+We'll discuss this idea
+a bit more later on.
+

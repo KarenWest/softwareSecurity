@@ -1,0 +1,253 @@
+[SOUND]
+In a web application the persistent or
+long-lived data resides in the database.
+This is things like personnel records or
+credit card numbers, online inventories.
+And of course, this sort of data
+needs to be protected from illicit
+access and tampering.
+Even web applications
+that recognize this and
+do try to protect it sometimes
+fail because of a bug that
+allows a very clever sort of attack,
+called an SQL or SQL injection.
+So, in this unit we're going to
+look at that attack, but to do so,
+we're first going to have to talk
+about how data tends to be managed,
+and how it's accessed using
+a special language called SQL.
+So, typically for
+an online server application,
+we want to support ACID transactions
+on our persistent, long-live data.
+What's a transaction?
+Well it might be a transfer from
+one bank account to another, or
+a purchase of an item
+from an online store.
+ACIS stands for first atomicity.
+And this is to say that transactions
+should complete entirely or not at all.
+That is, you should either
+completely purchase the book or not
+purchase the book, but you shouldn't pay
+the money and then not receive the book,
+or you should transfer $100 from
+bank account A to bank account B.
+You should not withdraw the $100
+from bank account A, but
+then not deposit the result
+in bank account B.
+Consistency means that the database
+is always in a valid state.
+That is, as far as other concurrent
+queryers of the database are concerned
+all of the data in the database
+is in the state you expect.
+Intermediate states of transactions like,
+I've drawn the money from one account but
+not yet put it in the next account,
+should not be visible.
+Isolation basically says, the results
+of a transaction aren't visible until
+an atomic operation completes.
+And finally, durability.
+Once a transaction is committed
+it should be persistent, durable.
+Even if there's a power failure or
+some other sort of failure the effects
+of that transaction should persist.
+Now, achieving acid
+transactions is no easy feat.
+Fortunately the research community and
+industry have done a great job
+over the last three or four decades
+putting together systems called
+Database Management Systems, or
+DBMSes, for managing data and
+supporting transactions on that data
+that provide the ACID properties.
+So, the standard way, maybe not
+entirely completely the standard,
+but a common way anyway,
+of storing data is in tables and
+accessing those tables using
+the standard query language or SQL.
+So here on this slide we
+have an example of a table.
+The name of the table is users, and
+the table consists of a bunch of
+records where each field of the record
+is referred to as a column.
+So, here we see that we have five tuples,
+a record with five elements: name,
+gender, age, email, and password.
+And we have four records
+stored in the users table.
+Now, we can use SQL to read
+from this database and
+to write to it, update it in various ways,
+using different SQL commands.
+So the most common SQL command is
+probably the select command and
+it gives you a way of querying
+the contents of a database.
+So this particular select command says
+look at the age fields in the users table
+and select all of them where the same
+record as the age has the name D.
+So, looking at the table we can
+look at the age column, and
+find sorry, we can look at the name column
+to find the users whose names are D and
+then select out the age
+column from those records.
+So in this case, the answer would be 28.
+Another SQL command is update, and
+this gives us a way to modify records
+that are already in the database.
+So this update command says we want
+to set the email address of all
+users whose age is 32 to be
+the email readgood@pp.com.
+So if we look at the users table and
+we look at all of those users whose
+age is 32, there is only one.
+It is the third record Charlie, and so
+we should update the email address of
+that record to be readgood@pp.com.
+Another command is the insert command.
+This gives you a way to add new
+records to the data to the table, and
+here we're inserting
+into the table a record.
+Frank who's male and 57 and so on.
+Finally, there's the drop command which
+gives you a way of removing data from
+the database.
+Here we show how drop can be used to
+delete an entire table from the database.
+Now, server side code will interact
+with the database using SQL and
+one common way that server side code is
+written is using a language called PHP.
+So PHP is looks like a hybrid of HTML,
+which is the standard markup language for
+rendering web pages, along with some
+extra code that allows the program,
+the PHP program, to query the database and
+substitute the results of
+that query into variables in the PHP
+program that are eventually rendered.
+So this is a very convenient and
+popular way of writing dynamic
+content generation from asking
+a database questions and then putting
+the results in the generated webpage.
+So here on the slide we see a web site,
+or we see a couple of fields, user name,
+password, and a button.
+And we can suppose that when the user
+clicks a on the login button he will have
+filled in the username and password fields
+and these will have been included in
+arguments to the URL that was sent
+along with the http post request.
+So let's suppose then,
+that a user types in their username and
+password and sends that information along.
+That information is going to
+be included in the user and
+pass variables shown in the PHP code.
+So, what is that doing?
+Well I've logged in as user, and the query
+is going to select star from users.
+So it's going to get every possible user
+in the users table, where the user's
+name is the user, that was typed in,
+and the password is the given password.
+So, let's suppose that you can fill
+in that user field however you like,
+the question is, could you exploit
+this situation by being clever
+in your choice in what
+the user field contains.
+And in this particular case,
+the code is vulnerable to a SQL injection.
+How?
+Well, suppose we fill in
+the user field with this data.
+Frank close quote, or 1 equals 1
+closed paren semicolon dash dash.
+So this text is going to
+be substituted in for
+the dollar user field inside of
+the query that's being constructed as
+a string in the mysql query
+call to the database.
+And after substitution,
+this is what the string will look like.
+I'll take the frank closed quote and
+stick it in for
+user, along with everything else, or
+one equals one semicolon dash dash.
+But what you can see here is that
+the way that the string is constructed,
+what we've done is we've effectively
+modified the query that's going to
+be sent to the database.
+The frank close quote closes off the user,
+as if the user was frank.
+And the or 1 equals 1 is another element
+of the where clause for the query.
+Dash dash is a comment, so
+that's effectively ig, causing the SQL
+interpreter on the database to ignore the
+and password equals portion of the query.
+What's this query going to do in the end?
+Well, it's going to select every user
+whose name is frank or 1 equals 1.
+Well, 1 always equals 1.
+And so this query will always succeed,
+and effectively this will return
+the entire contents of the users table.
+You can even chain together
+statements with a semicolon,
+here by adding the semicolon
+drop table users dash dash.
+Once we substitute in we'll do
+the select to grab all the records from
+the database and print them out.
+And then we will delete the table
+by writing drop table users.
+So this is very bad.
+A very obvious way of coding things,
+just putting in the user and
+the password,
+has opened us up to the possibility that
+malicious input can effectively
+change the form of the query.
+And cause private information
+to be returned, or sensitive and
+important information to be deleted.
+And SQL injection attacks
+are quite common.
+They're less common than
+they were a while back but
+they're still a significant
+source of vulnerabilities.
+So at this point you should know
+enough to understand this xkcd comic.
+The great thing about the comic
+is that at the very end,
+it indicates the solution to the problem,
+a solution we've seen many times before.
+Which is to sanitize your database
+inputs to prevent these sorts of
+injection attacks from taking place and,
+in fact,
+that is exactly what we'll
+look like in the next unit.
+

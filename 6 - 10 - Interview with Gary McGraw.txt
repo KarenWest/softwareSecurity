@@ -1,0 +1,1169 @@
+[SOUND] Okay, I'm very pleased to have Dr.
+Gary McGraw joining me today to
+talk about software security.
+Gary, Gary is the Chief Technology
+officer at Ciginal Incorporated,
+which is a software
+security consulting firm,
+that provides services to some of
+the world's best know companies.
+And Gary is a highly regarded expert
+in the field of software security,
+having, having written or
+co-written six best selling books, and
+more than a 100 peer reviewed
+scientific articles on the topic.
+He also hosts a regular podcast called
+The Silver Bullet, and writes a monthly
+opinion article that has found its home
+in many publishing houses over the years,
+but it's currently at Search Security.
+Gary is also on the advisory boards of
+many companies and Universities and
+in fact, he serves on the advisory board
+of the Maryland Cyber Security Center,
+which is a nexus of cyber
+security research and
+education here at
+the University of Maryland.
+Well Gary, welcome it's really great to,
+to have you here.
+>> Thanks.
+>> So, can you tell us about how you
+got involved in computer security,
+maybe a bit about your background?
+>> I got started in computer
+security in a funny way,
+you know, really my B.A. from University
+of Virginia is in Philosophy.
+So I was a Philosophy major in College,
+but I've been coding since I was 16 year,
+years old I had an Apple II Plus in 1981.
+And try to figure out how
+to make that work, and
+computerize my high school and so on.
+And then I went to do Philosophy, but
+I got into Philosophy of mind, and I read
+Doug Hofstadter book, Godel Escher Bach,
+which had a big impact on me in fact,
+I went to do my PhD with Doug later.
+And I started thinking about computers and
+minds and
+brains, and
+the relationship between these things.
+So, I went to get a PhD
+in Cognitive Science and
+Computer Science,
+which I did at Indiana University.
+While I was there, of course, Indiana's a
+great place for programming languages, and
+just like you, I'm a huge
+programming languages aficionado.
+I guess that's because
+Dan Friedman was there, and
+Dan's so dang good at,
+at Lambda Calculus and Scheme.
+So I'm act,
+I'm actually a Scheme weenie as well.
+And so I got started thinking
+about those things and
+then I went to do a startup at a company
+called Reliable Software Technologies,
+there were six people there at the time.
+[LAUGH] And they had just gotten a big
+DARPA grant to work on taking some
+software safety technology, and
+applying it to computer security.
+And I got involved in that project.
+And it made me start thinking about,
+computer security for the first time, now,
+this was really 1995.
+And at the same time Java came out.
+And of course Java was a language, and
+there were people talking about
+Java is secure, blah, blah, blah.
+So my understanding of languages and
+this new field of computer security and
+all that stuff all came together,
+and we started breaking Java,
+I wrote that book Java Security
+with Ed Felton back in 1996.
+And then I guess after
+Java Security came out,
+started thinking why is that these
+amazing people, like Guy Steele,
+who is really one of the best languages
+people we've ever produced on the planet.
+Or, Bill Joy who wrote
+Berkeley Unix all by
+himself basically screw these things
+up when it comes to security?
+And if you were somebody who was trying
+to build a system like that, like Java,
+where would you go to learn
+how to do this stuff right.
+And there really were zero books
+on software security at the time.
+So I wrote Building Security Software
+with John Viega in 2001,
+13 years ago believe it or not.
+And that's really where it all came from,
+that's how I got dragged, kicking and
+screaming, into computer security, and how
+I've come to be a software security guy.
+>> Actually, I was I was looking at
+your book recently, your 2001 book,
+and I'm amazed at how
+well it has aged that.
+Maybe this is a sad state of affairs,
+but many of the things that you guys
+write about are still important issues,
+that people need to worry about today.
+>> Yeah, even though that book
+Building Secure Software is 13 years old
+we really wrote it as
+a philosophical treaty.
+So it had a lot to do with what the
+problem was ways to approach the problem,
+what we should do about it.
+There was even a chapter on early,
+early approaches to static analysis,
+you may recall.
+So, everything in that book still applies,
+but
+I do believe we've made a great
+deal of progress in the field of
+software security some of
+which has been written down.
+In particular, we understand what kinds of
+activities belong in
+Software Development Lifecycles today.
+And we're beginning to understand how
+to scale those sorts of activities,
+to armies of developers, 15,
+30,000 people at a time.
+So speaking of of Building Secure Software
+as you've already hinted at,
+you're a passionate advocate for
+building security in, as you like to say.
+>> Yep.
+>> Can you say more about why that's so
+important, and
+maybe why it's so neglected?
+>> Yeah, I think that the beginnings
+of computer security, had a lot
+of focus on protecting the stuff
+from the bad guys by putting it big,
+you know, it was a kind of a network
+operations approach to computer security.
+And, the big insight was, well,
+you know, you're protecting broken stuff
+from the bad people by putting a thing,
+which we call a firewall to this day.
+Why is this stuff broken?
+[LAUGH] And you know, people were all
+like oh, wow, that's a good question.
+And then the,
+the obvious next question, is what
+do we do to make stuff less broken?
+So, it's a paradigm that sort of
+came second in computer security and
+as a result, you still see network
+security accounting for about 90%,
+of computer security spend,
+spend out there.
+You know,
+it's about a $30 to 40 billion industry.
+But software security is
+growing at twice the rate, and
+is now probably a $2 to 4
+billion industry it, itself.
+And it's taking over you know?
+So it used to be, we were nothing,
+if you looked at the two hands of
+computer security, and
+now we're at least the pinkie finger.
+[LAUGH] So that's good and,
+and growing fast.
+>> It seems like a,
+one of the things that I suppose is,
+is at least part of the reason for
+why software security is neglected,
+is that it's,
+it's hard to build software that's secure.
+That if you can ignore the software and
+just stick a box on your network,
+even if that doesn't work we'd like
+to pretend that it works, and so
+that's what people do.
+Can, can you say a little
+bit about maybe why,
+building security software is so hard?
+>> Yeah.
+I mean the,
+the big issue is one of who's doing it.
+So the traditional computer security
+people, in an organization are network
+security operations people,
+system administrators, and so on.
+So, these people that have been
+tasked with defending networks
+are not really software people.
+And they install applications,
+and they like to call this field,
+application security, because they're
+trying to figure out what's wrong with
+these applications that ruin all
+their perfect network stuff.
+But the people who need to practice
+software security, are Developers and
+Architects and System Designers, and
+really the business people who make
+these systems up from scratch.
+So we have a new audience of people
+to address, and those people are very
+much willing to learn about software
+security, but it's pretty new to them.
+You know, we've been doing it for
+a decade or more but there are lots and
+lots of Developers out there,
+probably 8 million.
+I think we've touched about
+a quarter million of them so far, so
+we're one 29th of the way there.
+>> So speaking of people
+unaware of computer security,
+I'm thinking about
+computer security courses.
+Courses that teach material like this
+course teaches, but it probably they focus
+a lot on the hacks like buffer over flows,
+squeal injections, cross site scripting.
+Maybe they teach about access control and
+crypto, and these topics touch
+on Building Secure Software.
+Right?
+We avoid buffer overflows use crypto when
+you're on an un-secure network, and so on.
+So they illustrate weaknesses and
+present some mechanisms but
+maybe they're missing important topics.
+What, what do you think that these
+courses need to be teaching, so
+that Developers are aware
+of what's going on?
+>> I think it's great that these courses
+are touching on security at all.
+And in fact,
+I think the key is to teach some of
+the stuff that you mentioned
+during normal development courses.
+Like, if you're learning to program in C,
+you should be taught, by the way,
+watch out for buffer overflows,
+just because it's C.
+So, there doesn't have to be a special set
+of courses although that's great, too.
+But we need to integrate software security
+throughout the entire curriculum,
+I think that's very, very important.
+I think the hardest thing that
+we don't know how to teach yet
+today, that we're still working on,
+is design.
+But we don't know how to
+teach Software Architects,
+like where do
+Software Architects come from?
+The answer is takes a army
+of a lot of experience and
+one day 15 years later you turn around and
+you go, oh wow, there's a bunch of people
+asking me what to do all the time.
+Let me put down this keyboard, and
+pick up this white board marker.
+[LAUGH] And you know, you sort of never
+code again, and you became an Architect.
+But Architects have as much to do
+with software security as coders.
+So this notion of writing secure
+code is very, very important, and
+it's not to be ignored, but it really
+addresses about half of the problem.
+The other half of the problem
+has to do with design.
+And so when we focus on both secure
+design and security engineering from
+a design perspective, and secure
+coding and security engineering from
+a coding perspective, we'll have a much
+more robust approach to the problem.
+>> Okay.
+So let's maybe talk a little more about
+the Software Development Lifecycle.
+So the traditional lifecycle
+has requirements engineering,
+what does the software need to do,
+design, as you mentioned,
+how do we organize the software so
+that it, it does what we want.
+Then implementation,
+how do we actually implement it?
+>> And then finally testing, or
+assurance, how do we know that it,
+it actually does what we
+think it's supposed to do?
+>> Yeah.
+>> And, of course,
+these activities are often iterated
+throughout the development process, and
+then even after deployment.
+So what I'm wondering is,
+well where does security fit in,
+in terms of this traditional lifecycle
+that people might know about, but
+haven't been thinking about security,
+at least as yet.
+>> And I, you know, maybe not ironically,
+I'm going to give you the same answer
+as I gave you with the curriculum.
+Everywhere.
+[LAUGH].
+>> Uh-huh.
+>> So,
+my approach to software security and
+the SDLC or SDLC's,
+with an S as the case may be,
+is to think about software artifacts that
+get produced no matter what your SDLC is.
+So you may be doing Agile, or
+you may be doing CMM level 57, or
+you maybe doing SCRUM, or you know,
+who knows, or just an iterated
+water fall or a spiral model.
+It doesn't really matter you
+do create these artifacts, and
+you should consider these artifacts
+from a security prospective.
+So if your thinking about requirements,
+or user stories in the Agile case,
+you need to think about abuse cases,
+and anti-requirements.
+If you're thinking about
+design in architecture,
+you need to think about threat modeling in
+architecture, architectural risk analysis.
+If you're thinking about implementation,
+you need to think about,
+choosing the language is
+really a key decision.
+So which language should you use,
+and then how do you look for and
+eradicate bugs using technologies like
+static analysis when it comes to testing?
+And I'm talking about testing
+before you've released,
+so you need to think about
+security test cases, and
+test cases that are based on those abuse
+cases from earlier in the lifecycle.
+And intentionally pushing
+the limits of edge cases and
+corner cases, so that you're not
+just doing functional testing.
+You, of course, need to do normal
+functional security testing on
+the security features, because there
+is such a things as security features.
+But remember, we're not just
+interested in features here,
+we're interested in that
+property called security.
+And those features can help
+us get to that property, but
+they're not the be-all
+end-all by themselves.
+A really easy way to think about this is,
+security is not cryptography.
+>> Right.
+>> We get on in the lifecycle, you know,
+when you finally release you do need
+to do some penetration testing.
+It's always a smart thing to do, but
+hopefully if you spent time earlier in the
+lifecycle eradicating security defects,
+you're not going to find much when
+it comes to penetration testing.
+Unfortunately today, a lot of firms
+that are just starting out in software
+security, begin with penetration testing,
+which finds all sorts of problems.
+Now, you know,
+the good news is it disavows them of
+the belief that their software is perfect.
+But the bad news is, it's very expensive
+to fix problems that you find,
+after a software project has been shipped.
+Right?
+So even with live update and
+all that stuff it's still it's still,
+penetrating patches is a very silly way
+to a, approach things economically.
+So all of those activities are what I
+call the software security touch points.
+And that in fact is what my book
+Software Security which was
+published in 2006 is about.
+And that book, remains utterly relevant
+today, because there are whole
+industries that are just beginning
+to take on software security.
+Made a lot of progress
+in financial services,
+we've made a fair amount of progress
+in independent software vendors.
+But we've got medical device
+manufacturers, we've got retail and
+hospitality, we've got gaming,
+we've got all sorts of,
+got retail, well I said retail.
+All sorts of disciplines
+that are just beginning to
+take a look at software security,
+and figure out what they should do.
+So the good news is,
+we know what you should do.
+The bad news is,
+you need to start doing it.
+[LAUGH].
+>> So
+you I'm going to talk about the er, or
+ask you about the building security and
+maturity model,
+which talks about how companies
+are starting to adopt these practices.
+And that's something that
+that you developed, so we'll,
+we'll spend a few questions on that.
+Before I get to it I'm, I'm thinking that,
+one thing that might get in the way of
+people wanting to implement
+security practices in
+their development lifecycle is
+the perception that it's just really hard.
+>> Right.
+>> That figuring out how to change
+everything they do, to sprinkle security
+in and what does security mean?
+And how does an Architect
+think the right way, and
+so on, is, is just very difficult.
+Is there it there a way that we can get
+those traditional security people, or
+we create a new kind of security person
+who can help Developers and Architects and
+so on within an organization,
+move toward better practices?
+>> Yeah, that's a really tough question,
+I think the answer is you do have to
+have people whose job is to focus on that,
+and who really are Developers.
+They're not working with Developers,
+they are Developers.
+And they're not working with Architects,
+they are Architects.
+And so, the real answer is,
+to pervade this approach to software
+security to all software people.
+But, you know, that's going to
+take a while to, to sink in,
+it's kind of like pouring water,
+it has to get to the roots.
+And it's happening but
+it's not happening super-quickly.
+In the meantime, there are a lot of
+people who are helping large development
+groups some consultancies like Cigital,
+you know, we have 350 people now.
+And we're growing really fast.
+Some tools companies, like Coverity,
+you talked to Andy last week.
+Or Fortify or the IBM, AppScan people and
+there are others, that produce tools
+that can be used by Developers.
+And and just in general an understanding
+of computer security and its importance.
+The good news is that, I think even
+people on the street know about computer
+security now, and I gotta tell you, when I
+started doing this in 1995, they didn't.
+I mean there was sort of a hacker thing,
+but it was way over there.
+And now everybody's like, whoa,
+computer security, you know?
+And they, they always know what that is,
+you don't have to start by explaining,
+what that is that's good.
+Now we have to say, well you know,
+the real way to approach this problem is
+not to sprinkle magic, crypto fairy dust,
+or put a firewall or get of the net or
+you know, all of these silly approaches.
+The real answer is build
+stuff to be secure.
+Now is that difficult?
+Yeah, but is it hard to build a,
+a quality car versus a crappy car?
+Yeah.
+You remember when American
+cars were crappy?
+[LAUGH] You were probably a kid
+when American cars were crappy?
+And some of the people listening to this,
+weren't even born yet.
+But American cars used to be crappy,
+first they were the best in the world,
+and then they were crappy.
+And everybody said why are cars so crappy,
+gosh it is so hard to build a good car.
+How are we going to do that right?
+And it is very same issue quality,
+and reliability, and
+safety, and security,
+are all these emergent properties that we
+want out of our systems, and we do have to
+do some hard work to get those properties.
+>> So, let's talk about some of
+the hard work that companies are doing,
+that you've managed to uncover in
+the building security and maturity model.
+>> Yeah.
+>> So could you tell us about that model,
+and, and
+maybe a little bit about its history?
+>> Yeah, we call it the BSIMM for short,
+and you can download the whole thing and
+check out everything that we have
+written down at the website,
+bsimm.com or bsimm.com.
+Everything's released under the creative
+common, so it's totally free, and
+it makes a really good teaching tool for
+advanced students, for example.
+What we did was we went out and
+we gathered data from in
+the beginning nine firms who were
+practicing large scale software security,
+and had software security initiatives.
+To give you one common example
+that most people have heard from,
+about, Microsoft has what they call their
+trustworthy computing initiative, and
+they've developed what they
+call the SDL out of that.
+They are one of the nine
+firms that we studied,
+when we gathered data to
+build the BSIMM model.
+The idea was let's go out and find out
+what firms are really doing, not theory,
+not, you know, what they're going to do,
+but what they're actually doing today, and
+let's write all of those
+activities down and describe them.
+And so we started with nine firms,
+now we have I think it's 83 firms.
+The last published model has
+67 firms in it, BSIMM-5.
+We released last October,
+were probably going to release BSIMM-6
+sometime in the spring of 2015.
+I'm shooting for 100 firms which is very,
+you know, [LAUGH] ambitions but
+I think we can get there.
+And the notion is to have this model,
+be based on
+describing the world as it is, out
+there in software security initiatives.
+These are 83 real software security
+initiatives at every single major
+international bank on earth
+almost all of the ISBs, and
+it's a way of describing what they do and
+then measuring that.
+And you can actually compare
+belly buttons, you can say, gosh,
+everybody else in the world seems to think
+this particular activity's important.
+But we're not doing that.
+Why do they think that?
+Is that good for us?
+So it's not really a prescriptive model,
+it doesn't say, you should do this.
+What it says is,
+everybody else is doing these things.
+Maybe it's a good idea for
+you to think about those.
+So just to cycle back around, once you
+have a measurement tool you can begin
+to much more strategically approach
+your software security initiative.
+And you can begin to tell you know,
+whether you're world class, or
+whether you're in the middle of the bell
+curve, or whether you're way behind.
+And it's easy to tell with the BSIMM,
+so it's a very powerful tool both for
+strategically planning and implementing
+a software security initiative, but
+also getting budget from the board and,
+you know,
+showing that you're
+making real improvement.
+One of the challenges in security
+I gotta say this is, you know,
+from a business perspective, if your
+job is to make good security stuff,
+then guess what the best result is?
+Nothing happens [LAUGH].
+And in business your like,
+wait a minute let me get this straight,
+you spent $5 million and nothing happened.
+And next year you want to spend $6
+million, but nothing happened, and
+you have to say yeah,
+the reason that nothing happened.
+So it gets a little bit challenging,
+you know,
+when it comes to security,
+but that's the way things go.
+>> So can you describe the,
+maybe some elements of the BSIMM, and
+perhaps relate it to some of
+the things we've discussed so
+far, just to give people
+a flavor of how it looks?
+>> Yeah,
+there are 12 practices in the BSIMM and
+the practices each have
+individual activities.
+So, an example of a practice
+that's easy to understand
+under the governance
+heading would be training.
+How do you train all your Developers?
+How do you train your Product Managers?
+How do you train your executives
+to understand what's going on
+with software security, and
+get engaged in the initiative?
+So there you know, like 12 or so
+activities under training,
+I don't remember the exact number.
+Another practice is architecture analysis,
+another practice is sourcecode
+analysis and another prac, code review,
+and another practice is security testing.
+And so you can look at standard
+touch points as a practice area,
+and they all have particular
+activities inside of them.
+The activities themselves inside of the
+practices are divided into three levels.
+Really easy stuff is level one.
+And lots and
+lots of firms do the really easy stuff.
+Slightly harder stuff is level two, often
+requires level one stuff to be done first,
+and then you can move on to level two.
+And then level three, is rocket science.
+And there are some firms that are doing
+rocket science stuff, but, you know,
+everybody doesn't have to do that.
+It's just good to know
+what everybody does.
+So, you can think of the BSIMM
+model as a Venn diagram
+of overlapping you know, software security
+initiative shapes from different firms.
+And the popularity of various activities,
+which really has been driven
+by the market and driven by these firms
+that really want to get some stuff done.
+Just to give you some sense of scale,
+in those 67 firms in BSIMM-5,
+we actually are controlling or helping to
+impact the work of 267,000 Developers, so
+that's a lot of Developers, you know,
+almost it's more than
+a quarter million Developers.
+It's not enough, but
+it's real, this is not,
+you know, some little tiny
+science project or some theory.
+This is you know,
+very impactful in the real world.
+>> Actually I was, that makes me wonder,
+since you've been working on BSIMM quite
+awhile, this is the 5th iteration.
+>> Mm-hm.
+>> And you're up to, in,
+well I guess you're in your 6th iteration,
+but
+you had those nine companies at the start,
+and then 67 in the most recent.
+>> Yeah.
+>> Have you
+been able to chronicle the evolution
+of practice of those companies, and
+maybe even attribute some of that to
+those companies having been in BSIMM?
+>> Yeah, actually we have and since
+the BSIMM is a data driven model entirely,
+we're very much concerned with making sure
+that the model describes the data, and
+not the other way around.
+So remember it was data first,
+model second, and that's always driven us.
+So whenever we take a new population of
+companies and add it to the data set,
+we revisit the model and make sure
+that it actually describes the data.
+yeah, I guess the biggest thing that's
+caused companies to move in terms of
+BSIMM work is, we asked the firms when we
+reached 30 in statistical significance.
+What do you guys want out of this project,
+besides knowing how tall you are and
+how you compare with all your peers?
+And they said uuh, we have peers,
+we want to meet those people.
+Can you, like, introduce us to those guys?
+And so, we set up a conference and
+we're getting ready to have our 5th
+conference in November of 2014.
+It's going to be in, in Monterey,
+California this time.
+And we're going to get together all of
+the member BSIMM firms, who can make it.
+And the, the conference is incredible,
+they give presentations.
+It's presentations from the firms
+themselves about what works and
+what doesn't work, interms of real
+activities, real tools, real scalability.
+What the problems are, how you get budget
+for this stuff, how you measure it,
+what you do when you have a crisis,
+and introducing these people together.
+And helping to stimulate
+that conversation and
+keep it aimed in the right direction, has
+been an incredibly powerful experience.
+It's something that when
+we were building the BSIMM,
+as a scientist who is driven by data,
+[LAUGH] I didn't even have that in mind.
+But because of that,
+there's lots of sharing, and
+there's a real community that's
+developed around the BSIMM.
+>> Is there any chance that some of
+those experiences, some of the data that
+these companies have gathered, could feed
+back into procreating some evaluations?
+So, for example, you mentioned there
+are these categories of recommendations,
+the easy stuff and the rocket science.
+>> Yeah.
+>> You could also imagine, you know,
+these are both easy and highly effective.
+>> Yeah.
+>> As compared to some of these others,
+which would be great to have evidence
+say from these other companies to
+make that assessment.
+>> You're right, and
+actually this notion of effectiveness
+is much trickier than you would think.
+Because there are very few extranalities,
+to put it in economic terms,
+that you can measure that, that allow
+you to determine security effectiveness.
+Right?
+You can always do a test of a particular
+project and look for vulnerabilities, but
+that's just a point, that's a data point.
+And when there's an event that means there
+was a problem in that application or
+that software.
+But the real question is,
+what about the problems that got found
+earlier in the software lifecycle?
+Now the real tricky bit is
+that all these companies,
+a lot of them actually know that, but they
+don't want to share [LAUGH] those data.
+Microsoft does not want to tell you,
+how many security bugs they
+find themselves and fix.
+They're just not interested
+in underscoring,
+that their Developers still
+need help writing perfect code.
+Nobody wants to say that, and
+you can't blame any individual company for
+that approach.
+So the data do in fact exist,
+but nobody's sharing those data.
+Every time we've tried to
+approach of efficiency and
+effectiveness, we've come up with
+stuff that's just not powerful enough,
+to hold scientific water, in our view.
+So, in some sense if you think about
+this from a pedagogical perspective, and
+you think about this from
+a science perspective,
+we've had to retreat from
+a first order of measurement,
+to a second order of measurement
+about process and about activities.
+And sort of, work under
+the hypothesis that those activities,
+jointly, give you better security.
+But there's no direct
+measurement of security, so
+that's what we have to do, that's,
+we're, we're stuck with that.
+It's sort of a bummer for
+me, you know, I'm a,
+I'm a code guy, I always used
+to argue with the process guys.
+I had so many arguments with
+the guys at the SEI before.
+Like, Watts Humphrey and
+I had some colossal arguments
+back [LAUGH] in the day.
+And I find myself, I guess,
+when I get older in my
+mid 40s building a process model,
+it scares the bejesus out of me.
+[LAUGH] But
+I think that ultimately, that's the way
+you have to approach this problem.
+Because we have no great way
+of measuring software, or
+software security, other than the BSIMM.
+>> I think that the from
+my own perspective,
+one thing that's nice about BSIMM is
+that because you're making a good model.
+A good model abstracts what
+many things are doing, and
+pulls out what the most
+important elements are.
+And it's hard work,
+making a a nice, descriptive model,
+that doesn't leave out important bits.
+>> Mm-hm.
+>> Once you've done that, and
+you've done it and it really
+represents what lots of companies do,
+then other people can start
+to study those practices.
+So, maybe the companies are not
+going to give you the data.
+But those people can look
+at their BSIMM model, and
+then can look at how many security
+instances they have, or use other studies.
+For example, within the company,
+the companies could do them themselves or
+academics could come in.
+And then they can start asking, you, you
+created a, a way to frame the questions.
+>> Yeah.
+>> So,
+that that future research can happen.
+>> It think that's right, and
+I think that there are companies that
+are doing those exercises already.
+I mean, everybody who has an existing
+software security initiative that's
+working well, wants to make it
+more efficient and more effective.
+And so there are sort of lots
+of natural experiments going on
+among the top 20 BSIMM firms just
+addressing that, that issue.
+And in fact, I get them to talk about
+them at the BSIMM conference, so
+we are making some progress, but
+yeah that's a real challenge.
+I mean there's this issue too Michael, and
+you guys in academia can help with this.
+So, there are some vendors, who
+are pretending that you can take a piece
+of code, and stick it in the magic box,
+and the magic box will turn green,
+if everything is all right, and go
+[SOUND] if, there is a security problem.
+Well, that either those people are really
+bad computer scientist, right, or
+there charlatans and
+neither answer is good.
+So, either they're hucksters lying to us,
+or
+they don't know a damned thing
+about computer security.
+And so, in understanding of theory,
+of what the halting problem is,
+of [LAUGH] you know, what levels
+algorithms take to do certain analyses.
+All of these things have to ground
+the field of software security, and
+if we let it just lift off like
+a sort of a ethereal baloon and
+become filled with balooney then it's
+not going to be a very useful field.
+So it's important for
+us when we're talking to students to go,
+look there is no magic box.
+Everybody wants a magic box,
+but we can't even build that
+from a theoretical perspective.
+So let's stop trying to pretend we can
+build a magic box, or sell magic boxes.
+Let's get down to the hard work of
+actually building code that doesn't suck.
+And that's what we're
+doing with the BSIMM.
+>> Fantastic, let's see, so, I guess the,
+some sort of wrapping up questions.
+So what is as you said at the beginning,
+I think we have made a lot of progress
+in making things more secure.
+I wonder if you have thoughts about things
+that are most important to do next.
+>> Mm-hm.
+>> Maybe, this,
+maybe I can answer my own question and
+with the answer you just gave,
+which is there is no magic bullet.
+But maybe there are things that, for
+example, the BSIMM has revealed that
+are particularly under appreciated.
+>> Right.
+>> Or are suggestive of something that is
+really a breakthrough on the horizon,
+is there anything like
+that that comes to mind?
+>> The hardest problem that
+all of us have recognized,
+who practice software security,
+is one that I have already alluded to.
+And that is the problem of security
+architecture and security design.
+There's an over focus in the field, on
+what I like to call implementation bugs,
+as opposed to design flaws,
+which have a super class called defect.
+And if you want to address
+all of software security,
+you have to address all defects,
+not just half of them.
+So some focus on design flaws, and
+how to avoid design flaws is what we need.
+Now we put together a workshop, we being,
+the IEEE Computer Society, put together
+a workshop in April, for something that
+we called The Center for Secure Design.
+And that involved 13 representatives
+from ten different organizations and
+companies who came together to think
+about, gosh, if we had to build
+a list of the top ten design flaws
+in software, what would that be?
+And believe it or not, nobody's ever
+written down the top ten design flaws.
+I mean, there are top ten lists
+of bugs all over the place,
+there's an O-Waskp one, and
+a Sam's one, and Joe's one, Bill's one.
+And, you know, everybody talks
+about buggety, buggety, buggety,
+bug but no one's ever talked about flaws.
+So, the price of admission
+at this workshop,
+which was the Foundational Workshop for
+the Center for
+Secure Design,
+was you must bring a bug of flaws, and
+you have to, it has to be real, and
+you have to dump it out on the table.
+And then we're all going to talk
+about real flaws and real system.
+So we had representatives from Google,
+from Twitter, from HP, from EMC,
+from RSA, from Harvard,
+from University of Washington,
+from George Washington University National
+Science Foundation DARPA Cigital all,
+putting these things together.
+And we created a report, that we're
+going to release in, I guess it's 26 days.
+Oh, 20 days, what, 18 days, on the 26th of
+August in San Francisco, when we
+launch the Center for Secure Design.
+So I think that if we really
+rally behind that sort of work,
+we can begin to better understand how
+do we do threat modeling effectively,
+how do we do architecture
+analysis effectively.
+And most importantly, how do we scale that
+to the enterprise level, because we can
+always have a few superman s people, that
+are running around doing design analysis,
+and you know, it just doesn't scale, and
+we have a really big problem to attack.
+So, the real issue is,
+how can academia get it involved there?
+And frankly I think academia has a hard
+time understanding how to teach,
+software architecture in the first place.
+And so I think some pedagogical
+breakthroughs are required
+in order to address this design and
+architecture issue.
+And if you think about how
+Architects of buildings,
+get created out in the world and
+certified.
+Maybe some analog makes sense,
+I'm not really sure, but
+it would be great to have you guys,
+in academia working on that problem.
+So I think that over the next ten
+years we're going to shift from what I
+call the age of bugs, which is what
+we're in now, to the age of flaws.
+And so we've our work cut out for
+us, there's plenty to do by the way,
+anybody who's listening to this class,
+[LAUGH] if you want to make sure that you
+have a job,
+pick software security as your field.
+[LAUGH] You'll be paid.
+[LAUGH] You'll be overpaid for
+your whole career.
+>> Silver lining.
+>> Yeah.
+>> So I in my final question, so
+putting security aside for the moment.
+I understand that you're a musician and
+you play in a band in your spare time,
+however much spare time you might, might.
+>> [LAUGH] I don't watch TV, so.
+[LAUGH].
+>> So what what do you play?
+What instrument do you play?
+What kind of music do you play?
+>> I play the violin, and
+I've played since I was three years old.
+I was a Suzuki method
+violinist when I was a kid,
+played in Carnegie hall twice
+when I was ten and when I was 16.
+and, played with a bunch of symphonies,
+then in, in college I
+started learning to improvise,
+and doing improvisational stuff.
+And then after grad school,
+I started writing music with friends,
+I have two bands.
+One is called the Bitter Liberals, and
+we're actually releasing our second
+CD on Saturday in Barryville.
+Come on down, Micheal,
+we need an audience.
+And it's all original music
+that's kind of Americana,
+it goes across a lot of different genres.
+But it's all music that
+we wrote ourselves, and
+we recorded at a professional studio.
+And so we're going to release that, if you
+are interested in the music, you can go to
+thebitterliberals.com and it's all there,
+the, the music's actually up now for free.
+The other band is called Where's Aubrey.
+Where's Aubrey,
+is a collaboration with another college
+friend of mine who lives in New Hampshire.
+And, he and
+I have been writing for years, and
+whenever we play a concert we'll always
+take the money and give it all to charity.
+So, we play big concerts, and
+then we'll give a couple thousand
+bucks to charity of choice.
+Because we all have real jobs, but
+music is an important part of my life and
+I think that, you know,
+you can see the background here.
+You can hear the stuff that I work
+on everyday is, is technical.
+But having a well-rounded life also means,
+you know, putting yourself in a,
+in a comfortable place where you
+can get lots of work done, and
+having some art in your life as well.
+And so I think all those
+things add up to what is a,
+what is a good high quality
+well-rounded life, and
+I would encourage everybody who is a DB
+to get some art in real life as well.
+>> Yeah I mean I, I it didn't occur to me
+until after I became a computer scientist.
+But I, I like to play music too,
+and I realized that what we do,
+what we've been talking about,
+like secure design writing code and
+these are creative activities,
+you are making something.
+You are thinking about how to make it,
+and make it well.
+And it's it's tickling you're creativity
+in ways aside from writing code,
+will only make you a better coder, and I
+suspect good coders can be really amazing
+musicians, maybe much different
+musicians than if they weren't coders.
+>> I think that's right, you know,
+when, when I went to grad school I
+went to study with Doug Hofstadter
+who wrote that amazing book,
+Godel Escher Bach, which everybody
+should read if you haven't read it.
+And it's about the Intersection of High
+End Computer Science Theory Hardcore Math
+and Godel's Incompleteness Theorem Art and
+Self Reference in Azeur.
+And music and self reference in Bach, and
+what it means to be a conscious entity.
+So even the most tricky
+problems in Philosophy, and
+what it means to be a human, involve
+computation in really important ways.
+>> All right, well Gary I want to thank
+you profusely for taking the time.
+I've really enjoyed chatting with you,
+and thanks for
+sharing your wisdom with our viewers.
+>> [LAUGH] It's my pleasure,
+Michael, thanks.
+>> All right.
+

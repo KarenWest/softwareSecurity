@@ -1,0 +1,167 @@
+[SOUND] Now let's look at the main idea of
+code injection using a buffer overflow.
+We call our function, func, and in this
+case using sprintab to copy and to buffer.
+There are two main challenges for
+code injection.
+The first is somehow using the program
+to load your own code into memory.
+And the second is somehow getting
+the instruction pointer to point to it so
+that that code can be executed.
+So let's look at the first challenge,
+loading code into memory.
+The first thing to keep in mind is that
+this code must be the machine code
+instructions that the machine
+is prepared to run.
+In other words, it's not going to be C
+source code, but instead it's going to
+be the actual assembly language for
+the target architecture.
+Moreover it can't be just any assembly
+language, we have to be cons,
+careful about how we construct it.
+So, for example,
+it cannot contain any all-zero bytes.
+Why is this?
+Well, stir copy, Sprintf gets scanf,
+and various other unsafe calls
+that we might like to exploit will only
+copy data that doesn't have zeros in it.
+That is, it will copy from
+the start of a source buffer,
+buffer up until it reaches zero,
+and then stop.
+Therefore, if we want to
+inject a lot of code,
+we have to make sure that all
+of that code contains no zeroes.
+Next, we need to be careful
+that the code is complete.
+It can't assume that it can use the loader
+to say resolve memory addresses inside of
+the program.
+Instead, it has to be
+completely self contained.
+The other thing that it can't do is use
+the stack because we're going to smash it.
+If the code while it's running uses
+a stack that is then being smashed,
+then the code is not going to work.
+What code should we try to run?
+Well, we want to try to run a general
+purpose shell in the best case.
+A general purpose shell is a command
+line prompt that provides the attacker
+general access to the system.
+You may want to do other things
+with the code you inject, but
+this is sort of the best case.
+Code that launches a shell as part
+of an attack is called shellcode.
+Here's what the shellcode you might
+like to write might look like.
+It's a simple function
+that calls execve which
+effectively transforms the current program
+into the one given as an argument.
+In this case, the argument /bin/sh".
+Here's some assembly for this shellcode.
+If we look at the first instruction, this
+is what it might look like as a string.
+This would be the string that you
+provide as part of your input.
+The second challenge is getting
+the injected code to run.
+Just because we loaded the code in,
+it doesn't mean we can get the pointer
+program to jump to your
+code whenever you'd like.
+Moreover, you don't know precisely
+where your code is with respect to
+the instruction pointer.
+Somehow we have to get it at the start and
+start running.
+Now, recall the memory layout summary for
+the calling and returning from functions.
+How could we use this setup to
+our advantage to inject code.
+Here's the key,
+the very last step jumps back to
+the location of the return
+address by setting eip to four,
+to the location that's four
+after the current frame pointer.
+Therefore we can store the address
+of our code at that location, and
+therefore get the program
+to jump to that code.
+That's the main trick.
+Here's what it looks like visually.
+We load in the address of our code
+over top of eip saved on the stack.
+Therefore when the function returns,
+it's going to return exactly to that
+location and then start running the code.
+Now the next question is what
+address should we put there?
+How will we know what the address is?
+Well, maybe,
+thinking of the question another way, we
+can ask: what if we get the address wrong?
+If we pick the wrong address and
+jump to some other location, most likely,
+the CPU will panic because it will
+reach an invalid instruction,
+therefore crashing the program.
+Another challenge that adversaries
+sometimes face is finding
+the return address.
+Now, if the adversary knows the code that
+he is trying to attack and knows exactly
+where the buffer overrun is, he might know
+exactly where the buffer is with respect
+to the frame pointer, and therefore,
+where the return address is located.
+Therefore, he knows what the location is
+to overwrite to get his code to be run.
+On the other hand, the adversary
+may not have access to the code,
+and may not know how far an overrun
+buffer is from the saved frame pointer.
+One approach is trial and error.
+Just try a lot of different injected
+values on a running server until
+something works.
+But of course the address space is quite
+large, and maybe this won't really work.
+On the other hand,
+without address randomization, which is
+something we'll discuss later, the stack
+always start from the same fixed address.
+The stack will grow but
+usually it doesn't grow very deeply
+unless the code is heavily recursive.
+This reduces the search base dramatically.
+Another thing the adversary can do
+is use what is called a nop sled.
+A nop is a single byte instruction that
+just moves to the next instruction.
+If the adversary sticks a bunch of
+nops as padding prior to his own code,
+then jumping anywhere in
+that nop sled will work.
+Now, we can improve our chances
+by a factor of number of nops.
+So, putting it all together,
+here's what all of the injected
+adversarial code might look like.
+This part labelled padding has to
+be something because we have to
+start writing wherever the input to
+gets or sprintaf or stir copy begins.
+But when the program returns to the picked
+location, it'll hit the nop sled and
+start running our malicious code.
+

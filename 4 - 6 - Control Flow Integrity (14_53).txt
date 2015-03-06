@@ -1,0 +1,394 @@
+[SOUND].
+As we saw with the success of Blind ROP,
+state of the art
+defenses complicate attacks, but in some
+cases, those attacks are still feasible.
+Stepping back,
+consider what we really want to do
+is to prevent malicious behavior.
+In particular, if there was an efficient
+method to check that a program is
+doing what we expect it to be doing, then
+we could use that method to identify when
+a program has been compromised and
+has deviated from our expectations.
+Such deviations could be malicious.
+And so, the program could be halted
+when a deviation is observed.
+Now, for this idea to work, we must
+define what we mean by should be doing.
+That is, we have to define
+the expected program behavior.
+Next, we need a way of efficiently
+checking that a program is
+acting according to our expectations.
+Then finally, the detector that
+does the checking needs to
+be protected from compromise so
+that its determinations are trustworthy.
+So how does control flow integrity
+implement behavior-based detection?
+First, we have to define by what
+we mean by expected behavior.
+For CFI, the expected behavior is defined
+by the control flow graph, or CFG.
+How does CFI detect deviations
+from this expectation?
+It does it by using an in-line
+reference monitor, or IRM.
+An in-line reference monitor is
+a rewriting of the program where
+the instructions that
+are inserted check whether or
+not the CFI property is maintained.
+To avoid compromise of the detector,
+we rely on sufficient randomness for
+the secrets that CFI uses and
+on the immutability of the code.
+Is CFI efficient?
+Well, classic CFI imposes a 16% overhead
+on average and 45% in the worst case.
+It works on arbitrary executables,
+but it's not modular so
+it can't handle dynamically
+linked libraries very well,
+which is a problem for modern programs
+which use such libraries quite often.
+Moreover, 45% in the worst case is getting
+to be a bit high in terms of overhead and
+may partially explain why CFI has not
+really been deployed so much to date.
+Now, on the other hand, research has
+continued since the original paper in
+2005 and a recent approach called Modular
+CFI solves the problem of modularity.
+It does support dynamically linked
+libraries and it's far more efficient.
+It imposes only a 5% overhead on
+average and 12% in the worst case.
+The main drawback here is that it
+works on C programs only as part
+of the LLVM compiler.
+More importantly, we should be concerned
+about whether CFI is actually secure.
+One way we can measure this is to look at
+how many ROP gadgets are eliminated by
+the use of CFI.
+How might they be eliminated?
+Well, their use would be considered
+non-compliant according to
+the program's CFG.
+And what we see is that for
+MCFI in particular, 96% or so
+of ROP gadgets are prevented.
+Another measure, called
+Average Indirect-target Reduction, AIR,
+shows that MCFI works really
+well in ruling out the target,
+the possible targets of indirect jumps.
+In particular, it rules out 99% or
+nearly all of them.
+So we're looking at pretty
+good security here.
+Okay, let's look at our
+definition of expected behavior,
+which we said was the control flow graph,
+or CFG.
+To introduce this idea, I'm going to
+first introduce an idea called the call
+graph that the CFG can be derived from.
+So here we have a program, sort2, which
+takes two arrays, a and b, and the length.
+And it sorts one in ascending order and
+the other in descending order.
+At the bottom, we see the control, the
+call graph, pardon me, of the program and
+it basically shows which functions
+call which other functions.
+So sort2 calls sort and sort will call
+lt and gt because we assume that sort is
+going to take those function pointers lt
+and gt in its third arguments, and invoke
+them when comparing the various elements
+of the two arrays that it's passed.
+Now, the control flow graph is
+defined by distinguishing calls and
+returns in the program.
+So here we can see that it looks quite
+similar to what we saw before, but
+now we've broken up each
+function into basic blocks,
+where a basic block is always
+going to end with a jump or
+a return or a call,
+some kind of indirect control transfer,
+rather than allowing the program to
+continue from one instruction to the next.
+So here we can see that the sort2
+function calls sort, so
+we do a break there at that first call.
+And then, when it's return to,
+it's going to call the second sort,
+which is then going to be returned
+again until it's completed.
+So we can follow the control flow
+through the program as follows.
+Sort2 calls sort,
+which then will call lt and
+return back to sort,
+which will return back to sort2.
+Then sort2 will call sort again,
+which this time will call gt,
+which is then returned from and
+then finally returned back to sort2.
+CFI works by ensuring that a program's
+execution is consistent with its
+control flow graph, computed in
+advance of running the program.
+This graph could be computed
+during compilation or
+by analyzing the executable
+post compilation.
+With the call graph in hand,
+either the compiler or
+a separate tool can modify the program
+to monitor the program's control flow.
+Such monitoring will ensure the execution
+is consistent with the CFG.
+Because we assume the program
+runs with depth enabled,
+we do not need to monitor direct calls,
+that is, those with constant targets.
+This is because depth precludes
+modifying the program text.
+Therefore, we must only monitor indirect
+calls, which are through registers.
+Jump, call and return instructions all
+potentially have indirect targets.
+Branch instructions used to
+compile conditionals have
+indirect targets very rarely and therefore
+usually fall under the depth protection.
+Jump tables compiled from switches
+may have indirect targets and
+so these too must be monitored.
+So looking back at our example, we can see
+that the direct calls to sort do not need
+to be monitored because they're just
+in the control, in the program text.
+Whereas the indirect calls to lt and
+gt and
+all of the returns do need to be monitored
+because they are through dynamic data.
+The returns are going to pop values off of
+the stack, which is dynamically alterable.
+And the jumps, the calls of lt and
+gt, are through function pointers,
+which are again pushed onto the stack.
+Okay, so we're going to
+implement an in-line monitor
+as a program transformation.
+And the way it will work is we can insert
+a label just before the target address of
+an indirect transfer.
+We'll insert code to check the label of
+the target at each indirect transfer.
+And if the label is not the one
+that we expect, then we'll abort.
+How do we know what we expect?
+From the analysis of
+the control flow graph.
+So, the simplest possible labeling is to
+just pick a random value, label L, and
+stick it at all possible targets of
+indirect transfers in the entire program.
+That is, all,
+the beginning of all functions that could
+be indirectly jumped to, say,
+through function pointers, and
+the location of all just after all
+calls to which something could return.
+So that's what we've shown here, that
+basically every, the edge of the end of
+every arrow is the same label L and
+every time we go to return or to call
+via the function pointer, we're going to
+check, is the target a legal label L?
+So what this will do then is it will
+prevent overwriting the return address to,
+say, go to the system command
+in the library somewhere.
+Why is that going to work?
+Well, the system command will not have
+a label preceding it, the label L, and so
+therefore, the jump to it will be denied.
+On the other hand, what our labeling
+will not prevent is returning not to
+the intended location, but to some
+other location that has the label L.
+So what we've shown here is that
+the sort function should have
+returned back to the caller sort2.
+But instead, let's say the adversary
+modified the return address to point to
+the beginning of the greater
+than function instead, well,
+this is legal according to CFI
+because it has the expected label.
+This is not the control flow we expected
+in the program, but it is allowed
+according to the control flow graph and
+the, in particular, the labeling we
+used to implement the enforcement of
+that control flow graph using CFI.
+Now, we can overcome this
+precision limitation by
+having a more detailed labeling of all
+the targets of indirect transfers.
+And we can see here at the bottom
+of the slide the constraints that
+these targets must satisfy.
+So in particular, return sites from calls
+to sort must all share the same label.
+When sort goes to return,
+it doesn't know who its caller is, and so
+all of the callers have to have
+the same label at their targets, so
+we see that in sort2, the two called
+from locations have the same label.
+At the same time, the call targets for
+gt and lt must share the same label.
+And the reason for this is that
+the sort function doesn't know which
+function pointer it's going to be given so
+that all those function pointers have to
+have the same target label,
+in this case, M.
+And then finally,
+the last label is not constrained and
+so we can give it a new label N.
+So this is sort of the most precise
+graph of labeling that we can have.
+So now that weird transfer
+we saw before is going to
+be denied because the label
+L does not equal label M.
+On the other hand, there's nothing that's
+going to prevent the weird case of sort of
+calling from one location from
+the first label L in sort2,
+but then returning to the second label L.
+It's not clear why the adversary would
+gain anything from this, at least in
+this example, but it would be allowed by
+the control flow graph of the program.
+Okay, so how are these label implemented?
+What are the instructions
+that we might use?
+Well, this is the classic
+CFI instrumentation.
+The MCFI and
+other approaches are not quite the same.
+So here we see call of a function pointer.
+We're transforming the call via ebx plus 8
+to be the sequence that's just below it.
+And what we see here is that we
+move the target first into eax,
+ebx plus 8's location.
+And then we compare against the target
+label, which we expect to be 12345678.
+If that's not going to work, then we're
+going to jump to this error label.
+Otherwise, we'll call eax,
+the actual target.
+When we call the actual target,
+we need to make sure that the target,
+when it returns back to us,
+it will also check its label.
+So, when we do the call, the stack pointer
+is going to be pointing to this location,
+this ins, prefetched instruction.
+Now, in the target, when it goes to
+return, we're rewriting the returned 10h
+here at the bottom to pick the new loc, to
+store the actual return address into ecx.
+And then,
+to look 4 past it to see whether or
+not the label stored there matches
+what we expect, that is, AABBCCDD.
+In this case, we can see that it does and
+therefore we will not jump to the error
+label, but instead we'll jump to ecx.
+So, given the strengths and weaknesses
+of CFI, let's think about what the as,
+adversary might try to do to defeat it.
+One thing he might do is to inject
+code that has a legal label.
+Maybe you can smash the stack and
+insert a code buffer that has a label that
+turns out to be a legal
+label to which you can jump.
+Now, this shouldn't work because we assume
+that we're using non-executable data and
+so you can't insert any new code.
+The only thing you could attempt to do
+would be to, say, modify code labels, but
+even this won't work because we
+assume the code is immutable.
+You could try to modify the stack or
+registers during the check to make
+it seem like it succeeded, right?
+So once we did the comparison and
+stored the result inside of the register,
+maybe we could somehow make a failed
+check look like a successful check.
+But this is not going to work because
+the adversary can't change any registers
+into which we would load the relevant
+data that would fake out the check.
+So, basically CFI is going to defeat
+control flow-modifying attacks like remote
+code injection, ROP,
+return-to-libc, and so on.
+But it's not going to perment, prevent
+the manipulation of control-flow that is
+allowed by the labels in the graph.
+And these are called mimicry attacks.
+And recent results have shown that
+the simple single-label control flow graph
+is susceptible to dangerous
+remote code injections.
+CFI also does not prevent data leaks.
+So, for example, the Heartbleed bug, which
+overruns a buffer to read the contents in
+adjacent memory, that's not going to
+be prevented because that's not
+affecting the control flow of the program,
+just what is read.
+It also is not going to affect the control
+flow that's determined based on
+data rather than on things like jump
+targets or return address targets.
+So in this little function
+here on the right,
+where we have this authenticated
+variable that we branch on,
+a buffer overrun by the str copy location
+could overrun the authenticated value and
+make it seem like we've been
+authenticated even though we're not.
+And this is perfectly legal according
+to the control flow graph of
+the program even though it
+is violating our security.
+So, control flow integrity is not
+everything, but it will defeat many,
+many, probably all, as far as we know,
+remote code injection attacks.
+Because the performance of CFI,
+particularly modular CFI, is improving,
+we can hope that CFI will one day, one day
+soon hopefully, make its way into actual
+practice and protect our programs far
+better than defense mechanisms do today.
+

@@ -1,0 +1,216 @@
+[SOUND]
+We are now going to look in
+depth at one particular kind of
+static analysis called flow analysis.
+Roughly speaking,
+a flow analysis tracks how values might
+flow between the different
+memory locations in a program.
+This kind of analysis is
+interesting because it can help us
+find bugs whose root cause is
+improperly trusting user input.
+And in particular,
+input that has not been validated.
+In a tainted flow analysis,
+untrusted input is considered tainted.
+Various operations in the program,
+on the other hand,
+expect to operate only on untainted data.
+If the flow analysis finds that tainted
+data could be used where untainted data is
+expected, there could be
+a potential security vulnerability.
+Examples include the source
+string to strcpy,
+whose length is assumed to be no
+greater than that of the target buffer.
+Format stings given to printf
+which could otherwise be used in
+format string attacks.
+And form fields from web pages used in
+the construction of SQL strings which
+could be used in SQL injection attacks.
+As a possible application of tainted flow
+analysis, recall format string attacks.
+Here, the adversary
+controls the format string.
+fgets reads from the network, and
+suppose the adversary is on the other
+side sending data along, which is stored
+by the program into the name variable.
+Then this variable is passed as
+the format string to printf.
+The problem is,
+the attacker can set this format string
+in such a way as to exploit the program.
+For example, by setting it to %s%s%s it
+will attempt to read from arguments
+that printf assumes are on the stack.
+But of course, in this case, they are not,
+which results in the program crashing.
+Even worse, the attacker can set
+the format string to include %n,
+which will write to assumed arguments on
+the stack, which, again, are not there.
+And as a result, the adversary can
+actually do code injection attacks.
+And these bugs still do occur in the wild,
+because we can
+not usually simply specify the format
+string as, say, a constant string.
+Now, another way to look at this problem
+in types is to imagine that the origin of
+a string, its level of trust,
+is specified as a type qualifier,
+either tainted or untainted.
+So here, we specify that printf
+expects an untainted format string.
+And by untainted, we mean that it is not
+controlled by a potential adversary.
+On the other hand,
+fgets could return data that is tainted,
+that an adversary could control.
+As such, the program that we saw
+before is illegal because fgets
+returns a tainted string, but
+printf expects an untainted one.
+These qualifiers don't match.
+Tainted does not equal untainted, and so
+we have found a possible bug, in fact,
+a security relevant bug, in the program.
+>> Let's carefully state the problem
+we want our analysis to solve.
+It is the no tainted flows problem.
+The goal is to establish that
+no tainted data is used where
+untainted data is expected.
+We identify trusted data using
+the untainted annotation.
+And untrusted data using
+the tainted annotation.
+Unannotated data could be either, and
+the analysis will figure out which.
+A solution to the problem considers
+all possible flows of the data
+through the program.
+That is,
+what sources can reach what sinks, and
+whether a tainted data source
+can reach an untainted sink.
+We will aim to develop a sound analysis.
+For the flow problem, this means that
+if the analysis finds no illegal flows,
+then indeed, there are none.
+So which flows are legal?
+Well, if f expects a tainted parameter,
+it's actually okay to pass it
+one that is untainted instead.
+Here we see a function f that
+takes a tainted int, and
+we're passing in untainted int instead.
+If f could handle
+something that's tainted,
+it surely should be able to handle
+something that's untainted.
+On the other hand,
+if g expects an untainted argument,
+we should not pass it a tainted argument.
+That's the situation we've been
+considering with format strings.
+So g should accept only untainted data.
+So we can view the allowed flows as a kind
+of lattice, where tainted is less than,
+in the lattice, untainted data.
+Here we see that untainted
+is less than tainted, but
+tainted is not less than untainted.
+Visually, we can look at
+the lattice as a graph
+where the higher values in the lattice
+are higher up in the graph.
+So for our analysis, we can think of a
+flow analysis as a kind of type inference.
+If no qualifier is present,
+then we must infer it.
+To perform type inference, our algorithm
+will take the following steps.
+First, we'll create a name for
+each missing qualifier.
+That is, for
+each type that does not have a qualifier,
+we'll generate a fresh name for it.
+We'll call them alpha or beta.
+For each statement in the program,
+we will generate constraints of
+the form qualifier one is less than or
+equal to qualifier two on possible
+solutions of qualifier variables.
+For example, if we had the statement
+x equals y in the program,
+then we would generate
+a constraint qy is less than or
+equal to qx, where qy is y's qualifier,
+and qx is x's qualifier.
+These qualifiers could either
+be constants like untainted or
+tainted or variables if they
+were missing like alpha or beta.
+After we have generated the constraints
+for the entire program,
+we can solve the constraints to produce
+solutions for alpha, beta, and so on.
+A solution is simply a substitution
+of qualifiers, like tainted or
+untainted, for names like alpha or
+beta such that all of
+the constraints in the resulting
+substituted constraints are legal.
+If no solution exists,
+then we may have spotted an illegal flow.
+So here's an example analysis.
+Recall the declarations of our printf and
+fgets functions that we've seen already,
+and then consider this program.
+The first step is to
+generate qualifier names for
+those variables that do not have
+qualifiers attached to them.
+In this case, name and x.
+The next step is to generate
+constraints due to each of
+the statements in the program.
+So for the first statement in the program,
+fgets returns something that is tainted
+and assigns it to the name variable.
+Therefore, we generate a constraint,
+tainted is less than or equal to alpha.
+Next, we assign name to x,
+and as a result,
+we generate a constraint that alpha
+is less than or equal to beta.
+Finally, we pass x to printf,
+which means that data is less than or
+equal to untainted,
+which is the annotation,
+the qualifier constant on
+the argument to printf.
+So now we can look at the constraints and
+see if a solution exists.
+The first constraint requires
+that alpha equals tainted.
+The only thing that tainted
+can be less than or
+equal to is something that's tainted.
+Therefore, to satisfy the second
+constraint, we must also have beta as
+equal to tainted, because, again, tainted
+is only less than or equal to itself.
+But then the third constraint is illegal,
+because nothing allows tainted to
+be less than or equal to untainted.
+As a result, we have identified
+a potentially illegal flow,
+because there is no possible solution for
+alpha and beta.
+

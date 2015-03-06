@@ -1,0 +1,1074 @@
+[SOUND] Okay, so
+today I'm really happy to have with
+me Patrice Godefroid
+a Principal Researcher at Microsoft.
+I'm going to now read
+a little bit about him.
+His bio.
+So he's been at Microsoft
+in Redmond since 2006 and
+before that he spent 12 years
+as a researcher at Bell Labs.
+There he earned his Bachelor's and
+Doctorate, sorry not there.
+Before that he earned his Bachelor's and
+Doctorate degrees from
+the University of Liège in Belgium.
+Patrice is well known for
+having invented VeriSoft.
+Which is the first
+software model checker for
+mainstream programming
+languages like C and C++.
+And more recently and,
+and something that's going to be
+a big topic of today's conversation.
+He codeveloped SAGE, which is the first
+whitebox fuzzer for security testing.
+And SAGE has been credited with having
+found roughly one-third of all of
+the security vulnerabilities
+discovered by file fuzzers.
+During the development
+of Microsoft Windows 7.
+So, Patrice, thanks so much for
+joining me and welcome.
+>> Well thank you very much for having me.
+>> All right so I'll get right to it.
+So in this class the class
+that I'm teaching on
+Coursera we're covering common
+security problems in software.
+Like buffer overflows and SQL injections
+and format string attacks and
+things like that.
+And you've worked on automated means for
+finding and preventing these problems.
+So I'm curious given
+all of your experience,
+what's your view on the state of the art?
+What are these tools do well,
+and what are they not so good at.
+>> Well I think yes, so so
+over the last 15 years there has been
+a lot of progress on these kind of tools.
+So automatic program analysis tool.
+There, there, I would say two main classes
+and I hope you would agree with that.
+The first class is
+static program analysis.
+The second is dynamic program analysis.
+So static program analysis tools.
+They can read code.
+Usually source code.
+[SOUND] And then they scan it, and
+they kind of try to find all kind of
+issues with the code, like bugs.
+Like those that you just mentioned.
+And then dynamic program analysis tools,
+they run the code.
+So usually the, the,
+one execution of the code and
+then do all kind of check
+during the execution.
+Again, to try to find all kind of
+like [INAUDIBLE] or bugs.
+And so, and
+then you can run them repeatedly and so
+you can check multiple execution this way.
+And I think that really,
+like for instance, for
+static program analysis,
+I mean it really took off.
+I think I would say around like 2000.
+There's starting to be really
+commercially available tools.
+Inside Microsoft we had,
+we have a a tool like that called Prefix.
+That started to be developed within
+the late 90s, 90s and early 2000s and
+was deployed really on a large
+scale thoughout the company.
+And these tools we found really
+lots of issues and help and
+help quite a bit and, they and
+they are use, used routinely today.
+And I make also tools
+that have been used for
+quite a while so
+right time checkers lets say.
+Like [INAUDIBLE] fire, internally
+we have a tool called True Scan.
+So these tools also find a lot of bugs and
+memory leaks and performance issues and
+things like that.
+And then in the area of
+security also starting in the,
+your early 2000 I would
+say around that time.
+There have been also or a lot of work on
+security testing also called fuzzing,
+basically to try to find
+security unreliabilities.
+Mostly in parsers for files and packets.
+And then there have been also
+a lot of progress over the years
+in having more sophisticated techniques
+finding mobile bugs using fuzzing.
+So, I mean that's kind of
+a general [LAUGH] answer.
+So there's been a lot of progress, but
+there's still room for improvement.
+>> Uh-huh.
+Do you, do you at this point as you
+say they, they've been under
+development of maybe 15 years.
+Are there things that these
+tools are just awesome at.
+You've mentioned they're in routine use.
+>> Yeah.
+>> For what things do people routinely use
+them versus things that are maybe
+still somewhere off in the future?
+>> Right.
+So so I know a little bit better the,
+the area for like systems code safety.
+So actually.
+For like cross site scripting attacks,
+and and like SQL injection bugs,
+things like that.
+So I do not know what the ratio of
+static versus dynamic analysis.
+But for buffer overflow,
+memory, corruption, bugs, etc,
+both are used extensively.
+So usually static analysis is used first,
+earlier, as the code is being written.
+And now you buy into these tools that
+are basically embedded into, I mean,
+the broken environment like Visual Studio.
+And as, as soon as you type,
+it can also perhaps flag some errors.
+And so they are used early on.
+And so this static are,
+these tools usually they are fast.
+And then they can be increase size.
+And so, and,
+in contrast the dynamic analysis tools
+are used when you can run the code.
+So after you can compile it,
+[INAUDIBLE] builds.
+And so they are run later.
+And they tend to be more precise,
+but they only check some execution.
+Typically not all
+execution of the program.
+So they're,
+they are very much complimentary.
+And in practice, they are used at
+different points during the development,
+software development.
+And so they are very much complimentary.
+And, we're still, I mean,
+as a community or inside Microsoft.
+So developing,
+developing these tools further to
+improve basically this precision.
+And type of bugs that we can find, and
+reduce the cost of using these tools.
+>> Okay, great.
+So, so you yourself have worked on
+these sorts of automated analysis.
+Most static analysis.
+So software model checking
+in the case of Verisoft.
+Back also since then whitebox fuzzing.
+So I'm curious having worked on
+software model checking for so long.
+What prompted the switch to working
+on whitebox fuzzing starting with
+I believe DART which was
+a forerunner of SAGE.
+>> All right.
+So, I mean, so, in my mind,
+VeriSoft, and DART, and
+whitebox fuzzing, and
+implements whitebox fuzzing.
+They are all related to this idea of
+software model checking, where one wants
+to try to prove that you have,
+to exhaustively test programs.
+In the case of Verisoft the main
+source of non determine is
+there was due to concurrency so the goal
+was to find concurrency related bugs.
+And in the case of DART or
+white box fuzzing the goal was to find
+bugs in data driven applications.
+And so, so there the non determine is
+due to the large input space for data.
+But the goal is the same,
+in the sense that, in the limits.
+So if you,
+if you're applying to small example, or
+if you let it go long enough,
+you get verification.
+So verification means it's a tool.
+A verification tool is a tool
+that can not only find bugs, but
+also prove the absence of bugs.
+Or a, a class of bugs,
+under some assumptions.
+Or a testing tool is
+just a tool to find bugs.
+And so so myself and
+many others in the research community have
+tried to basically develop new tools.
+That are inspired by
+verification techniques.
+In order to define new bug finding
+techniques, either static or
+dynamic, basically, testing-based,
+super testing kind of techniques.
+So the reason for the switch in,
+in my case is simply because ,.
+So when I was,
+I worked at Bell Labs for 12 years and
+their class of very expensive bugs,
+where inside communication switches.
+Like optical switches, or
+CDMA-based station, or phone switches.
+And so there, you had most of these
+bugs where you do concurrency issue,
+reactivity, real time issues inside
+really the core of a switch.
+And these were, like,
+very expensive box and very hard to find.
+And that's why a lot of work initially
+on model checking in the initial labs,
+at least, came out of the labs.
+Because there was a lot of interest,
+a strong interest in
+these type of techniques.
+Which have been proven
+to find quite subtle and
+expensive bugs physically inside switches.
+And when I move to Microsoft in 2006.
+Here at Microsoft,
+I would say that as a class, the,
+the most expensive bugs that Microsoft
+faces are probably security related bugs.
+And so there, this,
+it's not concurrency, really.
+It's really bugs that
+are due to malformed inputs.
+So, for instance, Windows client.
+So, Windows that runs on every lap,
+I mean laptops running Windows, for
+instance, etc, or PCs.
+Includes support for
+about more than 300 file formats.
+So they have 300 file parsers
+that are embedded in every
+laptop running windows for instance.
+And so there's, it's a big attack circus.
+In the sense, if you can craft specific
+input file and then open it or
+process it through the software
+running on your machine.
+And you can trigger buffer overflow.
+In principle this could
+be perhaps be exploited.
+And then you could hijack the execution
+of the process that runs on your machine.
+And so this is, so a big problem for
+Microsoft Office is this second big
+target, and big customer that we have for
+these type of techniques.
+Because Office also supports,
+depending on how you count.
+The tens, thousands, maybe a few hundred,
+depending on how you,
+the limits basically.
+But parsers and sub-parsers, etc.
+And both Windows and
+Office are successful products, they have
+been deployed on over a billion machines.
+So we have, when we have security
+related bugs that are very visible.
+We need to patch basically
+a billion machines through,
+like patch Tuesday kind of bugs, etc.
+So this is very expensive for Microsoft.
+Hence the interests of kind of developing
+and pushing further techniques or
+finding bugs in this type of application.
+>> So Microsoft, before you got involved
+with SAGE was using fuzzing technology.
+And you developed this new approach
+that was inspired by program analysis to
+do fuzzing.
+I wonder if you can characterize maybe
+the difference between other sorts of
+fuzzers that Microsoft uses and, and SAGE.
+And then also maybe
+the balance of how much time is
+spent using SAGE style fuzzing today.
+Versus maybe, before you,
+you know, when you got started.
+>> Right.
+So, I, I, I, I, I would say that there
+are three main types of fuzzing.
+And and they were they were
+proposed in that order.
+Well the first type of
+fusing is the simplest one.
+It's so called black box fusing.
+So it's random testing.
+So if you have for let's say five
+fuzzing you have a five parser.
+Parser means here just a,
+a program I'm going to read that file and
+do something with it.
+And so, so the, the simplest form
+of fuzzing, and the oldest one and
+the most basic one and the more used one,
+is called black box fuzzing.
+So you take, for instance, a,
+a well-formed input file in that format.
+And then you randomly fuzz, you randomly
+switch the value of bits in that file.
+As with that base variance, like a by,
+by, by causing where you to run by two,
+256 values, and
+then move to the next one, etc.
+So you can do the fuzzing.
+This way, you generate a lot of variance.
+And then you o, you try to open this file,
+run the program that reads that file.
+With all these variants,
+it takes a lot of machine time.
+And you hope to find a bug this way,
+like a bug overthrow, for instance.
+So that's blackbox fuzzing.
+The second class of fuzzing
+techniques we call them
+grammar based fuzzing techniques.
+So there, in addition,
+you have a grammar that
+represents the input format of the the,
+the, the, the, the inputs.
+That's the, the format that
+the application that your interested in to
+fuzz is supposed to take as input.
+So for instance you have, like Excel,
+or Word, or JPEG or GIF or whatever.
+And so, so now you have a grammar that's
+basically constrained the, the fuzzing a,
+a bit more.
+So you can say well, you, you, you can go
+through prediction rule of the grammar.
+And by construction generate
+basically inputs that are accepted in
+the language of the grammar.
+And then you can also enhance grammar base
+fuzzing this way by having heuristics.
+For instance saying well these four bytes,
+they're really meant to be an integer.
+And then you can.
+So, to, and try more often like
+values with many like 0 minus one.
+And even associate probabilistic
+weight through the production rule of
+the grammar.
+So basically that,
+when you go traverse and
+generate inputs so you can control the.
+Is if we randomly fuzzing this way.
+It's a way to guide random fuzzing.
+And, and make it much more
+intelligent by science based grammar.
+So and this is also a very
+popular approach and the, the,
+the drawback of grammar base
+fuzzing is that you need a grammar.
+And so the grammar-based fuzzing,
+in some sense, is as good as your grammar,
+to a large extent.
+And so this has been also used quite
+a bit, including inside Microsoft.
+And the third kind of technique
+large class of techniques is what I
+would call whitebox fuzzing.
+Which is what we,
+we started really developing and,
+here at Microsoft 2006, roughly speaking.
+And so there, in whitebox fuzzing.
+We, we, we run the program so
+we have a, a file parser, and,
+and, and a C file as an input.
+And then we run the program on that
+input to see what it does with it.
+And we do what's called
+simulated execution.
+When the program is running,
+we also execute that specific
+execution symbolically.
+And we, we, in this, basically
+the outcome of that is to generate,
+to see what the program
+does with its inputs.
+So we generate constraints that
+correspond to tests on the inputs.
+And then this, and then later on we can
+negate these constraints to try to, and
+use the constraints over
+to generate new tests.
+That are going to drive the execution of
+the program through different code path.
+And so we call these whitebox
+fuzzing because there the fuzzing is
+not done offline.
+But really we have to analyze the program
+and see how what it does with it's input.
+And then the tools suggest different
+inputs to drive a param through
+different code path.
+That's whitebox fuzzing there's various
+[INAUDIBLE] that have been proposed in
+various level of past precision.
+The advantage.
+So, whitebox fuzzing is more complex,
+the tools are more complex.
+But it's still fully automatic.
+So you don't need a grammar.
+And so,
+once you have a tool like that, it's,
+you press a button, and it,
+essentially goes, basically.
+So so it's still a victory.
+I think blackbox fuzzing was the first and
+probably started to begin to be
+used quite a bit in the early 2000.
+Grammar based was, I think,
+soon came after, like also between 2000,
+2005, started to be developed.
+I mean, I'm talking about main
+stream kind of fuzzing cycles.
+And then we started with 2006 etc,
+whitebox fuzzing.
+It took us a few years to get traction,
+and, and get, deployed on a large scale.
+And today we, we still,
+actually Microsoft we use still,
+use the three type of fuzzing
+techniques in production.
+With the exception for
+grammar based fuzzing.
+because sometimes we don't have good
+grammar's for some formats with so
+many different formats.
+It's finding the format
+itself is a hard problem.
+Their has been attempt to try to
+automatically generate these grammars and
+reversing hearing.
+And sometimes in whitebox manner,
+but these are mostly I think a,
+a stayed in research cycles so far.
+I mean it's less frequently used.
+And so grammer based fuzzing there
+are people exchanging grammars on
+the internet etc.
+So for some formats they are very
+well covered and [INAUDIBLE] covered.
+And it's labor intensive.
+I mean you need to pay somebody
+who's going to write for
+weeks basically grammars,
+and guess and try.
+So this is kind of more expensive
+than blackbox fuzzing and
+whitebox fuzzing in some sense.
+The increment passes higher.
+But today we use all three
+inside Microsoft usually.
+>> So there are all, and so
+I take from that that they all
+are effective in various ways.
+That for example, I could imagine that in
+whitebox fuzzing, you're going to follow.
+You're driven by the control
+paths of the program and
+some control flow paths are just, they
+are just harder or difficult to reach.
+Whereas you might get very lucky when
+you are doing a blackbox thing or
+you are not so lucky.
+Because you put the extra effort
+in to writing the grammer.
+You're able to get sort of deeper
+into where the program goes.
+Or, or maybe deeper is the wrong word.
+You just end up covering different parts
+of the states base of the program with
+these different techniques and so
+they, they complement each other.
+>> Yes, I, I, I think your,
+your intuition is absolutely correct.
+I mean this is intuition at the end
+because it's still, we're still trying to
+figure out what's the really fine print
+of what is, what technique is good at.
+And where there are threshold,
+what kinds of bugs, etc.
+But yes, in the end I think they
+are still very much complementary.
+I would love to be able to claim that
+SAGE finds basically everything that
+other fuzzers have, can find.
+And, in some cases of it we've
+done some experiments, etc.
+But in general also the product
+teams they don't want to
+put all their eggs in the same basket,
+and so they going to.
+Also, if a, a, a, a hacker is going to
+use a blackbox fuzzer, you want to,
+you want to also use blackbox fuzzer.
+Because that's what they would find,
+basically.
+And in practice, also.
+So when we run fuzzing,
+like in large organization like Windows.
+We don't run, fuzzers don't run
+exactly on the same code, as well.
+Which make comparison difficult.
+So, for instance, you ca, you might,
+first, as a small, first kind of test,
+ran some like, default like,
+like for instance blackbox fuzzing.
+And because it's offline fuzzing,
+it's easier, you can,
+it's easier to kind of test it on like,
+unstable build, and things like that.
+And later on you can go to the more
+sophisticated tool that needs to
+run perhaps for a longer period of time,
+or, or, and things like that.
+So it's, it's very much a mixture in,
+in the end.
+But yes, and, and so,
+absolutely programmer-based fuzzing for
+instance, especially for
+like very sophisticated languages.
+I mean, you cou, it, it,
+having a grammar, good grammar
+give you a heck of a head start.
+Basically to understand what
+the format is about and
+how to drive the execution of a program.
+So in fuzzing, in general,
+we always use seed files, so
+well-formed inputs that give
+us also a head start, right?
+So you can also have a combination,
+where you use grammer based fuzzer.
+You generate the 1,000 seeds,
+cover the grammar well.
+And then you use that as this suite
+basically for whitebox fuzzing.
+So, we use,
+we use this kind of techniques as well.
+I mean, using seed files is also a common
+practice in the fuzzing world, but
+we also use this whitebox fuzzing.
+And so, we also to refresh the seeds,
+or, and
+how to kind of,
+try to have more diversity in suite.
+Also, and their grammer based
+fuzzing can be useful for that.
+So.
+>> I'm wondering as as you talk about
+the different tools.
+And the history that Microsoft has
+had with using these different tools.
+And also the history
+of automated analysis.
+Having started with with Prefix,
+maybe in the late 90s.
+And it become into more common use.
+sort of what the story was.
+From your point of view you're, you're,
+you come into the research division of
+Microsoft and
+you just start to develop this technology.
+And then you you know,
+what was the step that went from a tool,
+a prototype that you were developing.
+To getting to the point that now it's
+being run on, you know, like you said,
+Office and Microsoft products
+that are used all over the world.
+>> Right.
+>> I imagine that that story of,
+of getting it adopted is going to
+mirror at least a little bit of story.
+That maybe people taking the class
+that they try to get tools used at
+their companies.
+You know, maybe, what they're certain road
+blocks or what-not that you encounter,
+that maybe they would encounter as well?
+>> Yes, so.
+We started the development of SAGE,
+which tool that can implement this
+whitebox fuzzing approach and
+we, and in 2006.
+In 2007 we had our first prototype.
+And we were fortunate
+to have some people in
+the current group that were really
+intrigued and interested in this.
+But at the beginning we didn't
+know how successful it would be.
+And so we started basically
+applying it to a handful of.
+And we found bugs.
+Bugs that have been there for
+a long time, and
+that were missed by everything
+that was throwed at them so far.
+So, so that's kind of whats and
+then we had there was the, the managers.
+The person or the head of security
+testing for Windows Client for
+Windows 7, who, and
+his name is Eric Douglass.
+And he, he was actually an early,
+he kind of was early on suggesting that,
+encouraging us to do this project.
+And at some point he decided to one day,
+so
+he was at the head of fuzzing,
+white fuzzing.
+Fuzzing actually for Windows 7.
+And then he decided to invest
+basically more significantly in SAGE,
+and then it was deployed for
+the first time.
+And about two-third of the, the, the file
+parsers embedded in Windows Client
+were fuzzed for the first time with
+SAGE in the 2008, 2009 time frame.
+And it turns out that it's, wasn't,
+it's a very effective way of finding bugs,
+especially in binary parsers.
+And so, as, as you mentioned earlier.
+I mean, at the end to give you an idea.
+SAGE was credited to it found about
+a third of all the file fuzzing bugs found
+during Windows 7.
+And so because SAGE was also the first.
+I mean, U2 at the time was run last.
+Which means that all the bugs
+found by SAGE were missed by
+literally everything else.
+Which is blackbox fuzzing, grammar
+based fuzzing when it was applicable.
+And also static program analysis
+that was run way earlier.
+But and maybe, I mean,
+by missed I mean that maybe the static
+analysis tool would have flagged that bug.
+But among a sea of false alarms.
+And I do not know exactly why, but in the
+end it was, the bug was still there when
+we, we, we paused it so
+when we run these tests basically.
+When they ran,
+the Windows team ran these tests.
+And so the, Windows 7,
+that was our first basically big customer.
+We were also lucky that in, and
+this is also something that I,
+I recommend in some sense for
+other companies, and this is a trend.
+Very visible and inside Microsoft.
+There has been a trend
+of centralizing fuzzing.
+So in Windows Vista for instance,
+which was the back, before Windows 7,
+the Windows team, they was doing
+fuzzing in a distributed manner.
+So every, and maybe, let's say,
+I'm just making this up, but
+let's say 100 group that
+need to do some fuzzing.
+Well there would be 100 fuzzing guy, and
+they have to grab some machine and
+do some [INAUDIBLE] some fuzzing.
+Starting in Windows 7 Client,
+they decided to centralize fuzzing.
+But for me,
+the true provider was great because I
+would just need to talk to that specific
+team, and I go leveraged this way.
+So, there, the, the, if you, if you like
+the head of the development team, and
+I'm the the fuzzing group.
+What we have to do is to, we identify,
+you have to identify, basically,
+that's part of the process
+that we use at Microsoft.
+There has to be a,
+an architectural, sorry, a review at the
+architectural level for your component.
+Where you have to identify
+your untrusted interfaces.
+And then you have to give me some kind of
+test driver and some seed inputs.
+And, but I need, the centralized
+fuzzing lab will run the test.
+Will run all kind of fuzzers,
+do all kind of things, triage the bugs.
+Eliminate duplicates, and then I will
+send you email, I mean we'll use.
+But rep, database kind of thing
+to communicate, and then I'll,
+I'll, I'll,
+I'll send the bugs back to you, basically.
+And so now you, for
+you, you don't have to worry about
+all this fuzzing business, etc.
+A bunch of experts are doing it for
+the entire Windows organization.
+And so at the beginning it was Windows 7.
+But now it moved, Windows 8 moved
+to the uncentralized fuzzing.
+Now we have recently a reorganization
+where its operating system growth,
+including Windows Phone and XBox,
+and a single, centralized team.
+And the same trend happened in the Office.
+And so for two provider it's great because
+now I have a few but very smart users.
+And so for
+sophisticated tools I get it's easier for
+me to really get a few
+people then hundreds.
+Actually do not do that don't have
+the bandwidth, the time to do that.
+And then it allows basically more
+sophisticated analysis to be run as well.
+because they have a lot of machines
+available, for all kind of fuzzing but
+also for basically available.
+>> That's really interesting to hear.
+So that, kind of dovetails into
+another thing I'm curious about,
+which is so you described an evolution
+of the development process.
+Where people are using static
+analysis all the time.
+Of course they're doing unit testing and
+code reviews and
+things like they,
+they've always done before.
+And then they also now are adding
+this very late phase, right?
+I mean this is to the point where
+these things are building running.
+And you can hand them off to a third
+party to do this fuzz testing with them.
+I wonder, you know, stepping back and
+looking five or, or
+ten years into the future.
+Seeing how the development process
+has evolved to the current state.
+Where, where do you
+think things are going?
+Where, what potential is there that's in
+development that's yet to be exploited?
+How are things going to get better?
+Are certain practices going to fall away?
+Can you look into your crystal ball and
+imagine what thing will
+look like in five years.
+>> Yeah this is a tough question.
+As a Yogi Berra used to say,
+it's hard to make predictions
+especially about the future.
+>> [LAUGH]
+>> But so I, so
+I, I, I don't know, but
+one trend that one sees and
+not just here but externally,
+I mean, and the market as well.
+Is perhaps having like
+like program analysis of
+ffuzzing services where
+you have basically ,.
+So you can kind of as an individual
+like company you might
+outsource a little bit of
+these analysis techniques.
+And perhaps, I mean,
+you still need the expert for the, the.
+But, but, for
+the techniques the tools themselves would
+be running in like a cloud for instance.
+And so, now, you get the economies
+of scale, this way, or
+you can mind, basically.
+I mean, how you can do more sophisticated
+analysis, for instance, and
+find APA, API usage bugs.
+Or I mean, cross-application kind of bugs,
+and all kinds of things like that.
+So this is definitely a training going on.
+And maybe in testing it
+will also reach that point.
+It's little bit cross-structured,
+a bit more complicated.
+If you do for
+instance Windows, which some of the stuff
+is really close to the hardware.
+So it's hard to,
+you cannot run this on a standard VM etc.
+But for higher level application I mean
+definitely it opens up new opportunities.
+Economies of cost and
+also perhaps sometimes running
+more expensive than ISIS.
+another, general research comment
+I mean comment about research or.
+They could do also, hopefully we
+will continue to see new tools.
+And especially perhaps combining, trying
+to combine the strength and, and, and,
+of both static and dynamic analysis.
+By static, the strength of
+static analysis is fast and
+can go anywhere, kind of things, and,
+and, and always on the kind of, tools.
+And in dynamic being precise,
+very few false alarms.
+And so that's the strengths
+of dynamic programs is and
+have more and more of and package
+them in a way that is really usable.
+By ever first basic application domain,
+or hopefully, for large classes of users.
+So, these kind of tools becomes more and
+more main stream.
+Overall, I think there is still
+a lot software being written.
+And of course its more than
+ever impacting society.
+Security is very critical
+to many different type of.
+So, there will be more progress.
+It's hard to crisply define
+exactly how progress will happen,
+but I mean there is a need,
+so it should happen.
+>> I, I just thinking about this
+synergy that you're talking about
+a static versus dynamic analysis.
+I'm wondering whether just thinking
+about the way things have evolved at
+Microsoft that.
+So one point of view might be that
+there are these very simple complete.
+You know, very likely to be correct
+low false alarm static analyses.
+That can find bugs really fast while
+you're developing your module.
+And this is good,
+because you can't run the code yet.
+It's not part of a complete application.
+And they find these bugs, and
+they, therefore these bugs get
+eliminated maybe early on.
+So I imagine this is sort
+of what's happening now.
+But then there are more
+sophisticated static analyses,
+you were mentioning verification before.
+That you might be able to prove that your,
+your component sort of does the right
+thing for some specification of,
+of the right thing.
+And then I imagine that that will have
+impact on downstream use of tools, right?
+So when you're, the,
+the more components you develop, say,
+in type safe languages or
+using static analysis upfront.
+That creates an opportunity for
+the tools later on.
+Rather than treating, you know,
+every binary as the same.
+If this binary came from.
+Become a, a fuzzing.
+Even whitebox fuzzing might
+be a little bit different.
+So, I, I think, as you say,
+it's hard to look and
+see how these, this interplay will,
+will evolve over time.
+But seems to me that there's
+an interesting opportunity there.
+>> Absolutely.
+And, eh, and
+there is a whole class of bugs.
+I mean, most, I mean a lot of development
+currently going on in developing apps, for
+instance, for like smart phones and
+things like that.
+Or they are like,
+browser and or application.
+And fortunately,
+this is not really my area of expertise.
+But this is also, the world these
+are like sub-worlds, so to speak.
+And and it's, I mean, this sense,
+I'm, I'm, the comments that I made, I
+think, are, are applicable to all of them.
+But maybe I was thinking more
+of a systems call, systems code,
+and a buffer overflow kind of things.
+And like, networking software and, and
+like file parsers, and things like that.
+And so also absolutely, I mean,
+in the order, like an application
+development for like yeah, apps.
+Or like phones, for instance,
+etc, or for like the web and
+so these are also other very specific
+kind of markets, so to speak.
+And so there's, there's also
+a lot of new tools coming up and
+different approaches there.
+And so definitely the,
+the world is, is changing.
+I mean, if you look at the five year
+time frame, it changing quickly.
+>> That's very cool.
+I wonder so just to finish up and
+continuing to look ahead a little bit,
+maybe a little bit nearer term.
+Can you say a little bit about
+research problems that you or
+the community working on.
+That these sorts of techniques,
+symbolic execution or,
+or whatever,
+that supports whitebox fuzzing.
+What are some of the problems that
+you're looking to solve today?
+>> Right.
+So, the, the, that's, that's,
+there's a lot of work currently
+being done in SPAs and as you know.
+But to solve our two main, I mean,
+personally the way I view it is or
+a simple way to, to, to, to,
+to see what's going on is twofold.
+So in the short term here,
+so one, one, one problem is to
+see how far come verification.
+So sometimes we have run SAGE for
+instance, for a long time now.
+So actually we have run SAGE now for
+total, roughly speaking to give you
+an idea about 500 machine-years.
+So SAGE has been running nonstop
+on average about 100 machine
+over the last five years.
+And, today as far as I know, so it's like
+the largest computational usage ever for
+an SMT solver.
+The satisfiability
+[INAUDIBLE] theory solvers.
+And so, but, one thing that's so
+in some cases we've been running it for
+a long time.
+And and we don't find bugs anymore.
+And so now,
+how far away from verification.
+I mean, how can we even improve
+the a techniques especially the,
+the, the techniques that
+deal with past explosion.
+Explore in such a way to have complete
+coverage even of two size of inputs etc.
+So that's one, so it is,
+of course, related to all their approach,
+related approach to program verification.
+Like so-called verification
+condition generation and
+bounded model checking, etc.
+Which are other techniques, basically,
+that try to take programs, and
+have a logic, precise logic
+representation of those programs.
+And then you can.
+And using Silver reason very effectively,
+very efficiently about the possible be,
+be, behaviors of the program.
+So that's one direction is one,
+how is the gap with the verification.
+The other is try to find,
+I mean, short-term.
+More application domains.
+So for instance, SAGE is used mostly
+today, still today for file fuzzing.
+But now what about packets?
+What about services?
+What about unit testing of in general,
+for instance, what about managed code?
+So we have another project called
+Pack Seer, which, which tells you,
+you need testing for .Net code, etc.
+But so how can we get more usage and
+users for that.
+And so we try to find basically this
+machinery of using symbolic execution and
+constraints over.
+Is still very limited to
+a specific application domain.
+And so while we, we're very happy and
+proud of that success I
+mean this is just the, the tip of
+an iceberg or scratching the surface.
+I mean most developers at Microsoft do
+not write code for, for five parser.
+So how do we reach other, application
+domains on your other communities.
+How can we maximize the impact
+of this type of research,
+not just the work we do at Microsoft,
+but on a community basis.
+How can we impact the world further
+in order to continue the research,
+get our funding, etc.
+Of course also.
+But, and so there, I mean, so, like,
+trying to get better at what we do,
+which is the verification angle.
+And also trying to make what we
+can do already more applicable to
+a larger class of applications and
+users is another main theme.
+>> Okay, fantastic.
+Well I, I don't have any more questions.
+Unless you'd like to add, I will say
+thank you so much for joining us.
+>> Well, thank you very much for,
+for, for having me, and giving me
+an opportunity to talk about this work.
+>> Fantastic, thank you.
+

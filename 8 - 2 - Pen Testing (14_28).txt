@@ -1,0 +1,392 @@
+What is penetration testing?
+Penetration testing is the process
+of trying to find exploitable
+vulnerabilities in complete systems or
+system components.
+And it is both an art and a science.
+Pen testers must be creative.
+They must think about how a system
+is put together, and poke it and
+probe it to see where assumptions made
+by designers represent weaknesses.
+Pen testers will cleverly
+adapt to what they find
+as they gain a foothold in one place.
+They may use that foothold to
+exploit a weakness somewhere else.
+Over time,
+certain patterns of weaknesses emerge.
+Many systems will be incorrectly built or
+misconfigured in the same sort of ways.
+When patterns are discovered, we can
+build tools that systematically look for
+those patterns, or try to exploit them.
+In a sense, this is ingenuity automated.
+As Donald Knuth once said, science is
+something we understand well enough to
+tell to a computer,
+while art is everything else.
+A pen tester's job is to
+find vulnerabilities in
+the applications being penetration tested.
+What's in a pen tester's bag of tricks
+to make him successful at that job?
+Well, a penetration tester
+needs to approach a target
+knowing a lot about the target domain.
+For example, if the pen tester
+is attacking web applications,
+then the pen tester needs to know
+a lot about how the web works.
+You also need to know how systems
+are built in that domain.
+For example, what protocols allow
+applications to communicate.
+For the web, that's HTTP and TCP, and IP.
+The languages that are used to build
+applications like PHP, Java, or Ruby for
+talking about the web.
+Or frameworks that used to build
+applications or application components
+like, for the web, Ruby on Rails,
+DreamWeaver, Drupal, and so on.
+You also want to know common
+weaknesses from that domain.
+For example, the bugs that are common to
+web applications like SQL injections or
+cross-site scripting, or
+cross-site request forgery.
+Or common misconfigurations or
+bad designs, like the use of
+default passwords or hidden files.
+Continuing our example
+of pen testing the web.
+Consider one professional's point of
+view of what web hacking is about.
+70% of the process is simply
+messing with parameters.
+So for example, if the target URL is the
+following, which you can imagine is what
+one might generate when clicking a button
+to buy an item on an online store.
+You can try to change the url to change
+the price and see what happens, or
+change the item number to see
+if you can buy something else.
+This would demonstrate
+the client parameters or
+unwisely trusted by the web application.
+Or you can try to insert a script in
+the parameters that are set in the url.
+If this works, and maybe it's
+susceptible to cross site scripting, or
+you could had structural characters to
+the URL, for example, to see whether or
+not you can inject other sorts of code.
+Another 10% of web hacking
+might be default passwords.
+That is, research what
+the default password might be and
+try it out to see whether or
+not the target has changed it.
+This research could be
+through online searches or
+through looking at user manuals.
+Another 10% might be hidden files and
+directories.
+Again, you could look through manuals for
+clues or you could just try out a bunch of
+common file names on the directory
+by typing in different URLs.
+You might find password files,
+or other administrative pages.
+And the remaining 10%
+might be other things,
+like authentication problems,
+such as bypass or replay.
+Or insecure web services, that is,
+ones that provide APIs that don't
+require any authentication.
+Or configuration page that
+gives away passwords.
+Now let's talk about
+some pen testing tools.
+Pen testers use tools for
+a variety of tasks.
+They use them to probe the target system,
+to understand important
+characteristics about it.
+Pen testers also use tools to
+gather information about a system.
+And perhaps test hypotheses about it.
+For example, they may see how
+it responds to certain stores,
+certain sorts of stimulus.
+Finally, pen testers will use tools
+to actually exploit a target system
+to demonstrate an actual
+vulnerability in it.
+Now there are many possible security
+tools out there, which should we use?
+Well, the answer depends on the target
+of our test and of our goal.
+If we're pen testing a network, then
+tools should explore the entire network.
+Its components, its topology and
+so on looking for issues.
+If we're targeting a single machine,
+tools might help us figure out what
+files are on that machine, and
+what software it's running, and
+what exploits it's susceptible to.
+If the target of our pen
+test is a single program,
+then tools will help us to explore that
+program's attack surface to see where it
+might handle input incorrectly.
+And as such be vulnerable to an attack.
+The first tool we'll consider is Nmap,
+which is used for network probing.
+Nmap stands for network mapper,
+and it will figure out for
+you what hosts are available
+on the network.
+What services, that is application name
+and version, those hosts are offering.
+What operating systems
+the hosts are running, and
+what type of packet filters or firewalls
+are in use, and many other things.
+Nmap works by sending raw IP packets into
+the network and observing the effects.
+You can give it a range of addresses and
+it will send packets to those
+addresses watching how the hosts that it
+tries to find at those addresses respond.
+Nmap is free open source though there
+are commercial variants as well, and
+you can get it here at this url nmap.org.
+So in a little more detail,
+here's now Nmap might find hosts and
+services by sending pings
+to various IP addresses.
+In particular, it might send
+ICMP Echo Request or Timestamp requests.
+These are the implementation
+of the standard ping protocol.
+Now, sometimes these packets are dropped
+by routers or firewalls, and
+so other packets should
+be injected as well.
+We might send TCP SYN or TCP SYN/ACK
+messages to ports 443 or ports 80.
+If we get any sort of response,
+that suggests that an HTTP or
+HTTPS server, that is,
+web servers are running on these ports.
+Nmap will try other things as well as,
+as designated by the operator.
+That is, it might send UDP packets,
+that is,
+User Datagram Protocol packets,
+to particular ports.
+And it might fill out those packets to
+look like what's expected of packets on
+those ports.
+For example, DNS often uses UDP,
+where DNS is the domain name service, and
+we could send DNS packets to that port and
+see whether or
+not there is a domain name server
+running at a particular address.
+Nmap will also send probes to other
+TCP ports, for example, looking for
+web servers or
+other TCP based services like FTP.
+And it will send probes that may illicit
+different responses on different operating
+systems in an attempt to fingerprint
+which machines it's talking to.
+Nmap can also attempt to be stealthy.
+A flurry of activity may be detected
+by an intrusion detection system.
+And so
+Nmap can be configured to emit packets at
+a slower rate to stay under the radar.
+Another common tool in a pen
+tester's arsenal is a web proxy.
+Web applications are common
+pen testing targets.
+And web proxies are useful because
+they sit between the browser and
+server capturing packets.
+They'll display any packets
+that are exchanged and
+allow the pen tester to modify them.
+Some proxies have additional features for
+vulnerability scanning, exploitation,
+site probing, and so on.
+One example of a web proxy is Zap,
+the OWASP Zed Attack Proxy.
+It provides a GUI that the pen tester can
+use to inspect or modify captured packets.
+It can allow the pin tester
+to set break points so
+that packets can go through quickly until
+a certain condition is met at which point
+the exchange is stopped and the pin tester
+can have a look or make a modification.
+Zap has several other features too,
+like active scanning which will
+attempt cross side scripting,
+SQL injection and so on.
+Fuzzing, in which the proxy sends
+context-specific payloads to
+see whether it can crash or
+otherwise corrupt the web application.
+And a spider that explores a site to
+construct a model of its structure.
+And this is useful to give a pen tester
+sort of a lay of the land of what the site
+is about and give him an idea of where to
+look for hidden URLs and things like that.
+Zap is free and
+open source, but commercial tools are
+available as well such as the Burp suite.
+This is quite popular among
+professional testers.
+There is a free version of it, but the
+professional version actually doesn't cost
+that much more and
+provides many useful features.
+The third and final tool we'll
+consider that a pen tester may
+find useful is Metasploit.
+Metasploit is quite popular.
+It's an advanced open-source platform for
+developing testing and using exploit code.
+It provides an extensible model
+through which payloads encoders no-op
+generators and
+exploits can be integrated together.
+It works by allowing the pen
+tester to script attacks.
+These scripts take several steps.
+First, probe the remote site looking for
+vulnerable services.
+Based on what's found,
+construct a payload.
+Encode the payload to avoid detection.
+For example, by introducing superfluous
+features that intrusion detection
+systems will be confused about,
+and therefore, fail to block.
+Inject the payload and wait for
+shellcode to connect back.
+In the end, you'll have a command prompt
+that you can use post-expoitation.
+So here's how it works, visually depicted.
+On the left, we see the pen tester
+armed with Metasploit and some scripts.
+And on the right,
+we see the target network.
+Two of the servers on the network
+are patched, but one of them is not.
+In step one, Metasploit probes
+the vulnerable target systems, and
+maybe it's able to find
+the vulnerable server.
+Next, it constructs the attack payload,
+which it then sends along,
+according to the script, triggering the
+vulnerability and compromising the target.
+In the best case, the target will connect
+back, providing the remote shell.
+The Metasploit framework has a bunch of
+different ways to support
+user interaction.
+For example, the msfconsole is an
+interactive type based command prompt for
+executing Metasploit commands.
+There's also a web based front end and
+a command line interface
+from the normal shell.
+All of these support probing and
+communication commands,
+payload construction and encoding, and
+support active and passive attacks.
+Active attacks are those that involve
+connecting to a remote service.
+While passive attacks are those
+involve setting up the service and
+letting clients connect to you.
+Meterpreter is a command processor that's
+actually injected into the target.
+For example,
+in the memory of a compromised process.
+If someone on the target system
+were to look at the process table,
+they would not see that anything is amiss.
+They would see all the programs running
+that they expect to see running.
+Unknown to them,
+inside one of those programs is
+actually running a meterpreter,
+which is following the commands from
+the remote metasploit operator.
+Obviously, this permits the pen
+tester to probe more stealthily.
+Msfpayload and msfencode are tools
+that generate stealthy shellcode.
+Msfpayload generates the payload.
+Msfencode encodes it to
+make it hard to detect.
+Metasploit comes with
+hundreds of modules and
+script developed by a broad
+community over time.
+These include exploits against particular
+vulnerabilities, along with stagers and
+other modifiers that generalize
+the exploits to different platforms.
+Tools for password sniffing.
+Privilege escalation.
+And keylogging and backdoors.
+All of these can be combined
+together using scripts to
+generate very sophisticated exploits,
+and there's much more.
+Kali is a Linux distribution
+with many open-source pen
+testing tools installed and configured.
+These include the ones we have already
+mentioned Nmap, Zap, Metasploit, and
+the Burp Suite and dozens of other
+ones such as John the Ripper for
+password cracking, Valgrind for dynamic
+binary analysis, Reaver for WiFi password
+cracking, peepdf for scanning PDF files
+for attack vectors and many more.
+Overall, there are many, many pen
+testing tools that are available, all in
+different levels of use, and many of them
+are installed on this Kali distribution.
+As I mentioned earlier in this unit,
+sectools.org gives a comprehensive list.
+At this point, I want to make
+a note about ethical hacking.
+Penetration testing tools are meant
+to reveal security vulnerabilities so
+that they can be fixed, not so
+that they can be exploited in the wild for
+the purposes of crime or harm.
+But it is true that people will use
+these penetration testing tools for
+nefarious purposes.
+In that way,
+they are sort of two way tools.
+Just as guns can be used to defend,
+guns can be used to attack.
+Don't be someone who uses
+pen testing tools to attack.
+

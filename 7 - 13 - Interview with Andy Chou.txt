@@ -1,0 +1,1050 @@
+[SOUND].
+So I'm very pleased to welcome Andy Chou,
+the Co-founder and
+Chief Technology Officer of Coverity,
+a leading provider of software quality and
+security testing solutions.
+We're going to talk to him today about
+a bunch of the stuff that Coverity does to
+make software better by using
+tools like static analysis.
+So, Andy, welcome.
+>> Thanks for inviting me, Michael.
+>> Thanks so much for
+taking the time to speak with us today.
+I'm sure that all of our,
+viewers are going to really
+benefit from your feedback.
+So, prior to co-founding Coverity, Andy
+was instrumental in developing the core
+intellectual property behind the Coverity
+platform while he earned his Ph.D.,
+in computer science from
+Stanford University.
+And since then he's developed many key
+innovations in Coverity's products, and
+prior to earning his PhD, Andy earned
+a bachelors in electrical engineering and
+computer science from Berkeley.
+So Andy in my software security course,
+we're looking at common security problems
+in software like buffer overflows and
+SQL injections and format string attacks.
+And we've also started
+to talk about tools and
+methods that developers can use to write
+software that avoids these problems, so
+hopefully it makes it more secure overall.
+Among these methods is
+static code analysis and
+Coverity, their code advisor tool,
+is an industry leader in static analysis.
+So, I'm wondering if you can briefly
+explain to us what static analysis is, and
+how it features in Coded Visor
+to identify security issues?
+>> Well static analysis is
+really just a broad name for
+a suite of different technologies that
+analyzes programs without executing them.
+And that can encompass many different
+kinds of things including you know,
+things that your compiler typically would
+do if you're using a statically typed
+language to check the types
+are used properly.
+But it can also include very
+advanced techniques that such as
+data flow analysis,
+control flow analysis that go
+beyond what the compiler would
+typically do you know to find defects.
+And so it's a very broad rubric, and
+underneath it you can take a look at many
+different specific technologies all around
+that's actually helping them find more
+about sort of many, many different kinds.
+Inside Code Advisor we use
+dataflow analysis to find how data
+flows through the application and
+potentially find tainted dataflows, for
+example, where potentially untrusted data
+is used in a, in a, in an unsafe fashion.
+We also use, other forms of analysis to
+detect control flows where operations are,
+are used incorrectly.
+So for example, you might have
+memory leaks in a program which
+allow the program to essentially lose
+track of memory that's been allocated.
+And you know many many other
+kinds of defect types as well.
+So there's, there's essentially
+many different kinds of
+analyzers that fall under
+the rubric of static analysis.
+>> Okay great.
+So you gave us some nice examples
+of what code advisor looks for.
+Tainted data flows is something that
+we talk about in the course a lot, that
+is that many security issues arise because
+data that should not be trusted that comes
+say, from the user over the Internet,
+is trusted to conform to a certain format.
+And then is used to overrun a buffer or
+used as a format string or
+something like that.
+So I can imagine that static analysis and
+identifying so-called tainted or
+untrusted data flows should really useful.
+And that leaves me to wondering how,
+how general is the technology that
+the tools that you developed use?
+In other words is there sort of a core
+technology that many different security
+issues take advantage of, or
+are each of the analyzers you spoke
+of really sort of independent?
+>> I would say that there's
+a handful of core engines, right?
+In, in our static analysis
+product in particular.
+One of them is a, a global intraprocedural
+data flow analysis engine, right,
+that can track data across procedure
+calls and you know, through the heap and
+things like that to some extent.
+And that's very useful for
+problems like SQL injection scripting.
+These typical tainted data flow problems.
+There's also a separate analyzer that
+essentially analyzes the program bottom up
+by summarizing function behaviors, and
+then using those summaries when
+analyzing callers of those functions.
+And that, that's also intra-procedural,
+but it's not producing it, a global
+dataflow graph, and that's very useful for
+detecting control flow type problems.
+And usually we would consider you know,
+certain kinds of, of issues such as
+certain kinds of buffer overflows
+fall into that, under that category.
+So there's a few core engines that
+are very commonly used across all of
+our different checks.
+And then there's some odd balls like,
+things like dead code for
+example; use a somewhat different,
+analyzer engine.
+Because we found that detecting dead
+code is a little different from
+the other properties we're looking for.
+Another exception is copy and paste that
+uses a different detector than others,
+because copy and pasters work differently
+than, than typically floaters.
+>> In, in the the dead code elimination
+one, or dead code detection,
+is that something that you might run
+before running the other analysis so
+they end up looking at less code?
+>> Right.
+That is the question
+sometimes we get asked if you
+know that helps make
+the analysis more efficient.
+But we found that the, it's not really
+useful for that purpose because it's
+very hard to tell what code is not
+being executed from our perspective.
+From a purely static point of view any
+function that is potentially exported
+is potentially culled because this might
+be a library that we're analyzing.
+It's very difficult to tell if it's, you
+know, something we can truly just skip.
+So we don't really skip anything
+when running our other analyzers.
+>> Got it.
+What do you think I can imagine
+that static analysis would
+be useful because it's,
+it's analyzing the code before it runs.
+How does it fit into the pantheon
+of things that you might do.
+To assert that, to give yourself
+satisfaction that your program is
+secure compared to things like manual
+code reviews, or penetration tests.
+How does static analysis fit in,
+how does it compare to those things?
+>> Yeah, I mean, it,
+it there is no panacea for security.
+There's no single technique or
+approach that will solve all of
+your security problems, and
+that is also true of static analysis.
+I would, I would,
+I would characterize it as,
+sort of part of a complete breakfast,
+if you will, right.
+So you have many different techniques.
+yes, manual review is definitely
+a technique that should and, and
+can, and does get used in practice.
+But it's, the problem with manual review
+is that it's very inefficient, right?
+It's very costly to review every
+single line of code with an expert who
+actually understand all of the different
+potential security vulnerabilities.
+Really there's very few people
+in the world that know about any
+particular type of vulnerability in depth.
+So it's very hard to get
+the level of review and
+the coverage that you need
+through manual analysis.
+Dynamic analysis is another approach
+that is very commonly used.
+And this, this can mean different things.
+One of the most common meanings of
+it today is, for web applications to
+have a sort of scanner that will probe
+an application by crawling through
+the different pages your application has
+and essentially trying to attack it.
+with, with malicious inputs to
+see how the application responds.
+When it works that's fantastic because
+then you get an actual example of
+an attack and as a developer you have
+verifiable proof that, you know,
+you have a vulnerability, right?
+And that's nice but the,
+the that's the plus side.
+The downside of it is you don't
+get very good coverage of
+your application typically.
+So it's hard for dynamic analysis
+to reach all the nooks and
+crannies of the behaviors
+of your application.
+Static analysis you know, the strengths
+are that it covers all of the application.
+Right it can analyze every piece of code.
+Every potential corner case.
+The, the, the downside if you will
+is that because it's trying to
+analyze a program in abstract.
+It can have what's known
+as false positives, right?
+These are reports that,
+it thinks are real defects or
+vulnerabilities but
+aren't really a problem in practice and
+it's up to developers to
+determine if they're real.
+And depending on the analyzer
+you use it can take time and
+memory to analyze a large program.
+And so scalability for very large
+programs can be a concern as well.
+>> So imagine that, that scalability also
+trades off and maybe the false positives
+issue as well with the precision of
+the analysis that is to say sort of the,
+the, how fine grain the properties
+are that it tries to figure out.
+>> Absolutely.
+I think, that's one of the central
+challenges of building static analysis is
+how to make it scale up to realistically
+large programs, at the same
+time having a reasonable false positive
+rate so developers don't lose interest.
+And also not missing things, right?
+There's false negatives as well,
+you might miss defects,
+and yeah, in real life static analyzers
+don't find everything in practice.
+And that's, like, a deliberate
+trade off in order to be able to
+have these other properties
+that we also find desirable.
+So it's a balancing game and
+I think from a commercial standpoint that
+balancing game is where we spend a lot of
+our time trying to optimise for, you know,
+lowering false positive rates while
+at the same time finding more bugs.
+And also scaling up to large programs.
+These are conflicting factors.
+>> Okay, excellent.
+So you just mentioned as
+a commercial company you
+obviously have commercial clients.
+But my understanding is you have
+a program called Coverity Scan that also
+provides a service to
+the open source community.
+Could you also tell us
+a little bit about that?
+>> Absolutely one of the things
+we found is that a lot of
+commercial software is not
+fully commercial software.
+They use a lot of open source it,
+some statistics show that
+even very large commercial projects
+might contain 60 to 80% or
+more of open source
+software inside of them.
+If you look at this pure
+line of code count.
+So we think of it,
+what we did was we developed a scanning
+project for open source projects.
+It was originally started with
+the Department of Homeland Security.
+But ultimately we decided
+to fund it ourselves.
+And what it does is allows open source
+projects to submit their code to us on
+a regular basis, get the analysis results
+in the cloud, and fix them for free.
+So it's great marketing for us.
+But it's also, I think, a good service for
+the open source community.
+They've fixed tens of
+thousands of defects.
+Some quick statistics on scan you know,
+we just crossed 500 million lines of
+code in scan that's being
+analyzed on a weekly basis.
+And over 2,500 projects across
+many different languages.
+C, C++, and Java.
+Right now so,
+it's a very successful project, and
+if you have some open source
+code that you want scanned for
+free, you can certainly submit it to, to
+ScanThat converter common and try it out.
+>> Okay, fantastic.
+Let's see, I'm whether,
+you mentioned a moment ago,
+doing your analysis on C and C++ in Java.
+Is it, is it the case that static
+analysis is more difficult on some of
+those languages as compared to other ones?
+>> You know, C and C++ are generally very
+difficult languages to analyze, right?
+Because they don't have memory safety.
+But also,
+they're good languages to analyze.
+Because they don't have memory safety.
+>> [LAUGH]
+>> Yeah.
+>> I, from our perspective, you know,
+the worse the language, in a sense,
+the more ways that you can, yeah,
+shoot yourself in the foot.
+The better for us in that we
+can find more defects for you.
+And so, hard is good in that sense.
+You know, it's also just difficult
+to parse languages like C and C++.
+Java's got a, you know,
+just a lot less diversity when it
+comes to the compilers and the kind of
+different language variance there are.
+But then there's all these
+dynamic languages, right?
+Think JavaScript or Python and Ruby.
+These have different challenges for static
+analysis and I think there are static
+analyzers out there that, that do analyze
+these programs in these languages.
+But they are generally
+more shallow in nature,
+because it's hard to really get
+the same level of data that you
+do from a static language in these dynamic
+images just purely from static analysis.
+So it can be difficult.
+I think its still a research area for us.
+I mean we're definitely exploring that and
+I think for the academic community as well
+its still very much a research topic.
+>> Do you, are suggesting
+then that you have, plans or
+you would hope to at sometime in
+the future analyse things like Python or
+JavaScript other pretty popular languages
+but, ones that don't fit into this sort of
+statically typed traditional compiled
+language sort of, framework?
+>> I wouldn't claim that we have plans,
+but
+it's, I wouldn't, I wouldn't I
+wouldn't close that off either.
+[LAUGH] I have to be a little careful
+with talking about the future.
+But I would, I would say that, that we're
+certainly open to looking at all of,
+all kinds of software and
+all languages ultimately.
+But I, I'm not claiming anything today.
+[LAUGH]
+>> Okay, fair enough.
+So you briefly mentioned a little
+while ago dynamic analysis as compared
+to static analysis and you discussed
+a little bit about some of the trade-offs.
+Do you support dynamic analysis in
+you your, in your code advisor tool?
+And if so what sorts of things do you use
+it for as opposed to static analysis?
+>> Yeah, there are some,
+some uses of dynamic analysis within our
+static analysis product, and we use it
+primarily to, vet certain things that
+are hard to determine purely statically.
+So for example,um,
+inside programs there might be
+validation routines that checks that
+something is valid credit card number, or
+that it's a valid escaping routine for
+cross hash scripting in certain contexts.
+These kinds of routines you
+can analyze statically but
+we found that a relatively simple
+dynamic approach testing approach can be
+very effective at determining if these
+are for example, proper escaping routines.
+And so they don't produce a sound answer,
+but almost always they are very,
+very correct.
+Because it's very unlikely that
+we'll miss something if we've per,
+fairly exhausted it.
+So, it,
+that's how we use dynamic analysis.
+So there's certain core problems that are
+easier for dynamic [SOUND] than static.
+>> It sounds like these two
+things are complimentary that is,
+I could imagine you could use your static
+tainting analysis to find out, well is
+a sanitizer routine is an escaping routine
+actually being used on all program paths?
+And then separately using the dynamic
+analysis to determine, well is
+this actually a good escaping routine,
+now that we know that it's being called.
+>> Precisely, precisely.
+And that's exactly, that's generally,
+you know, at a high level of
+abstraction that's, that's what we're
+trying to do, is essentially elaborate
+the strengths of both to augment
+the analysis and make it smarter.
+>> Do you I, I know that in
+the area of data erase detection,
+trying to find bugs in concurrent
+programs, there seems to be more emphasis
+these days anyways, on using dynamic
+analysis to find those sorts of bugs.
+Because it's very hard to
+consider all of the dif,
+the different threat
+interviewings at compile time.
+Is that, is that something that
+that you guys do as well, or
+is that maybe something that
+you might do in the future?
+>> Sure, honestly.
+right, so we do have analyzers
+that detect concurrency bugs.
+So things like risk conditions,
+dead locks, and so forth.
+It's an area that is difficult I would
+say, but we do have detectors that do
+a pretty good job at finding a certain
+class of these kinds of errors.
+In general it's, it's one of those
+areas where static analysis can
+provide some coverage if you write your
+application code in a certain matter.
+So for example if you have
+fairly consistent use of
+locks in your application there are many
+kinds of defects it can detect for you.
+But if you have fancier concurrency
+mechanisms you have lock free data
+structures and you have to be very
+careful how you use them, and, and.
+Like things like this it can be more
+difficult for static analysis to just,
+you know, understand all those
+nuances in your application.
+So while we, we generally concurrency
+as in the broad strokes it depends
+on how you use concurrency and what you
+mean by it in a specific application.
+It sounds like it comes back to this
+point that static analysis has to
+look at fairly limited properties.
+And in the case that you can express
+the property in a simple way,
+like this lock is always held when
+this variable is always accessed.
+Then that's something static
+analysis kind of turns around for.
+But when the property is a little
+bit more subtle, it's harder to
+get static analysis to manage all of those
+different tradeoffs, scalability and.
+>> You know, I would say, I,
+I wouldn't claim that it's necessarily not
+possible or that it's hard, it's just from
+a commercial standpoint there are fewer,
+fewer people doing that
+kind of advanced work.
+And they generally have smaller and
+smaller pieces of code, right,
+in which to look at with those
+complex kinds of uses, usages.
+And so as a result from
+a commercial standpoint it
+might not be worth it to kind of delve too
+deep into corner cases, actually, right.
+The majority of the code that
+uses concurrency for example,
+Java is using fairly straightforward
+synchronization primitives that are built
+into the language and
+those we can handle just fine.
+So, I think it's more of a tradeoff
+in terms of what's worth,
+what's worth investing in
+from a commercial standpoint.
+But yeah, I mean there are algorithms
+that can deal with complex you know,
+data structures.
+And concurrency primitives that have
+been explored in research and if there's
+enough demands, someday some concurrency
+group that becomes really popular,
+it's something we would
+certainly consider.
+>> Okay, so you just mentioned that
+commercial viability was one factor in
+determining whether you design
+an analysis or not for your product.
+>> Right.
+>> Could you
+say a little bit more about maybe other
+factors that go into deciding how,
+how do you decide when to do something
+as a static analysis to extend your,
+your product to, to look for some problem.
+>> Yeah.
+One of the factors is, you know,
+the the criticality of the defects.
+Right.
+So
+recently we had heart bleed right which is
+a pretty severe security vulnerability.
+And we quickly determined that
+there was some way that we
+can detect this defect and so we,
+we augmented our analysis to do that.
+And so there are cases like that and
+there's other cases where we tried to
+develop things that our
+customers have asked for.
+Right?
+So we listen to our customers.
+They give us feedback about
+whatever kind of defect that
+they're interested in finding.
+They give us some examples, and we examine
+that, and we build prototype chuckers, and
+if those chuckers, can be developed in a
+way that don't excessive false positives,
+and still detect the errors
+that they're interested in,
+then we consider shipping them,
+right, over time.
+But there are cases, there's certainly
+cases where people sent us examples of
+defects which we'd give up on, right?
+And you know, they just either not
+detectable easily with static analysis or
+we don't have the time to get to them or
+the false positive read might be too high,
+right?
+In the latter case we also do things like
+have optional flags that essentially
+allow only certain customers to turn
+those on because they really want it.
+But if you, if you did it with
+everybody's code you'd end up
+with a lot of false positives so
+there, there's that option as well.
+>> Are you able to,
+to trial run your detectors on
+your existing customer's code?
+In other words, let's say that customer
+A requests a particular feature.
+And you want to decide, okay is it
+going to work with the you know,
+false positives and so on.
+I imagine you could certainly use the scan
+project to help you out with that.
+You have all this open source code
+to help you determine false alarms.
+Are you also able to ask your other
+customers to trial run these ideas and
+see how well they, they pan out?
+>> Right, so we,
+we have a couple of mechanisms for that.
+One is we can help the specific
+customers that ask for
+it to try out you know,
+a beta version of the analysis.
+Another thing that we do is
+we run a lot tryouts, right?
+So these are cases where we go out
+to cust, to, not customers yet.
+Prospects I would say.
+And we give them a chance to run
+our analysis and see the results.
+And sometimes as part of trials
+the the sales engineer that we
+have that helps with the trial will
+kind of let them know if they're,
+if they're interested in a particular kind
+of defect that we know we have you know
+prototype for we might turn it on.
+And, and give them an opportunity to
+see what the results might look like.
+Alright so they actually use that.
+So that does happen as well and
+it gets us some feedback about,
+about things that would be hard to gather
+otherwise as you might imagine since
+these code bases are mostly proprietary.
+>> Yeah I was thinking that,
+I believe it's the case that,
+I'm forgetting the name of the company.
+They have, they have the business
+model where you send them the code and
+they run the analysis on it and
+send you back a report.
+>> Right.
+Right.
+Veracode.
+That's the one.
+>> Yeah, Veracode.
+That's it.
+So they would have the benefit of
+they have access to all of this code.
+Whereas I suppose if your, you send
+to your product to your customer you,
+you give them the option of whether
+they send data back to you or not.
+>> Right so we so one of
+the differences between Vericode and,
+and us is that they
+analyze binaries right.
+And so as a result they don't actually
+need the source code or at least not
+the full source code of the application
+whereas we're elementing the source code.
+So, it's the one difference and, and
+the net effect of that is that we send our
+product to the customer and they run it on
+>> So
+Coverity was founded wow, I mean, I was
+looking on your web page, 2003, it's been.
+>> 2002
+>> Sorry, 2002.
+It's been, yeah, I guess 12 years.
+So 11, 12 years now.
+Yes.
+>> Yeah, wow.
+So time flies.
+you, you, I just remember you
+being a trailblazer at the time.
+That static analysis companies existed,
+but it seemed like the market came sort
+of of age when you guys hit the scene.
+I wonder if you could reflect back on all
+that's changed from the time that you
+started until today.
+And, what's the,
+what were the problems in the past,
+which of those problems have been solved
+from say a practical point of view and
+what problems do you see in the future for
+this industry?
+>> Right.
+wow, 2003 the world was
+a very different place.
+I think static analysis was not really
+much of a commercial market at all.
+There were a handful of products.
+If you look at C++ there was products
+like Lint and, there's a few others
+on the market place, but the aggregate
+size of the market was very, very small.
+I'd say commercially at least there
+were very few people working on
+static analysis as a product, right.
+And you know, since then,
+you know, Coverity grew to
+about 300 people as of 2014.
+We were just acquired by
+Synopsis this year so
+I it, it's,
+it's kind of not exactly the end, right?
+Because it will continue
+under the Synopsis rubric but
+it's, it's certainly been a long journey.
+And I think the market has
+matured a huge amount right.
+I think back in 2003 static analysis
+was considered kind of you know,
+not you know,
+wasn't really commonly used I would say.
+At least not in practice in
+large development organizations.
+And today I would say if you're doing
+C++ development it's not you know,
+absolutely required, right?
+But it's getting close to
+that point where, you know,
+it's kind of scary to not do static
+analysis if you're developing a,
+a million lines of code application or
+up certainly.
+And, you know, I think,
+I think that's a huge change from what it,
+from where we started and
+it's a good one, I think.
+If it means software engineering
+practices are gradually maturing and
+new tools are being integrated in.
+The other thing is security has just grown
+in terms of it's importance so much.
+I think think in the past when it all
+started it was all about quality, right?
+It was about finding crashes and
+things that could cause your customers
+to come back and scream at you.
+But now security is such a high
+profile problem and, and
+something that's fir, fir, first and
+foremost in developers' minds.
+At least within organizations like,
+maybe not individual developers, but
+in terms of the organizations they work
+for they care a lot about this problem.
+And it's really changed the focus of,
+of what kind of static analysis is,
+is being worked on in a lot of companies,
+including ours.
+>> Do you we'd spoke a little bit before
+about the core technology, like say, the,
+the tainting analysis.
+>> Yeah.
+>> Did you find that when the security
+became more of a focus, and, and maybe
+Coverity started working more on security?
+Did you have to develop new core analyses,
+or did you find that many of the,
+the analyses you'd already developed
+could be retooled to work for security?
+>> It was a combination.
+There were certainly algorithms that
+work fine for security checks and
+there were other one where we had
+to invent entirely new engines.
+So that tainting engine I was talking
+about was something we added specifically
+for security.
+And that was something we had
+in some form in the past.
+We got much more serious
+about it when [CROSSTALK].
+>> Mm.
+>> We realized that
+security issues really required you
+to have a good tainting analysis.
+And you know, I think that it's among,
+it's among many problems that we had to,
+to, to tackle when we
+change gears like that.
+Another is the reporting, for example.
+The kind of reports that security
+organizations care about and,
+and what's reported on them.
+It's very different than one on quality.
+A quality-oriented kind of
+report might look like.
+>> So I guess the, this question, there,
+there are two questions that
+are two sides of the same coin.
+So, what is what challenges do you see for
+the industry going ahead and
+on the flip side of that what are some
+barriers to the practical adoption of,
+of static analysis today as,
+as far these companies believe.
+>> Yeah.
+In terms of looking ahead I
+think there's lots of room for
+expanding use of static analysis.
+you, you mentioned languages before.
+I think, that's a huge one,
+right, in terms of
+getting more access to static analysis
+across these new dynamic languages where
+they don't even have the basic you know,
+type analysis in many cases.
+Right, that, that we take for
+granted in static languages.
+But I think that if you look at the, the
+industry as a whole, what's keeping static
+analysis from being used more right, and,
+you know, being more common practice.
+I think part of the answer is that it's
+just a change in culture and mentality.
+It's very difficult for
+people who aren't used to dealing with
+this new source of defects, right?
+To deal with that, right?
+Suddenly they turn this
+analysis engine on and
+they're faced with a few thousand bugs.
+And they don't know what to do with that.
+They already have too many
+bugs in their database and
+they can't fix them all anyway,
+so why add a few thousand more?
+but, you know, the thing about static
+analysis bugs is that they're,
+they're pinpointed in the code, right?
+There's an actionable kind of, there's
+no need to kind of reverse engineer how,
+you know, how the bug occurs.
+It's kind of a root cause.
+And so, you know,
+changing the mentality about how
+you can efficiently address these
+defects earlier in the cycle.
+And getting people to realize that if
+they're proactive about fixing those,
+they might have fewer of those hard to,
+you know,
+hard to understand defects
+in the field of futures.
+It's a, it's difficult.
+It's kind of like getting
+people to exercise.
+Or, or, dig it, you know, do,
+you know, g, have a good diet.
+It, it, before you have
+a problem it might seem like oh,
+that's other people's problem, not mine.
+But until, until it's your problem, right.
+And then you take it seriously.
+So I think that, that gradually
+organizations are realizing they do
+need to be more proactive about ensuring
+security and quality of applications and
+that's where we can help.
+>> So, this been great I it's
+been really interesting to
+hear about especially the a commercial
+perspective on static analysis.
+I wonder if you in your experience in
+working with companies and thinking about
+how static analysis fits in the overall
+process of making programs more secure,
+there are other tools or techniques that
+companies talk about that you have to
+think about when you write your tools so
+that you fit within the overall ecosystem.
+Things we, we mentioned already maybe
+testing, penetration testing perhaps, or
+manual code review.
+Are there other things
+that that you hear about?
+Maybe the use of certain operating
+systems or deployment environments.
+Things like that,
+that static analysis has to think about.
+>> Yeah I mean, I think that most sort of,
+direct touch points for static
+analysis include built systems, right?
+So built systems are complicated
+in integrating with them.
+So that you can actually see all
+the code is not trivial, usually.
+Another example is the use of,
+bug tracking systems.
+If, if you want to get your bugs
+fixed often you've got to push them
+into a system that people are already
+using for, assigning work to each other.
+Right?
+A third is source control systems, right?
+These are systems that keep track of,
+you know,
+who wrote what code and
+without the information it's hard to
+assign these defects that pop out
+of static analysis to a person.
+Right?
+And
+if they're just sitting there in
+the ether nobody works on them,
+so these are the common
+integration points that we have.
+But the big picture is that you,
+you need to really integrate with the flow
+that developers use in each company, and
+it's, each company has its own unique
+you know, often home-grown kind of
+methodology for how they do development,
+at least in the details, right?
+And integrating with all of those
+details is, is, often a challenge and
+is part of the reason why, you know,
+professional services or, or just,
+you know, someone champion inside
+the company that understands how to
+put this new thing, this foreign thing,
+into the organization, is,
+is often required to get static
+analysis to be effective.
+>> Okay, great.
+I wonder if there is there's anything
+we haven't talked about that you think
+is important that people ought to know
+about static analysis or about Coverity.
+Just any, any parting thoughts?
+>> You know, one thing that we just
+launched recently is a new version,
+it's not, it's not Coverity Scan,
+but it's called Codespotter.
+Right?
+And it's essentially a free service for,
+not just open-source projects, but
+kind of homegrown projects as well, so
+if you have some code at GitHub
+that's written in Java today,
+then you can use Codespotter on it and
+get analysis results.
+And so that's an interesting new dynamic I
+would say is this idea of putting code in
+the cloud and development in the cloud.
+And it's, it's a trend that I
+think actually does benefit static
+analysis technologies
+in that it's emerging.
+we're, we'd like to kind of write that
+trend as well and, and help, you know,
+developers that want to do
+that kind of development.
+It moved more of their flow
+into the cloud, and, and
+static analysis should be a part of that.
+So we're excited to see that.
+I think, you know,
+kind of the big picture is that,
+you know, if you care about security,
+if you care about quality, you know,
+there's like I said many
+different things you can do.
+And I think static analysis
+is one of those things and
+its one of the things that works,
+you know, while you code in a sense.
+Right.
+Like while you're first putting out
+that code you can actually get
+feedback really in the process.
+And, unlike techniques that wait until,
+let's say, an expert comes in a few
+months later or years later to look
+at your code, you can find it now.
+And I think that's something I hope
+developers can keep in mind that you know,
+security is part of their jobs and
+as well as quality.
+And you can't just rely on, you know,
+outside experts to just to do it for you.
+It really requires developers
+get proactively involved and
+to the extent that we can
+help that we're happy.
+But I am also if developers were just
+more aware of the problem and, and
+just you know, can learn more about and be
+more proactive about fixing bugs earlier.
+>> Fantastic.
+That's I have to say, that's, part of my
+goal in this class is that too often,
+people think of security as something you
+can solve by putting a box on the edge of
+your network and, really, that's,
+that's not going to scale.
+The way you're going to solve your
+security problems is to build that network
+better in the first place.
+>> Exactly.
+>> So one maybe fun question is have you
+used Coherity Code Advisor on itself?
+Right, it's a program and
+you can run it and evaluate itself.
+How does it do if you do?
+>> yes.
+We do analyze [LAUGH] our own products.
+And we do have a, dashboard that's sitting
+in our kitchen that everyone can see it
+at lunchtime, and so we keep a close
+eye on our analysis results.
+And we've found bugs in
+our own product before.
+Thankfully before shipping for
+the most part.
+>> [LAUGH].
+>> And we track and we release,
+we say no new defects and
+we whittle down the legacy
+defects if there are any,
+many products are at zero your
+know findings at this point.
+So, we, we definitely believe in it.
+I mean, we're believers in what
+we build and we use it for sure.
+>> Okay.
+Well, fantastic.
+So, I want to thank you.
+This this has been Andy Chou
+who is the co-founder and
+chief technology officer of Coverity
+which is a leading provider of
+software quality and
+security testing solutions.
+So, Andy, thanks so
+much for taking the time.
+>> Thanks Michael.
+

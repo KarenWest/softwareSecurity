@@ -1,0 +1,260 @@
+[SOUND]
+To decide how to secure your software,
+you have to understand what kind of
+adversary you're securing it against.
+To do so, you should make an explicit
+threat model for the system.
+A threat model defines the adversary's
+assumed powers in terms of how they
+could be used to attack your system.
+It's extremely important that this
+definition characterizes reality.
+Otherwise you may needlessly defend
+against attacks that are unlikely to
+happen or you'll fail to defend
+against those attacks that will.
+A threat model is thus
+critically important because it
+makes plain what you are up against.
+Even if the idea of an attacker is vague
+you can undoubtedly do some things to
+secure your system.
+But you are unlikely to put
+together a coherent defense.
+Making the attacking threat explicit makes
+it far more likely that you'll have all of
+your defenses aligned to a common purpose.
+All of this is part of
+architectural risk analysis.
+Which is the process of assessing
+the risk of a security failure based on
+the likelihood and
+cost of various attacks.
+And doing what you can
+to minimize that risk.
+So now let's consider a few
+example threat models.
+The first, and simplest,
+is that of a network user.
+A network user is an anonymous user that
+can connect to the service via network.
+What happens if such a user were
+malicious, that is, an attacker?
+Well, the user could measure the size and
+timing of requests and
+responses to and from the service.
+The user could run parallel sessions,
+for example, masquerading as
+multiple users and interleaving
+their messages in various ways.
+The attacker could provide malformed
+inputs or malformed messages.
+And the attacker could drop or
+send extra messages.
+Such an attacker, simply a network user,
+can perpetrate many attacks that we have
+seen so far, including SQL injection,
+cross site scripting, cross site
+request forgery, buffer overruns,
+perhaps by using return-oriented
+programming payloads, and many others.
+The second sort of attacker that
+we'll look at is the snooping user.
+This is an internet user on the same
+network as other users of some service.
+For example someone connected to
+an unencrypted wi-fi network at
+a coffee shop.
+Such a user has the same
+capabilities as a network user, but
+in addition, can read or
+measure other's messages.
+Intercept, duplicate, and
+modify those messages.
+And as a result,
+formulate the following attacks.
+Such an attacker could hijack
+another user's session by
+reading the session key out of their
+communications and then using it.
+The attacker could also violate privacy
+by reading unencrypted information that's
+exchanged between that user and
+the service.
+The attacker may even be able to learn
+something from encrypted communications
+by inferring properties based on
+the size or frequency of messages.
+Finally the attacker may be
+able to deny service by, for
+example, intercepting messages from
+a user but then throwing them away,
+rather than delivering them
+to the service as intended.
+As a final example threat model,
+let's consider the co-located user.
+This an internet user on the same machine
+as other other users of some service.
+This could happen by having malware
+installed on a user's machine,
+for example.
+Such a co-located user can addition.
+Such a co-located user can, in addition to
+all the capabilities we've already seen.
+Read or write the user's files, for
+example, reading cookies or writing
+those cookies, and even read memory.
+The attacker may be able to snoop
+key presses and other events.
+The attacker could read or
+write the user's display, for example,
+to spoof the users web browser to
+simulate an encrypted communication,
+when in fact none is taking place.
+As an example attack,
+a co-located user can steal a password.
+For example, by snooping the key
+presses as the user types in
+their password when logging
+on to a secure website.
+Once you have your threat model defined,
+you can work out how you
+will respond to the threat.
+Different threat models will
+elicit different responses.
+For example,
+when considering a network-only attacker,
+which can communicate with your system but
+do nothing else, you can be sure
+that your communications are safe.
+And as such,
+there's no need to encrypt messages.
+The adversary can always
+see his own messages and
+by assumption,
+he cannot see the messages of other users.
+This is the sort of threat model
+that the old telnet remote login
+program considered.
+It assumed that one user might attempt
+to masquerade as another user and so
+passwords for
+authentication were required.
+But it did not assume that one user might
+snoop the traffic of another user, and
+thereby steal her password.
+In some settings, this might be
+a reasonable assumption, but today,
+with wi-fi and mobile networks
+the standard, it's probably not safe to
+assume that attackers cannot
+observe others' message traffic.
+Which gets back to the point that your
+threat model must match reality to
+be useful.
+A snooping attacker is
+a more likely threat.
+And in this case, you should use
+encryption to protect your data.
+The encryption could be deployed at
+the link layer by using encrypted
+wi-fi like WPA2.
+At the network layer using IPsec, or
+at the application layer using SSL or
+something similar.
+Note that you might want to distinguish
+between an attacker that can snoop
+traffic, as opposed to one that
+can intercept and change traffic.
+Encryption may not be sufficient for
+such an attacker.
+Now a co-located attacker is
+the most powerful threat and
+thus the most difficult to defend against.
+But such an attacker is real.
+Some banks assume that users
+connecting to their sites are doing so
+from machines with malware installed.
+As such,
+the attacker who controls the malware.
+Can use the user's id and
+password, perhaps by capturing
+keystrokes that the user is typing.
+One way to defend against such
+snooping is to provide users with
+a separate device that is involved in
+the authentication process, but is not
+connected to the computer, and therefore
+not under the purview of the malware.
+We assume that this device
+is not compromised,
+even though the computer might be.
+We'll look more closely at
+authentication troubles a bit later.
+Now, just to, just to reiterate.
+A poorly chosen model,
+will result in poor security.
+In particular, assumptions you make
+on what an attacker can not do.
+Are potential weaknesses if
+in fact the attacker does not
+have the assumed limitation.
+As I mentioned a moment ago, assuming
+that attackers cannot snoop messages on
+a network is probably a bad idea.
+But beyond this, there are other poor
+assumptions that you could make.
+For example, people mistakenly think that
+cryptography hides communications as
+if they were being carried by a pipe
+that completely hides its contents.
+In fact, the attacker can still see
+individual messages, and their metadata
+such as the source and destination,
+and features like message length.
+Prior work has shown that this
+information is sufficient to
+identify user interactions that
+produce particular messages, and
+this can result in lost privacy.
+People also sometimes fail to
+consider that adversaries can
+measure the timing and
+other features of a communication.
+In some cases such measurements
+are sufficient to infer secret
+information like cryptographic keys.
+Given these failures,
+what steps should you take to ensure
+your threat model is realistic?
+First, you can use other threat
+models as a starting point,
+when their systems are similar to yours.
+Second, you can stay informed
+about the state of the art in
+cybersecurity attacks and attack patterns.
+And you can then apply your knowledge
+to the system you are building
+to assess whether new
+attacks are a real threat.
+Finally, allow your threat model to
+evolve as you design your system.
+Challenge assumptions in your design.
+What capabilities must an attacker
+have to defeat defense mechanisms that
+you're thinking of using?
+How likely is an attacker
+to have these capabilities?
+How will you know that?
+And what would be the cost of a failure?
+You may decide that a strong attacker
+is unlikely, but that the consequences
+are high enough that you should
+defend against that attacker anyway.
+And this is the essence
+of risk assessment.
+Taking into account the potential
+costs of building a system,
+the cost of a successful breach, and
+weighing the likelihood of each.
+

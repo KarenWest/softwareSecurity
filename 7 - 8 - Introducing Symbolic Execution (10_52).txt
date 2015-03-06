@@ -1,0 +1,296 @@
+[SOUND].
+Software has bugs.
+Seems unavoidable.
+The most common ways of finding
+bugs are testing and code reviews.
+But it's all users know,
+software, nevertheless,
+ships with bugs still unfixed.
+In fact, many of these bugs
+are known to the developers but
+they were not deemed important
+enough to fix prior to shipping.
+Many other bugs are not known.
+Why are they not found?
+It could be that the bug is
+in a rarely used feature.
+For example, in a device driver for
+a rare piece of hardware.
+Or, the bug arises in rare circumstances.
+For example,
+when memory is nearly exhausted, or
+the bug could arise nondeterministically.
+The circumstances that make the bug
+manifest could be unpredictable.
+And thus make the bug hard to
+reproduce and hard to fix.
+One way we can try to find those bugs that
+testing misses is to use static analysis.
+And this conceptually makes sense,
+because static analysis can consider
+all possible runs of the program,
+perhaps even those that are rare,
+non-deterministic and so on.
+We can feel heartened by the explosion
+of interesting ideas and
+tools that are being
+considered in research.
+And by the fact that companies are now
+selling and using static analysis tools.
+So there's great potential here
+to improve software equality.
+The question, though, is can static
+analysis find deep difficult bugs?
+So in principle, yes.
+But, maybe in practice, not so often.
+Okay, why is this?
+Well, it's because commercial
+viability implies that you have to
+deal with developer confusion,
+false positives, error management.
+That is quite a lot of code that has
+nothing to do with the core idea of
+analysis itself but, rather,
+the way that humans use the analysis.
+One particular thing that companies
+seem to do is to keep the false
+positive rate down.
+They do this by purposefully missing
+bugs to keep the analysis simpler.
+This turns out to be a good idea because
+studies show that developers get tired of
+dealing with alarms that don't
+turn out to be true bugs.
+And they're not interested
+in sifting through,
+say, nine alarms, even if on the tenth
+time they find a really important bug.
+So companies respond to this, and
+they make tools that will miss bugs.
+So one of the issues here that makes false
+alarms hard to deal with is abstraction.
+Abstraction is critical for
+static analysis because it allows us to
+simplify our view of what the program
+does so that we can efficiently, or
+efficiently enough,
+model all possible runs.
+But to do this we have to
+introduce conservatism.
+Now the various sensitivities like flow,
+context, and
+path sensitivity add precision.
+So that reduces conservatism.
+But these more precise abstractions
+are more expensive, which means that they
+won't be applicable to larger code bases,
+at least not at short time scales.
+And they still will not completely
+eliminate the false alarms problem.
+One particular problem that makes
+false alarms hard to deal with is
+that the static analysis technique
+may use an abstraction that
+is not familiar to the developer,
+that is the developer is not able to
+make sense of the alarm that the tool
+produces because it was produced in a way
+that the developer can't relate to.
+And therefore can't easily triage to
+determine whether the bug is true or no.
+So for the remainder of this unit,
+I'm going to talk about a technique called
+symbolic execution, that's kind of
+a middle ground between testing and
+static analysis, and aims to retain
+the best features of both techniques.
+We start with the observation
+that testing works.
+Reported bugs are real bugs.
+The problem is that each test only
+explores one possible execution of
+the program.
+If we do assert f of 3 is equal to 5,
+well, we've checked that f of 3 equals 5,
+but not that f applied to other
+input values also equals whatever it
+is they're supposed to equal.
+In short, tests are complete,
+but they're not sound.
+And, while we hope they generalize,
+they don't provide any guarantees.
+Now, symbolic execution
+aims to generalize testing,
+in a sense it's more sound than testing,
+so we can write tests like this.
+We can say that y is equal to alpha, which
+represents an unknown or symbolic value.
+And then we can assert that f of
+y is equal to 2 times y minus 1.
+This is basically saying, for all y,
+f of y is equal to 2y minus 1.
+Symbolic execution can
+execute this program, and
+confirm that this is indeed the case, thus
+performing a more general sort of test.
+The way that this is possible is
+that the symbolic executor can
+run the program to the point
+that it depends on an unknown.
+And then it will conceptually fork
+the symbolic executor to consider all
+possible values of that unknown that would
+affect the control flow of the program.
+So here we see the function f, and
+we see that it depends on x,
+it's argument at the first branch.
+If x was symbolic,
+as in our assert, then the symbolic
+executor will consider both branches.
+That is the case when x
+is greater than 0 and
+the case when it is not greater than 0.
+And of course, in this example when
+it does that it will discover that
+the assertion will not hold for
+non-positive values of x.
+Let's look at another example just to get
+a flavor of how symbolic execution works.
+Of course, we'll go into much
+greater detail later on.
+So here on the left, we have a program.
+And in the program, we've assigned
+to three of the variables, a, b,
+and c, symbolic values,
+alpha, beta, and gamma.
+The rest of the program is a series
+of conditionals and assignments.
+At the end, we see an assertion
+that we would like to hold for
+all possible runs of the program.
+All right, so the symbolic executor
+will start, and it will execute line 3,
+initializing x, y and z to 0.
+Then it will reach
+the conditional on line 4.
+This conditional depends
+on a symbolic value, alpha.
+And so, it will consider whether
+both branches are possible, and
+of course, they are.
+At first, it will consider the true
+branch, that is when alpha is non 0.
+In that case,
+it will assign x as negative 2.
+Then, it carries on to executing line 7.
+Here, the guard depends on
+a symbolic value again, and so
+it checks whether beta can be less
+then five, again, it could be or
+it might not be, so the symbolic
+executor will pick one direction.
+Here, suppose that it picks true.
+Now we see that we'll skip line 8, and
+the reason is that along this path
+we have assumed that a is non-zero.
+And that means the conditional
+on line 8 will not hold.
+After assigning z to 2,
+we reach the assertion and
+we see that the assertion succeeds.
+And that's because x is minus 2,
+z is 2, and y is 0.
+The sum is 0, and
+of course 0 is not equal to 3.
+Now, we can characterize this particular
+path of our program execution,
+using what's called a path condition.
+That is along this path we
+assumed that alpha was true i.e.,
+non-zero, and beta was less than 5.
+So we want to also consider
+the other paths by considering those
+branches again and
+going the false direction if possible.
+So for example, we could take the fall
+side of the branch on line 7.
+In that case we'd skip lines 8 and
+9, breach the assertion again.
+In this case, the assertion is still
+going to hold because x is minus 2,
+the other 2 are zero and
+therefore the resulting sum is not 3.
+Alright, we'll consider
+the other branch once again.
+On this branch, we'll now assume
+that a is, that alpha is false.
+And we'll check whether b is less than 5.
+Again, we have no constraints
+on beta symbolic value.
+So, we could go both ways.
+Suppose we go the false direction this
+time, thereby skipping lines 8 and 9?
+Here the path condition is not alpha, that
+is we're assuming that alpha is false and
+b is greater than or equal than 5.
+Now we'll go the other direction.
+In this direction, we're assuming that
+alpha is not true and gamma is true.
+Can this condition hold?
+Sure, it depends on what c is,
+and we have not constrained that.
+That is we have not constrained gamma.
+So suppose we go in the false direction,
+in this case we'll assign z is two,
+because we skipped the assignment to y.
+However we go in the true direction,
+then y equals 1 and
+z equals 2 and now the sum of y being 1,
+z being 2, and
+x being 0 is 3, and
+that violates our assertion.
+Importantly, the assertion violation comes
+with the path condition not alpha and
+beta is less than 5 and gamma, and
+this precisely states all of the inputs
+that will cause this test case to fail.
+And that is, if we used a satisfiability
+solver to give us a potential solution to
+this path condition, we could produce
+a test case that shows the failure.
+And of course, this is very useful
+because the developer can then run
+the test case and use it to diagnose
+the reason for the failure in the program.
+Notice that each path through the tree
+we just constructed represents a set
+of possible executions.
+More precisely, it represents
+all of those executions whose
+concrete inputs are solutions
+to the path condition.
+This set is a very precise
+notion of code coverage.
+Viewing symbolic execution
+as a kind of testing.
+Complete coverage of the program
+would be all of its paths.
+Symbolic execution allows us to
+systematically consider
+many of these paths.
+Viewed as a kind of static analysis,
+symbolic execution is complete in that
+whenever a symbolic executor claims to
+have found a bug, the claim is true.
+However, it is rarely sound because
+it is unlikely to cover every path.
+The reason is that most programs do
+not have a finite number of paths, and
+so symbolic execution will not terminate
+except by imposing a time limit or
+other resource limit.
+Symbolic execution's high precision,
+the source of its completeness, can be
+characterized as path, flow, and context
+sensitivity in static analysis parlance.
+

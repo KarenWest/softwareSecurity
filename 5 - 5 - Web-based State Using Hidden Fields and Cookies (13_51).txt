@@ -1,0 +1,363 @@
+[SOUND]
+What we have seen so far has been
+pretty simple in terms of interactions.
+The client sends a message and
+the server responds.
+But how about multi-message interactions
+that might be part of a longer session?
+In particular, and perhaps your
+own experience, you are used to
+a session lifetime in which the client
+connects, the client sends a request,
+the server responds, the client issues
+another request whose content is
+based on the server's prior response,
+the server responds again, and so
+on until finally the client disconnects.
+Given this experience,
+you may be interested to know that
+HTTP has no notion of state or memory.
+Each request response pair is completely
+independent at the protocol level.
+At the least this should make you wonder,
+well how is it I don't have to provide log
+in credentials with each request, so
+that the server knows it's me each time?
+The answer is that web applications
+themselves keep track of
+the relationship between requests and
+responses in a session.
+They do this by maintaining bits of state
+that relate the requests one to the next.
+Next, we'll look at how this is done.
+So in addition to the long lived state,
+that it is going to be stored in
+the database at the server, so this will
+have things like credit card numbers and
+user account information and
+inventory and things like that.
+The web application will maintain
+a femoral state that aids the server
+processing while a client
+is interacting with it.
+So this is not long lived state
+that must be durable, but
+instead it's keeping track
+of what a client is doing
+during an interaction to relate
+one request to the next.
+So, in order to maintain this state
+on the client rather than the server,
+the server will actually send an encoding
+of it back with each response.
+And then the client can return
+that state to the server when it
+makes its subsequent requests.
+And there are two ways that we
+can implement things this way.
+One is to use hidden fields in the HTML
+documents that are communicated back and
+forth that the server generates.
+And the other is to use
+something called cookies.
+So, let's look at hidden form fields
+using an example for an online store.
+So here on the left we see
+a web page from socks.com.
+It's the order.php page.
+And let's suppose the client has
+navigated, the user has decided to
+buy this pair of socks for
+$5.50 and clicks the Order button.
+Now the server will receive that
+request and send a page in response.
+And notice that this page
+says that the order is $5.50.
+So the user is going
+to confirm that order.
+Now the question is,
+how will the server relate the $5.50
+request that the server chose on
+the first page so that when he or
+she clicks the Yes button on the second
+page the server makes the right order.
+Because HTTP is stateless, it's not
+remembering, technically speaking,
+one interaction to the next.
+And the answer is, that the server can
+embed this information, the cost, for
+example, of the socks,
+in the webpage that it responds with.
+That is, the pay.php page.
+So here it is, presented to the user.
+And notice here we have what's
+called a hidden form field.
+So a form is just an HTML element
+that has a button associated with
+it that will produce a web request.
+And there are two non-hidden form values,
+yes and no.
+They're shown at the bottom of this
+HTML code, value yes, value no.
+And then there's this hidden one,
+the value $5.50.
+So this hidden value will get sent
+with the request when the user
+presses the button.
+Now here's the code, the PHP code on
+the backend at the web server that will
+receive this web request, and
+it will pull out the form field values.
+Pay, that this was a pay request and
+price.
+And as long as the price was not null it
+will debit the credit card that amount and
+deliver the socks.
+Here's the problem though,
+price comes from the user.
+It's filled in by this form field value.
+Well, because the HTML is sent
+to the user, a clever and
+malicious user can change
+the value to be something far
+less than the vendor intended, and
+therefore corrupt the computation.
+So we can get around that problem
+by using hidden form fields
+of a special variety that
+we call capabilities.
+So the server will maintain trusted state.
+Instead of sending the state to the client
+the server will keep track of the state,
+but it will index that state
+by a capability that gives
+the client access to it.
+And what is a capability?
+Well a capability is a right.
+It's a piece of data that gives
+a client who possesses it a right to
+perform some action, and
+that capability should be unforgeable.
+By definition, that would prevent us from
+waging the attack that we saw before,
+which was that the client was
+able to change the price.
+Because the capability is intended
+to be and should be unforgeable.
+The client will not be able to change
+it to effectively change the price.
+So, given that capability, the client will
+reference it in subsequent responses, and
+therefore be able to access the state.
+To make capabilities unforgeable,
+a typical approach is to make
+them large random numbers.
+So they are difficult to guess, and
+therefore if a client does attempt to make
+a guess the client is very unlikely to
+find a number that corresponds to a real
+capability, and therefore has no power.
+So here's what the page
+looked like before,
+here's how we might change it
+to use capabilities instead.
+So now the name is SID for capability,
+and the value is a random number.
+On the server side,
+we will modify the code to look up the SID
+to find the price, and only if the SID
+is legal will the price be present,
+in which case we'll bill the,
+the credit card.
+If it's not there, then we'll go to
+the else case and cancel the transaction.
+So, capabilities of this sort can take us
+quite a long way but they aren't perfect.
+We don't like to have to pass
+around hidden fields all the time.
+It complicates the interaction
+amongst all the pages.
+It's sort of difficult to put
+together a web application that way.
+And it has the big drawback that,
+if you ever close the browser window,
+you throw away the HTML that
+contained the hidden form fields.
+And therefore if you
+reopen your browser and
+reconnect to the site, all memory
+of your prior interaction is gone.
+So we can solve these problems by
+using what are called cookies.
+Just like with capabilities, the server
+will maintain some trusted state.
+And that state will be indexed by
+a cookie rather than a capability.
+Just as with hidden form fields,
+the server will send along cookies,
+along with any responses.
+And the client will then
+store them locally.
+When the client reconnects to the server,
+they will send the cookies in response.
+Now instead of these cookies
+being embedded in an HTML page,
+they're actually stored, they're sent
+around as part of the HTTP protocol, and
+so they're just stored on the disk in an
+area that's associated with the browser.
+And so it doesn't matter
+if you close the page and
+it doesn't matter exactly what's on
+the page during the interaction.
+So here's an example HTTP
+response that contains cookies.
+One of the headers, well,
+many of the headers, as we can see here,
+have the form Set Cookie.
+And the, what's,
+what follows is key=value, which
+indicates that the cookie key is the key,
+and it's associated with that given value.
+And then there are a bunch of options that
+specify things like timeouts and paths and
+hosts and so on.
+So let's dig into that and
+look at this example in further detail.
+So here on the client,
+it receives that HTTP response and
+it sees this set cookie header.
+And now it's going to process it.
+The first thing it does is it says, well
+the key is edition and the value is US.
+And the options for that cookie
+are that the value expires as of
+the given date,
+perhaps when the session expires.
+And the cookie is associated with
+the denai, with the domain zdnet.com, and
+URLs at that domain that begin
+with the subdirectory slash.
+So in short, whenever a client interacts
+with the server via his browser,
+if the interaction is with the given
+domain with the prefix of the given path,
+then this cookie should be sent
+along with that HTTP request.
+So, in particular here is that HTTP
+response that was received by the client.
+We see a bunch of cookies
+are being set here.
+In a subsequent visit, notice we're
+visiting zdnet.com and the root directory,
+and at the very bottom there we see
+the header that says, well, we're going to
+provide these session zdnet production
+cookie and we include it's value.
+And you can see that this matches
+the value that's given on the last line of
+the response at the top.
+Followed by another cookie,
+which is zd region,
+followed by further data that's,
+again, shown at the top, and so on.
+So all the cookies that are relevant
+are going to be provided
+along with the request.
+There are several reasons that
+web applications use cookies.
+The most common use,
+as we've hinted at already, is for
+a cookie to act as a session identifier.
+Basically, after the user logs
+in as part of a post request,
+the application sends a cookie in
+response that identifies the user.
+The cookie is sent in subsequent
+requests to the same web application.
+So that it can silently
+authenticate the user each time.
+The human user, of course,
+is unaware that this is happening and
+interacts naturally with the system.
+Another use of cookies is personalization.
+Shopping websites for
+example, are interested in showing you
+things that you are interested in.
+They can figure out your interests
+based on past interactions.
+Based on observations a site can create a
+cookie that identifies various interests.
+This cookie can be used to prioritize the,
+the display of various elements of
+the site,
+effectively personalizing the site to you.
+Personalization can even go to
+the level of font choices and
+other superficial elements of the display.
+The nice thing about cookies is
+that these can be anonymous.
+Such preferences are not security
+sensitive at least from the site's point
+of view, and so no authentication
+of the particular user is needed.
+Of course, the flip side to
+personalization is tracking.
+Instead of personalization cookies being
+used only by a particular site, they can
+be made available to other interested
+parties, like advertising networks.
+How can this work,
+given that cookies should only be
+visible to the site that created them?
+One way is the following.
+Site A uses advertising
+network B to show an ad.
+When B receives the request from
+your browser to show the ad,
+it can figure out that the ad was
+displayed when visiting site A.
+How?
+Well, by looking at the referrer
+attribute of the HTTP request.
+For example, the request to show an image.
+Site B would like to associate
+you with a list of sites and
+the pages on them that you tend to visit.
+In this case,
+it would like to include site A.
+One way it could this is
+to maintain a list in a database
+mapping IP addresses to site lists.
+The idea would be you are associated
+with a particular IP address and
+the list is then associated with
+that address and therefore you.
+But doing this isn't so reliable because
+you are not associated solely with
+one IP address, and in fact different
+people might use the same address.
+Instead, what will happen is the ad
+network will store the site list as
+a cookie on your machine.
+This cookie is called a third party cookie
+because it is associated with site B, but
+was created when visiting site A.
+This way, when you visit other sites
+that happen to use the same ad network,
+the ad network's cookie will
+be accessible to the ad.
+It can then add to the cookie,
+the current site.
+It can even customize the ad as
+shown based on previously visited
+sites which reveal your interests.
+Now one way to prevent this sort of thing,
+is to disable third party cookies.
+But this method is not perfect thanks
+to the ability to otherwise fingerprint
+your browser.
+But that's a topic for another time.
+Let's get back to considering session
+cookies and how we can protect them.
+

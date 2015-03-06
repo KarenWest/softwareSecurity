@@ -1,0 +1,366 @@
+[SOUND]
+As is probably apparent, a good symbolic
+executor requires careful engineering.
+We've seen that symbolic execution employs
+an appealingly simple algorithm, but
+with high computational costs.
+In particular, the executor might traverse
+many different paths in the program, and
+it must make potentially
+expensive calls to an SMT solver,
+to determine which paths are feasible.
+Considering the problem
+of traversing may paths,
+we will see that symbolic execution
+boils down to a kind of search problem.
+The goal is to search through
+a large space of possibilities to
+find events of interest.
+For us these events are bugs.
+We'll also take a minute to look
+at how improvements in SMT solver
+performance make the path feasibility
+check possible even for larger programs.
+A well known problem with symbolic
+execution is the path explosion problem.
+Essentially, for a symbolic executor to
+consider the entirety program's space of
+executions it needs to
+consider every path.
+But because most programs
+have a huge number of
+paths we can't usually run
+symbolic execution to exhaustion.
+In fact, programs can be
+exponential in branching structure.
+Here we see a program that has
+four lines of code, and yet
+because it has three variables
+it has eight program paths.
+That is, two to the third possible
+paths despite using the variable only
+once on each line.
+Loops on symbolic
+variables are even worse.
+In this program we're looping on
+variable a, which is symbolic.
+This is going to cause us to
+consider an arbitrary number of
+loop iterations because every time
+we re-reach the head of the loop,
+we consider whether to stay in the loop or
+whether to exit.
+Now, if we compare symbolic
+execution to static analysis,
+we can see that there's a clear
+benefit of static analysis.
+That is, it will actually terminate
+even when considering all possible runs.
+And, it does this by approximation and
+abstraction, approximating multiple loop,
+loop executions or
+branch conditions, and so on.
+But as we discussed to
+motivate symbolic execution,
+static analysis as use of extraction
+can lead to false alarms.
+So what can we do to improve the way
+that symbolic execution operates to
+maximize it's benefits?
+Well to understand that we have to look
+at how symbolic execution is viewed as
+a search algorithm.
+So the simplest way to perform
+symbolic execution is to
+use either depth-first search,
+or breadth-first search.
+That is, recalling our algorithm for
+symbolic execution, we can use, for
+depth-first search,
+a worklist that is a stack.
+So it will consider the most recent node,
+that is the most recent program state,
+when deciding what to do next.
+Or we can make it a queue,
+where we prioritize things that
+we put in that queue earlier.
+Now the potential drawbacks of using
+either one of these two strategies,
+is that neither of them are really
+guided by any higher level knowledge.
+That is, we aren't telling
+how we might be looking for
+particular bugs or that we want to get
+to a particular part of the program.
+Instead it will just blindly follow
+the program structure in considering what
+paths that it wants to execute.
+DFS in particular could easily
+get stuck in one part of
+the program by continuing to go deeper and
+deeper.
+So think about that loop example.
+We could go around the loop over and
+over and over again where as in
+breadth-first search, we'll consider
+both one further loop execution and
+the case that we get out of the loop.
+Therefore, of these two, breadth-first
+search is probably a better choice.
+On the other hand,
+it is more intrusive to implement.
+For example,
+it can't easily be made concolic.
+So what better search
+strategies might we perform?
+Well, one thing we can do is to
+try to prioritize our search,
+to steer it towards paths more likely
+to contain assertion failures,
+sInce that's ultimately
+what we're trying to find.
+And recall that assertion failures
+could involve array bounds checks,
+null pointers checks, and so on.
+We only want to run for
+a certain amount of time, and
+so, the prioritization ensures that,
+that time is used best.
+To consider these different
+search strategies,
+think of program execution
+as a kind of DAG.
+So the nodes in the graph
+are programme states and
+an edge between those nodes means that
+one state can transition to the next.
+Therefore, we can think of symbolic search
+as a kind of graph exploration algorithm,
+trying to pick among the various possible
+paths in the overall search space.
+One useful technique to
+employ is randomness.
+We don't know a priori
+which paths to take, so
+adding some randomness
+is probably a good idea.
+This is something that
+modern stat solvers do and
+it works very effectively in that setting.
+So, one idea is to pick the next path
+to explore uniformly at random, and
+we can call this the Random Path Strategy.
+Another thing we can do is
+randomly restart the search if
+we haven't had anything
+interesting in a while.
+So imagine that we explore depth first for
+a while, but as we go further and
+further down in the search of a particular
+path, we may increase our chances of
+stopping and going back to the start
+to try a different path altogether.
+And we could choose among equal
+priority paths at random.
+That is, if we had a prioritization
+strategy that say, favored coverage, or
+we wanted to try paths that we haven't
+covered those could statements before.
+If we had equal priority paths,
+we can just flip a coin to
+pick one versus the other.
+So one drawback of randomness
+is reproducibility.
+That is, because we may have made random
+choices to figure out a particular bug,
+if we run the symbolic executor on
+the same program two times, it's not
+guaranteed to find bugs that it found
+before, and in fact might find new bugs.
+This doesn't necessarily sound so
+bad except it's complicated for
+software engineering, for
+example once we fix the bug that we find,
+how can we run the symbolic executor again
+to confirm that it's not there anymore.
+So it's probably good to use
+pseudo-randomness based on a seed, and
+then record which seed is
+picked when bugs are found.
+And that way you can confirm that
+you don't hit the bug again, or
+if you re-run you'll find
+the same bugs you found before.
+Now a moment ago I hinted at
+the idea of using coverage to
+guide your prioritization strategy.
+And here we'll consider it in a bit
+more detail, that is, we should try to
+visit statements we haven't seen before
+when choosing which paths to follow.
+So the approach is to
+score a statement based on
+the number of times it's been traversed,
+and
+then pick the next statement to explore
+that has the lowest current score.
+So this might work because errors
+are often in hard to reach part of
+the program, and
+the strategy will favor going to parts
+of the program it hasn't seen before.
+On the other hand, we may never
+be able to get to a statement if
+a proper precondition is not setup,
+and so just favoring going closer to
+that statement is not necessarily
+going to get us there.
+Another strategy is called
+generational search.
+You can think of it as a kind of hybrid
+between breadth-first search and
+a coverage-guided search.
+It works like this.
+At generation 0 we pick a program and
+a random input to it and
+run it to completion.
+At the end we take paths
+from generation 0,
+negate one branch condition in
+a path to yield a new path prefix.
+Find a solution for that prefix and
+then take the resulting path.
+Will semirandomly assign to any
+variables not constrained by the prefix.
+For generation n we'll similarly
+apply this approach, but
+we'll branch off of generation n minus 1.
+And we'll use a coverage heuristic to pick
+the priority amongst the different
+paths that we choose.
+This generational search is often
+used with concolic execution.
+Now, it's probably obvious at this point,
+no one search strategy wins all the time.
+Instead different search strategies
+may find some bugs that other
+search strategies will not find.
+So one obvious idea is to combine
+searches by doing multiple searches at
+the same time.
+Essentially have parallel processes
+where we switch from one to the next.
+Depending on the conditions
+needed to exhibit the bug,
+one search may find it as opposed
+to another search finding it.
+You could even imagine using different
+algorithms to reach different parts of
+the program, depending on the properties
+of the program that you're trying to
+find bugs in.
+SMT stands for Sat Modulo Theories,
+where by theories,
+we mean mathematical theories
+beyond just boolean formulas.
+Such theories could include a theory of
+arithmetic over integers, for example.
+These theories can sometimes
+be encoded as SAT problems.
+And so
+some SMT solvers are basically just front
+ends that translate the SMT
+problem into a SAT problem.
+For example, the theory of bit vectors.
+That is, arrays of bits with operations
+on them, like addition, subtraction and
+so on, can be encoded as a SAT problem.
+It turns out that modern SMT
+solvers implement a variety of
+optimizations either in the SAT engine or
+in the translation to it.
+And these optimizations can make
+a big difference in performance.
+One example is to make use of
+axioms that witness equivalences.
+Another example is to directly
+support in the SMT solver a theory of
+arrays which model
+modifications to memory.
+The alternative would to be to have
+the symbolic executor simulate memory
+directly, rather than rely on the solver.
+But then,
+optimizations become less apparent.
+Another important optimization
+is to cache solver queries.
+It turns out that symbolic executors
+will submit queries repeatedly that
+contain identical subexpressions, and this
+makes sense because the path condition
+is built up incrementally over time.
+Finally, we can make the SAT solver's
+job easier by eliminating some
+symbolic variables from consideration.
+For example, if we were testing
+whether a guard is feasible,
+we only care about the existence of
+a solution to the variables in the guard.
+Such a solution may involve other
+variables which can be syntactically
+related to the ones in the guard.
+That is, we keep under
+consideration expressions that
+have variables that are transitively
+related to variables in the guard.
+For other expressions these
+variables can be ignored.
+In total the optimizations can
+make an enormous difference.
+SMT solvers have been a popular
+topic of research and
+development over the last several years.
+There's several that you
+can get free online.
+Z3 is quite sophisticated,
+it's developed at Microsoft research.
+Yices, developed at SRI,
+has been around for
+quite a while and
+continues a steady improvement.
+STP, which is the SMT solver used by
+XC and KLEE is available for free.
+And CVC is yet another.
+While smarter search strategies and
+SMT based optimizations will help,
+ultimately path based search is limited.
+To see why, consider this program.
+We can see that it has a loop.
+It's going to run around
+the loop 100 times.
+And each time it goes around the loop it
+may either enter the if statement or not.
+This means it has 2 to the 100
+possible execution paths.
+Now the program is asserting that it's
+a bug if the counter is ever equal to 75.
+So this bug is going to be hard to find.
+That is, there are 2 to the 78 paths that
+reach the buggy line of code, that is,
+100 choose 75.
+Out of the 100 executions,
+75 of them need to take the true branch.
+But if that's true, the probability
+of finding the bug is very low,
+because 2 to the 78 paths will
+find it out of 2 to the 100 total.
+So the chances are 2 to the negative
+22 that we will find the bug.
+In short, independent of search strategy,
+we'll have
+a very difficult time finding the bug
+using a path-based search algorithm.
+So this is really just a fundamental
+limitation of path-based search in
+symbolic execution.
+

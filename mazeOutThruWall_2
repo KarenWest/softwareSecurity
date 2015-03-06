@@ -1,0 +1,126 @@
+Maze dimensions: 11x7
+Player pos: 1x1
+Iteration no. 0
+Program the player moves with a sequence of 'w', 's', 'a' and 'd'
+Try to reach the price(#)!
++-+---+---+
+|X|     |#|
+| | --+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 1x2
+Iteration no. 0. Action: s. 
++-+---+---+
+|X|     |#|
+|X| --+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 2x2
+Iteration no. 1. Action: d. 
++-+---+---+
+|X|     |#|
+|XX --+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 3x2
+Iteration no. 2. Action: d. 
++-+---+---+
+|X|     |#|
+|XXX--+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 3x1
+Iteration no. 3. Action: w. 
++-+---+---+
+|X|X    |#|
+|XXX--+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 4x1
+Iteration no. 4. Action: d. 
++-+---+---+
+|X|XX   |#|
+|XXX--+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 5x1
+Iteration no. 5. Action: d. 
++-+---+---+
+|X|XXX  |#|
+|XXX--+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 6x1
+Iteration no. 6. Action: d. 
++-+---+---+
+|X|XXXX |#|
+|XXX--+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 7x1
+Iteration no. 7. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 7x2
+Iteration no. 8. Action: s. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+X| |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 8x2
+Iteration no. 9. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+XX |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+Player pos: 9x2
+Iteration no. 10. Action: d. 
++-+---+---+
+|X|XXXXX|#|
+|XXX--+XXX|
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+
+You win!
+Your solution <              sddwddddsddw
+Ïü·ôŸõÿ¿™ˆ>

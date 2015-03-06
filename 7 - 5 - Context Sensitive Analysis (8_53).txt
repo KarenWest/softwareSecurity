@@ -1,0 +1,242 @@
+[SOUND]
+Up until now,
+we focused on tracking tainted flows
+through blocks of code, normal statements.
+Now we'll consider how we handle
+tainted flows to function calls.
+This example shows a function
+id that we want to analyze.
+The id function itself is rather simple,
+it takes the argument x and
+simply returns it back to the caller.
+On the left hand side we see a client
+program that takes the result of fgets,
+passes it to id, and
+returns the result into the variable b.
+So we want to see wether or not there
+is a tainted flow in this program, so
+we need to track the flow into
+the id function and back out again.
+So, the way that we're going to
+do this is in several steps.
+First, we need to give flow
+variable names to the argument and
+return value of the function.
+So here we pick gamma and delta.
+Next, we need to create flow
+constraints between the actual caller,
+where in this case,
+we pass in the variable a.
+And the callee which receives
+that in the argument parameter x.
+In addition, after computing
+whatever result we compute in
+the function we need to take what
+is returned, in this case x.
+And create a flow between it and
+wherever that result is used in
+the caller, in this case the variable b.
+So, let's put it together.
+We see that fgets returned
+something into a.
+Remember that fgets has
+a tainted return value and
+so tainted is less or equal to alpha.
+Then, we call the identity
+function passing a in.
+Therefore, we need to create
+a flow between a and x, that is,
+the actual argument a, and the formal
+parameter x, in the function id.
+And, therefore, we create a flow
+constraint between alpha and gamma.
+In the body of the function, all that the
+body does is return the variable x, and,
+so, x has the name gamma and
+because we're returning it,
+we need to create a flow with
+the name of the return value.
+Which, as we said before, is delta.
+Now, finally, what is actually returned
+from this particular function column needs
+to flow into the variable
+we're assigning it to and so
+we create a flow between delta and
+b that is delta and beta, b's name.
+Okay so we've extended the example
+a little bit with two extra statements.
+In particular we define a new variable c,
+to which we assign
+the untainted constant high.
+And we also take that c and
+pass it as the format string to printf.
+So essentially we'll ignore
+the first two statements as far as
+the actual semantics of
+the program is concerned.
+But this is setting a more interesting
+example that we'll see in just a moment.
+Okay.
+So we're going to
+have the same sort of constraints that we
+saw a minute ago for the first two lines.
+Then we'll create the constraint
+untainted flows to omega.
+And finally the constraint
+omega flows untainted.
+Because, printf expects an untainted
+argument, and c's name is omega,
+that is,
+the actual argument we're passing in.
+So, there's a good solution here,
+and there's no alarm.
+Now consider a small
+change to the example.
+Instead of assigning hi to
+the variable c directly.
+We pass it into id and
+then it will return the result which
+eventually makes its way to c.
+So if we were to run this program and
+the prior program,
+they would have exactly the same outcome.
+But as we shall see, the analysis
+will treat them a bit differently.
+So, we generate the first set
+of constraints once again.
+And now we have to consider
+the function call into ID.
+We're passing an untainted value
+into the argument of ID, so
+untainted is less than gamma,
+and then likewise we're
+taking the return value from ID delta and
+assigning it to c whose name is omega.
+Now we'll call printf which causes
+us to pass omega into untainted.
+Which is the expectation of
+the format string for printf.
+And now let's look at
+solving these constraints.
+Unfortunately we're
+going to get a false alarm.
+There's no solution and yet
+as we said a moment ago this is
+exactly the same semantics as
+the program we saw before.
+So what happened?
+Well as the animation just showed.
+What's happening is the analysis
+is being imprecise, and
+it's considering a call into which fgets
+passes an argument, which is tainted,
+and the return into which we
+pass the untainted value high.
+But we're pretending the analysis is
+conflating these two calls together and so
+we're pretending that the first call can
+return its result to the second call.
+So this is a problem of
+context insensitivity.
+These call sites, as I said,
+are conflated in the graph.
+So context sensitive analysis solves this
+problem by distinguishing
+call sites in some way, so
+that we don't allow a call at one place
+to return it's value to another call.
+We can do this by giving call
+sites a label, call it i and
+perhaps correlate it with the line number
+in the program at which the call occurs.
+And then in the graph, matching up
+calls with corresponding returns,
+only when the labels on flow edges match.
+We'll also add what we call
+polarities to these edges,
+to distinguish calls from returns.
+So, minus i for argument passing,
+and plus i for return values.
+So let's see the example again, but
+this time in a context sensitive setting.
+Notice that we have labeled the two
+calls to id with one and two.
+These are the indexes for
+those calls that we can think of
+as happening on lines one and
+two of the program.
+So, we have the same constraint
+that we had originally.
+But now when we go to
+call the function id,
+we're going to index that
+call with the label one.
+And we're going to use a negativity
+polarity because that's
+the argument being passed down.
+Same constraint for
+the body of the function,
+now the call site one is going to
+return something slightly different.
+It's going to be indexed with a label, and
+it will have polar, polarity plus
+to indicate that it's a return.
+Okay, so
+here's where the new part happens.
+We have a new label on
+the constraint this time.
+We have label two.
+For both the caller and the return value.
+And then we have the final constraint.
+So given these constraints,
+these were the constraints that were part
+of the false alarm that we saw before.
+But, notice that they
+can't allow a solution now
+because the polarities don't match.
+Sorry, the, indexes don't match.
+And because it's an infeasible flow,
+the analysis we'll actually see that due
+to the different labels,
+and there will be no alarm.
+>> Just like flow and path sensitivity,
+context sensitivity is a tradeoff,
+favoring precision over scalability.
+In particular, the context insensitive
+algorithm takes roughly time O of n,
+where n is the size of the program,
+while the context sensitive algorithm
+will take time O of n cubed.
+On the other hand, sometimes the added
+precision actually helps performance.
+By eliminating infeasible paths
+it can reduce the size of
+the constraint graph by a constant factor.
+And this is true for flow and
+path sensitivity too.
+But the general trend is that greater
+precision means lower scalability.
+One way to push the trade-off
+more towards performance.
+Is to be selective about where
+context sensitivity is used.
+Rather than using it at all call sites,
+we could use it only at some of them.
+The remaining call sites are conflated,
+as in an insensitive analysis.
+This means that the analysis
+coarsely models calls from one site,
+as if they could return to another.
+Rather than having one
+blob of insensitive sites,
+we could also imagine groups of sites,
+that are sensitive with respect to
+the other groups, but insensitive
+with respect to their own members.
+Doing this amounts to giving all sites,
+in the same group, the same index.
+Finally, it's also possible to
+limit the depth of sensitivity.
+For example, to only match nested
+calls up to a certain limit.
+

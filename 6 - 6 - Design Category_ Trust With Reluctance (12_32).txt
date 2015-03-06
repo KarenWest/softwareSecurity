@@ -1,0 +1,335 @@
+[SOUND]
+The next category of secure design
+principles is trust with reluctance.
+A system is constructed from many parts.
+And the security of the whole system thus
+depends on the security of each part.
+The parts are trusted to varying degrees.
+And as such, we can improve
+the security of the overall system by
+reducing the amount of trust
+placed in its various parts.
+And there are several ways to do this.
+First, we could use a better design.
+Second, we could implement
+functions more safely.
+For example by using a type safe language.
+Third, we could avoid assumptions
+on which we base our trust.
+For example, we could avoid the assumption
+that the third party libraries we
+use are actually correct.
+And instead we could perform some
+of our own testing and validation,
+code review, to ensure correctness and
+thus establish trust in those libraries.
+As another example we
+could avoid designing or
+implementing security-critical
+features that require expertise that
+we don't necessarily have.
+A key mistake made by many system
+builders is to attempt to design or
+implement cryptography from scratch.
+Something that it turns out
+is very hard to get right.
+The principle of trusting with reluctance,
+when followed, can help prevent
+security problems, and can mitigate
+problems that might otherwise arise.
+One secure design principle that
+follows the idea of trusting with
+reluctance is to maintain
+a small trusted computing base.
+The trusted computing base comprises
+the system components that
+must work in order for
+the system to behave securely.
+As an example modern operating systems are
+often part of the trusted computing base
+because they enforce security policies
+like access control policies on files.
+When you have a multiuser system and
+your files indicate which users are
+allowed to read and write the file it is
+the responsibility of the operating
+system to enforce those policies.
+Now we would like to keep
+the trusted computing base small and
+simple to reduce its overall
+susceptibility to compromise.
+The idea is that a small simple
+trusted computing base is easy for
+a human analyst to reason about and
+argue that it is correct.
+It should also be easier for
+an automated tool to establish that
+the trusted computing base is correct.
+Unfortunately today operating system
+kernels, returning to our example,
+are not small and simple.
+Instead, they are often
+millions of lines of code.
+Usually the reason is that by keeping
+all of these different disparate
+components together in the kernel,
+we can have higher performance.
+But we increase the attack
+surface of the kernel and
+therefore increase the risk of compromise.
+For example, a buggy device
+driver could be exploited and
+thereby give the attacker
+access to the entire kernel.
+The kernel's trusted computing base, that
+is the parts enforcing security policies,
+could therefore be subverted by
+the attack, by the device driver.
+An alternative design is to
+minimize the size of the kernel so
+as to reduce the trusted computing base.
+For example, device drivers could
+be moved outside of the kernel.
+And therefore, a compromise of
+one of these drivers does not
+compromise the portion of functionality
+that enforces security policies.
+This sort of design is advocated
+by microkernel architectures,
+which were popular in the 90s, and
+are regaining popularity today.
+As another example of a failure to
+follow the principle of a small,
+trusted computing base
+consider security software.
+This software is obviously part of the
+trusted computing base because it used by
+the system to enforce security.
+In other words, to make sure the system
+is free of viruses or worms and the like.
+Unfortunately over time this software
+has grown in size and complexity and
+is now has become vulnerable itself and
+is frequently attacked.
+This chart, put together by DARPA, shows
+that six of the vulnerabilities reported
+in August and July of 2010,
+were in fact in security software.
+Now let's consider another principle
+that follows the idea of trusting with
+reluctance, and
+that is the principle of least privilege.
+This principle states that we should
+not give a part of the system more
+privileges than it absolutely
+needs in order to do it's job.
+This is similar to the idea of need to
+know, not telling someone a secret unless
+they really need to know it,
+and the motivation is the same.
+We want to mitigate any
+affects of compromise.
+If a component is compromised by
+an adversary we want its capabilities to
+be limited so that the adversary's
+power is also limited.
+As an example, consider the idea
+of attenuating delegations to
+other components in
+the design of a system.
+For example, a mail program might delegate
+to an editor for authoring emails.
+This editor could be vi or emacs,
+which are both very powerful editors,
+and both very desired by users.
+Unfortunately, these two editors and
+others permit too much power.
+For example, they permit escaping to
+a command shell to run arbitrary programs.
+This is too much privilege for
+an email program, because if we
+gave an untrusted user access to the email
+program they could author an email and
+then use the delegated email editor
+to execute arbitrary shell commands.
+A better design is to use a restricted
+editor that only allows the user to
+perform the functions that are absolutely
+necessary to author emails.
+An important lesson here is
+that trust is transitive.
+If you trust something,
+you trust what it trusts.
+And, of course,
+that trust could be misplaced.
+In our previous email client example, the
+mailer delegates to an arbitrary editor.
+And that editor permits running
+arbitrary code by delegating to a shell.
+Hence, the mailer permits
+running arbitrary code.
+This is probably not what we had in mind.
+Rule that implements the principle of
+least privilege is input validation.
+The idea here is to only trust inputs
+that we have properly validated.
+That is, we don't want to trust any input.
+Instead we want to establish
+trust in that input by
+making sure that it
+follows an assumed format.
+In short, we are trusting a subsystem
+only under certain circumstances.
+And we want to validate that
+those circumstances hold.
+So we have seen several
+examples of this so far.
+We can trust a given function only if the
+range of its parameters is limited, for
+example to be within
+the length of a buffer.
+Or we could trust input taken from a
+client form field on a webpage only if it
+contains no script tags and therefore
+is not subject to cross-site scripting.
+We could trust a YAML-encoded string,
+but only if it contains no code.
+So by validating the input, we are
+limiting the influence of that input, and
+thereby reducing the privilege
+that we're replacing in
+the components that process it.
+Another secure design principle
+that aims to trust with
+reluctance is promote privacy.
+Broadly speaking, a manifestation of this
+principle is to restrict the flow of
+sensitive information throughout
+the system as much as possible.
+Basically the idea is that only
+those components that have access to
+sensitive information can
+possibly disclose it.
+And therefore, by limiting access,
+we reduce the trust in
+the overall system because we don't
+have to trust as many components.
+As a result, we are mitigating
+the potential downside of
+an attack because fewer components that
+could be compromised will be able to
+disclose that sensitive information.
+As one example of this principle in
+action, consider a student admission
+system that receives sensitive
+letters of recommendation for
+those students as PDF
+files from recommenders.
+A typical design would allow
+reviewers of student applications to
+download recommendation files for
+viewing onto their local computers.
+The problem with this design
+is that compromise of
+the local computer will then leak private
+information contained in the PDF files.
+A better design is to then permit
+viewing of PDF only in the browser,
+as opposed to downloading
+it to the local computer.
+As a result,
+if that local computer is compromised,
+no sensitive data is available for
+access by the attacker.
+The last design principle that we'll
+consider that has the flavor of trust with
+reluctance is compartmentalization.
+This design principal suggests that we
+should isolate system components in
+a compartment or a sandbox.
+And thereby reduce the privilege
+of those components by
+making certain interactions or
+operations impossible.
+In this way we can prevent bad things,
+that is,
+those only enabled by the operations
+that we're not allowing.
+And we can mitigate the results of an
+attack by preventing the compromised code
+from doing anything beyond
+what the sandbox would allow.
+As an example, we might disconnect
+a student records database from
+the internet and
+grant access only to local operators.
+This compartmentalizes
+the student records database,
+therefore preventing
+attacks from the outside.
+Just as importantly if a local operator
+attempted to compromise the database and
+exfiltrate the data it would not be
+able to do that via the Internet.
+Another example of a mechanism for
+compartmentalization is
+the Seccomp system call in Linux.
+This system call enables us to build
+compartments for untrusted code.
+SecComp was introduced in Linux in 2005.
+The way that it works is that
+the affected process can
+subsequently only perform
+a limited set of system calls.
+Read, write, exit, and sigreturn.
+Notice that there is no support for
+the open system call.
+Instead, the compartmentalized process can
+only use already open file descriptors.
+SecComp therefore isolates a process by
+limiting its possible interactions to
+only these system calls.
+Follow-on work produced seccomp-bpf,
+which is more general.
+In particular, it allows us to limit
+a process to a policy-specific set of
+system calls,
+rather than just the four I just listed.
+This policy is enforced by the kernel.
+It's specified by something like
+Berkeley Packet Filters, or BPF.
+SecComp BPF is used by Chrome,
+OpenSSH, vsftpd,
+which is the very secure ftp daemon,
+and others.
+So let's look at how we might
+isolate Flash player that aims to
+execute a file that we
+browse to on the internet.
+First suppose we browse to a website
+that has a shockwave file.
+Which is a program that's going
+to be run by Flash player.
+As usual, we'll save this
+file into the local machine.
+Next, we'll call fork to
+create a new process.
+And that process will open the file.
+Now this process is still
+running as Chrome, and so
+we must exec the process to now
+run as Flash player instead.
+Now, before the process
+can get much further,
+we call seccomp-bpf to
+compartmentalize it.
+Limiting the system calls
+that it can perform.
+In particular, we do not allow
+it to open network connections.
+And we don't allow it
+to write files to disc.
+That way, we can ensure that Flash,
+if compromised, will be limited
+in the damage that it can do.
+

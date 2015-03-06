@@ -1,0 +1,166 @@
+[SOUND]
+Now that we're refreshed on the basics of
+how C programs are laid out in memory.
+In particular how they use
+the stack to support calling and
+returning from functions.
+We can start looking at
+buffer overflow attacks.
+Let's look at the components of the name.
+A buffer is simply
+a contiguous region of memory,
+associated with a program variable or
+field.
+When they use the term buffer,
+people are often thinking of strings.
+Where a string is simply an array of
+characters ending with a null or zero.
+For now, we will focus on strings too.
+Later, we will consider
+a format string of text.
+And in the process see how the idea of
+a buffer is actually quite general.
+An overflow occurs when the program tries
+to write more data to a buffer than it
+can actually hold.
+This term is evocative of data
+running off the end of the buffer.
+But once again,
+the idea is really more general.
+Basically, whenever the program
+tries to use a variable to
+access memory that doesn't belong
+to that variable, for example, by
+indexing an array out of its bounds, the
+program is performing a kind of overflow.
+An important question is,
+what happens when the program reads or
+writes to a buffer outside its bounds?
+According to the C programming language
+standard, such a program is undefined.
+Effectively it is allowed to do anything.
+In a move positive for security,
+the compiler could choose to insert
+code to detect out of bounds accesses.
+And terminate the program when they occur.
+Instead most compilers simply assume the
+program does not have any overflows and so
+the program will access whatever
+memory that happens to be at
+the accessed location.
+By knowing how memory is laid out,
+an attacker can use out of bounds
+accesses to his advantage.
+Lets look at what could happen if
+a buffer overflow takes place.
+Here we have a function in main, and
+main calls this function
+with the string AuthMe.
+Inside of the function, it tries to
+copy the string AuthMe into buffer.
+But probably you can see the problem here.
+The string has seven characters
+plus a null terminator,
+whereas the buffer in the local
+function only allots four characters.
+And so we're going to overflow
+that buffer when we call strcopy.
+Let's see this depicted on the stack.
+First, when calling funct, we see arg1.
+We see the frame, the instruction
+pointer that we saved from the caller.
+And we see the same frame pointer.
+Then we see the buffer of the four bytes.
+That we allocated inside of Funk.
+Now when the stir copy works, it's going
+to copy the first four characters.
+Then it's going to overwrite
+the frame pointer with the remaining
+four characters.
+When we get to the end of the function,.
+We're going to try to follow our similar,
+the same process we always do in trying to
+return to the function, the caller main.
+Of course,
+the frame pointer is now corrupted.
+So it's going to set it to
+whatever this strange value is.
+And we're going to segmentation fault.
+Now, normally we just think,
+oh, that's a crash.
+There are bugs in the program.
+This is one of them.
+Who cares?
+Eventually, we'll discover it and
+we'll fix it.
+Well buffer overflows
+are security relevant.
+If we modify function func as
+follows we can see that it
+can have security implications on
+the program when the buffer is overflowed.
+We've allocated a new local
+variable authenticated.
+And throughout the function func,
+we assume that authenticated should be
+set only if in fact
+authentication really happens.
+Perhaps sometimes after,
+sometime after the strcpy.
+Let's see what happens with
+our buffer overflow this time.
+So calling func we push arg1.
+We push the instruction pointer.
+We push the frame pointer.
+Now we've allocated the local
+variable authenticated and
+the local variable buffer.
+The stir copy takes place.
+And this time instead of
+overwriting the frame pointer,
+it overwrites the contents of
+the authenticated variable.
+This is a problem because now every
+time we go to check authenticated.
+The value is non zero and
+the check is going to succeed.
+So this mistake had a security relevant
+outcome by allowing the program to
+do things that probably we didn't intend.
+Could it be worse than this?
+Well in fact if we think about it strcpy
+gives us the ability to copy any amount of
+data into a buffer that's
+not the right size.
+So, basically we could overwrite
+lots of memory on the stack.
+And the question is, what could you do
+with that ability if you were an attacker?
+Well, as we'll see,
+one thing the attacker can do is overwrite
+the buffer with code and arrange for
+the program to execute that code
+when it returns from the function.
+Now, before we see how
+that works as an aside.
+Let me point out that these examples
+are providing their own strings simply
+as constants.
+But in reality the issue is
+that strings come from users.
+Some of those user malicious.
+For example they could come as textual
+input, they could come as packets or
+environment variables or input from files.
+It's very important that we validate
+our assumptions about user input.
+That is, we want to make sure that
+the input for example is not too long.
+Or that it conforms to a certain
+structure that the program assumes.
+We'll discuss in validating
+input assumptions later and
+throughout the course because it turns out
+to be a problem that programs make all of
+the time, not just with buffer overflows.
+

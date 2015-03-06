@@ -1,0 +1,9 @@
+ktest file : 'klee-last/test000001.ktest'
+args       : ['wisdom-alt-sym.o']
+num objects: 2
+object    0: name: 'buf'
+object    0: size: 20
+object    0: data: '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+object    1: name: 'r'
+object    1: size: 4
+object    1: data: '\x00\x00\x00\x00'

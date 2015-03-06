@@ -1,0 +1,257 @@
+[SOUND].
+All right.
+So if we're going to understand how to
+defend against SQL injection attacks,
+we have to understand the underlying issue
+that makes those attacks possible, and
+that issue is the following.
+One string combines code and data.
+So this is similar to what
+happens with buffer overflows.
+When a user types in more characters
+than a buffer can hold, then in
+an attack like a stack smashing attack,
+those extra characters will overrun
+the buffer's contents and corrupt control
+flow data, like the return address or
+function pointers, that then can
+manipulate what the program does.
+In the same way, we can think that
+the code and data boundary is
+blurred in an SQL injection, and in sense,
+we're overflowing the contents of
+that user field and inserting new code
+to change the structure of the query.
+So in general,
+when the boundary between code and
+data blurs, we're going to open
+ourselves up to vulnerabilities.
+So we can see the underlying issue
+by viewing the SQL query that we
+intend as a parse tree.
+So, if you look at that query,
+you can see that a select statement
+basically has three parts.
+First, it's what to select.
+In this case, it's star.
+That is, all possible records.
+Second, it's which table.
+In this case, the user's table.
+And then third, the where clause
+that refines which records should
+be considered.
+So, we represent that here as
+a tree where the first node of
+the tree is indicating the select command.
+And then the three children from that node
+are the three elements of that sort of
+command, star, which record,
+how many records or
+which records, users, which table,
+and finally, the where clause.
+Now, the where clause itself can
+be deconstructed into a tree.
+It's basically the conjunction
+of two equalities.
+It's saying that the name field of
+the records selected from users should
+be equal to the $user contents.
+And likewise, the password field, that is,
+the password column,
+should be equal to $pass.
+So, this should be data and not code.
+That's our intention.
+Whatever we stick here, it's going to
+be a string that's checked for
+equality to name.
+Unfortunately, by the way we're
+constructing this query, we actually will
+create a different parse tree by putting
+in a clever input like Frank closed quote,
+or 1 equals 1.
+And that's what we want to stop.
+Okay, so we hinted a moment ago
+at the end of the last unit that we
+should stop it by using input validation.
+We should check user input to
+make sure that it adheres to
+the form that we expect and therefore
+only use data that's trustworthy.
+And we can make data trustworthy,
+we can validate it in two ways.
+We can check that it has
+the expected form, or
+simply we can sanitize
+it by modifying it or
+using it in such a way that the result
+is correctly formed by construction.
+So, one kind of sanitization
+is blacklisting and
+one kind of blacklisting is to delete
+the characters you don't want.
+So, a blacklist is a bunch of bad things.
+So what we could do is we could look
+in the input for these bad things and
+we can delete them.
+So, what are some bad
+things we could delete?
+Well, we could delete the quote or
+the semicolon or
+the dash dash because those were important
+elements of that SQL injection attack.
+Unfortunately, this is not
+going to work in some cases.
+That is, when those characters have
+meaning in reasonable context,
+like the name Peter O'Connor.
+Another kind of sanitization
+is called escaping.
+And instead of deleting characters,
+escaping would have you change problematic
+characters to be safe ones instead.
+So here we could eliminate,
+we could escape out the quote,
+semicolon, dash and so on with the escaped
+versions that won't be interpreted in
+a control flow changing way
+in the constructed query.
+So you can do this using libraries and,
+and so
+on that are provided in various frameworks
+you might program in like in PHP.
+Now, the downside here is that even still,
+you may want to have some of these
+these characters in your SQL, and so
+this approach is not going to work.
+Now, on the checking side, you could use
+a whitelist to check that the input is
+reasonable and
+simply reject it if it's not.
+So, for example,
+we saw this in C programming that
+you can make sure that an integer
+is within the correct range.
+That is to say the length is,
+that's specified by user is no greater
+than the actually length of the buffer,
+the length it is referring to,
+and then reject the input.
+And the idea here is that it's safer to
+reject an input than it is to fix it.
+And the reason there is that a fix may
+actually produce the wrong output.
+That is,
+an attacker can manipulate the attempt to
+sanitize something to actually
+corrupt it to his to his needs.
+So this is the following the principle
+of fail-safe defaults, that is,
+do the simplest thing and reject the rest.
+And we'll look at that principle
+actually in more depth later on.
+It turns out that whitelisting can
+sometimes be hard because it's hard to
+specify what the whitelist should be.
+For example, if you only want to
+allow reasonable first names, well,
+how do you know what
+the reasonable first names are?
+Will you provide a, a specific dictionary
+that needs to be iterated through to
+check the names against?
+Could be both expensive and
+difficult to get right.
+So, for SQL injection,
+SQL injection in particular,
+the preferred solution is to use
+what are called prepared statements.
+And the idea here is to treat user data
+according to a type, therefore decoupling
+strings the use of strings as code
+from the use of strings as data.
+So here's our cue, our query again.
+Here's the same query expressed
+as a prepared statement.
+So, the first line creates
+a handle to the database, and
+the second line creates
+a prepared statement template.
+You can see that this very much
+resembles the string that we
+were constructing before.
+But the prepared statement instead
+includes everything other than
+the parts that are to be filled in and
+those it designates with question marks.
+The filling-in comes as
+a separate statement,
+happening with the bind_param call.
+And here,
+the bind_param call takes a format string,
+which specifies how many arguments
+are to follow and what the types are.
+So, the statement has two question marks,
+so it expects two arguments.
+And therefore, the format string
+has two format specifiers,
+here SS, where S stands for string.
+So, when user and
+pass are substituted in to the statement
+that's created by the prepared statement,
+it will treat the, those data as strings
+and not misinterpret them as code.
+And then the query can
+be sent to the database.
+So, we bind the variables.
+We type them.
+And as such,
+we have decoupled compilation,
+specifying the template with
+the binding process of the data.
+So, using a prepared a statement,
+we would replace the original
+query shown above with this query.
+And as such, the binding is only applied
+to the leaves where the purple parts
+are specified,
+leaving the structure of the tree fixed.
+So if we had filled in
+the user name with Frank or
+1 equals 1 as we did in the beginning,
+it would be fine because it would not
+change the structure of the query.
+It would simply be an odd user name
+to be looking up in the database.
+Now, prepared statements make it possible
+to eliminate many SQL injection attacks,
+but you may, sometimes queries
+are complicated and mistakes can be made.
+So you have reason to want to use
+defense in depth to mitigate the,
+the impact of a SQL
+injection should it happen.
+One way to do that is to limit privileges.
+That is, to reduce the power of
+the exploitation by not allowing
+the server application to do anything
+it wants when accessing the database.
+So for example,
+when you connect to the database,
+you can indicate to the database that
+only certain commands should be allowed.
+For example, only SELECT queries
+on the Orders_Table, but
+not on the Creditcards_Table.
+You can also chose to encrypt sensitive
+data stored in the database, so
+if somehow the database is stolen,
+that data is going to be less useful.
+You may not need to encrypt some of
+the tables like the Orders_Table.
+So when encrypted data is selected from
+the database, it is then decrypted inside
+of the server application using a key or a
+smartcard or some other sort of mechanism.
+But while it's stored in the database
+at rest, it's encrypted.
+

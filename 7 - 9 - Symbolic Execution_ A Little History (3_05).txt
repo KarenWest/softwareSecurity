@@ -1,0 +1,83 @@
+[SOUND]
+Symbolic execution is an old idea.
+It was first proposed in the mid 1970s.
+The most cited early paper on
+the subject is James King's PhD thesis.
+A synopsis of which was presented in
+the communications of the ACM in 1976.
+So if symbolic execution
+is such an old idea, and
+it seems like such a good one,
+well why didn't it take off?
+Why haven't we been using it for
+a long time?
+Well, one reason is that symbolic
+execution can be compute-intensive.
+In the end, for big programs, we'll
+consider many, many possible paths, and
+along each or many of those paths,
+we'll need to query an SMT solver
+to decide which of the paths are feasible,
+in which assertions could be false.
+And in the end such queries
+could involve much of
+the program state which
+could be very large.
+At the time symbolic execution was
+invented computers were relatively slow,
+not much processing power,
+and small, not much memory.
+I mean Apple iPads are as fast
+as Cray-2's from the 80s.
+Today computers are much faster and
+much bigger.
+Both more memory and more computing power.
+And we also have better algorithms.
+So SMT solvers are much more
+powerful today because of
+smarter optimizations that people
+have implemented over time.
+They can solve very large
+questions very quickly.
+And that lets us check the assertions and
+to prune infeasible paths.
+So let's take a minute to look at
+both the improved hardware and
+the improved algorithms.
+Here's a quick chart that shows
+trends of hardware improvement.
+You can see along the x axis is the date,
+the year, and
+along the y axis is number of,
+operations that the computers can perform.
+Because the y axis is a logarithmic scale,
+we can
+see that this linear growth is actually
+an exponential rise in computing power.
+On the algorithm side,
+here we can see that the time to solve
+a particular instance has been improving
+even while keeping the hardware steady.
+So here on the y axis is the time that
+it takes to solve a particular problem.
+While on the x axis we list the year
+of the algorithm we're considering.
+And all of these algorithms
+will run on the same computer,
+that is on 2011 hardware.
+So we can see that the time to run has
+been decreasing as the algorithms have
+been improving over time.
+And though small instances
+have not improved so
+much in time, since 2008 big problems
+are now starting to be solved faster.
+Symbolic execution has
+experienced a resurgence of
+interest in the last ten years or
+so, starting in about 2005.
+The main motivation behind it was to
+show that symbolic execution could
+find very interesting bugs that were
+often missed by normal testing.
+

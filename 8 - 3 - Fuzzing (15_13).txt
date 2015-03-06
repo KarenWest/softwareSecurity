@@ -1,0 +1,398 @@
+[NOISE]
+What is fuzz testing?
+Fuzz testing is basically a kind of random
+testing which is a kind of testing in
+which inputs for a test case
+are generated randomly or semi randomly.
+The goal of fuzz testing is to make
+sure that bad things don't happen.
+By bad things I mean crashes
+such as due to memory errors or
+uncaught exceptions or
+hangs do to non-termination.
+As we have seen memory errors often
+correspond to exploitable vulnerabilities.
+And thus are security critical.
+Non-termination is also a security problem
+since it can create a denial of service.
+Now, these are not the only bad things,
+of course.
+For example,
+a program could produce the wrong output.
+But a fuzz tester doesn't know
+anything about what the outputs of
+his tests should be.
+The fuzz testing tool only knows that
+those tests should not hang or crash.
+As such, fuzz testing is a very useful but
+a very limit endeavor.
+It complements, but does not replace
+traditional functional testing.
+In fact, functional tests can be
+the starting point for fuzz tests.
+Input from functional tests is
+assumed to be legitimate and
+fuzz test can therefore derive
+input from these legitimate tests.
+There are three basic kinds of fuzzing.
+The first is black box fuzzing.
+In this case the testing tool
+knows nothing about the program or
+its input format.
+And instead just generates random
+inputs to throw at that program.
+Now this is very easy to use,
+and to get started using.
+But, in the end it may explore only
+shallow states in the program,
+unless it gets very lucky.
+Grammar based fuzzing works by having
+the tool generate input informed by
+a grammar that describes the input
+format expected by the target program.
+Now this is more work to use, because
+the operator needs to define the grammar.
+But on the other hand, it will often
+go deeper in the program's state space.
+In particular, a grammar-based fuzzer
+will be able to get past the well
+formedness checks that the target program
+probably is implementing on its input, and
+therefore will be able to cover
+more parts of the program.
+The last kind of fuzzer
+is a white box fuzzer.
+In this case the tool generates new inputs
+at least partially informed by the code of
+the target program itself.
+Now these tools are often easy to use,
+because the fuzzing tool itself is able to
+look at the code and decide what inputs to
+generate to go to different parts
+of that target program's code.
+But as a result,
+they can be computationally expensive.
+Because they'll involve
+things like theorem provers.
+There are different ways that
+fuzzing tools generate inputs to
+pass to the target program.
+The most common way is by mutation.
+In this case, the fuzzer takes a legal
+input provided by the operator and
+mutates it,
+using that as an input instead.
+Such legal inputs might be human
+produced or automated, for
+example from a grammar or
+SMT solver query.
+The mutation might also be
+forced to adhere to a grammar.
+Legal inputs are often borrowed
+from legitimate functional tests.
+The second way that inputs
+are produced is generational.
+In this case,
+the tool generates an input from scratch.
+It might do so entirely randomly.
+Or it might do so
+following a grammar to the program.
+And there may be combinations of these for
+example, we could generate
+an initial input.
+Then mutated n times, generate new inputs,
+mutate those, and so on.
+And of course mutations could be
+generated according to a grammar too.
+That is if the original program's
+input adheres to a grammar,
+then we create mutations to that input
+that are informed by that grammar to
+make sure that it is likely to get
+further into the program's state space.
+Now there are two basic
+ways that fuzzers are used.
+One is as file-based fuzzers, and
+the other is as network-based fuzzers.
+So let's look at the file-based approach.
+What's going to happen here is the fuzzing
+tool will mutate or generate inputs.
+It will then run the target program
+using those inputs and see what happens.
+So here it is visualized.
+An example of a file based fuzzer
+is Radamsa, another one is Blab.
+Radamsa is a mutation-based,
+black box fuzzer.
+It mutates inputs that are given,
+passing them along to the target program.
+So here's an interaction with Radamsa,
+we start by echoing a legal input,
+passing it to Radamsa.
+Radamsa's arguments include a random seed,
+as well as the number of random
+input mutations to generate.
+You can see here that the inputs that
+Radamsa produced are variations of
+the input it originally received.
+Now, Radamsa can sit in between
+the generation of normal inputs and
+the receiving target program as follows.
+Here we're showing that
+the original input, which is
+a legal arithmetic expression that we
+might pass to the calculator program bc.
+Can have that input fuzzed by Radamsa
+first before bc is able to operate on it.
+Blab is a grammar-based fuzzer.
+The grammars are specified by
+the user as regular expressions and
+context-free grammars.
+So as an example, Blab would take
+a regular expression as a command line
+argument, describing the legal input
+space, and using that regular expression,
+it can generate an input that can
+be fed to the target program.
+Another example of a file-based
+fuzzer is American Fuzzy Lop.
+It is a mutation-based,
+white-box fuzzer, and
+it works according to
+the following process.
+We being by instrumenting the target
+program to gather run-time information.
+This is how it uses the code to
+determine what the next inputs ought to
+be to improve coverage.
+The instrumentation it inserts,
+tracks tuples that indicate where
+the program's execution has taken it.
+And these tuples consist of the ID of
+the current code location-you can think of
+this as just the line number.
+End an ID of the last code location
+before reaching the current one.
+With the instrumented program in hand, we
+run a test and we mutate the test input to
+create a new test if an unseen
+tuple was generated by that test.
+Otherwise, the test was not useful for
+covering new spaces of the program and
+we simply discard it.
+Mutations consist of things
+like bit flips, arithmetic and
+other standard sorts of things
+used by mutation-based fuzzers.
+After running for a while, American Fuzzy
+Lop will periodically cull the gathered
+tests to avoid getting
+stuck in local minima.
+In a sense it will stop making
+small local changes to tests.
+And instead make one big change to
+try to jump to a different part of
+the states base.
+So here's an example interaction.
+We can start by running afl-gcc.
+This is meant to be a drop in
+replacement for the gcc c compiler.
+Afl-gcc will instrument the target and
+pass it along to gcc for compilation.
+Using the instrumented target program,
+we call it afl-fuzz.
+And this starts the process
+of fuzz testing.
+This will run for a long time, and produce
+diagnostics as it discovers failing tests.
+Another example of a white
+box fuzzer is SAGE, and
+this uses symbolic execution as its
+underlying test generation technology.
+We talked about SAGE in the prior
+unit on symbolic execution.
+Another kind of fuzzer is
+a network-based fuzzer.
+In one role it can act as one
+half of a communicating pair.
+Sending messages to and from a target
+program, trying to get it to crash.
+Inputs could be produced by replaying
+a previously recorded interaction and
+mutating it.
+Whereby producing an interaction
+from scratch, for
+example from a protocol grammar.
+Here we can imagine the interaction
+specification being given to the fuzzer.
+The fuzzer can then interact
+with the target mutating that
+interaction input until
+the target potentially crashes.
+Another role for a network-based fuzzer
+is to act as a man in the middle,
+mutating inputs exchanged between parties,
+again,
+with those mutations possibly
+informed by a grammar.
+An example of a network-based
+fuzzer is SPIKE.
+SPIKE is a fuzzer creation kit and it
+provides a C language API for programming
+fuzzers in C that interact with remote
+servers using network-based protocols.
+The way that a programmer uses SPIKE is to
+create a series of blocks that form parts
+of protocol messages, and to leave holes
+in those blocks that spike can fuzz.
+As an example, we might start off
+by specifying a size string call.
+This indicates that in the protocol,
+a length field for
+the rest of the packet will go here.
+We don't know what that length yet
+will be, so
+we leave a place for it using size string.
+Next we specify the start of the block,
+whose length we're interested in, and
+we specify some contents of that block.
+If we want to insert constants
+we can use the S string call,
+here we use the S string variable call
+where the argument is a prefix of
+the fuzzed component so user equal
+Bob will be included in the block and
+then a bunch of random
+texts will follow it.
+We end the block and
+this will determine the length which
+can get back patched at the start.
+Spike then allows you to connect to
+a particular host and port by a TCP.
+Send the block, and
+then close the connection.
+Of course there are many other examples
+and interactions that Spike permits.
+Another example network
+fuzzer is Burp Intruder.
+It's one element of the Burp suite.
+Burp automates customized attacks
+against web applications, and
+it's similar to SPIKE in allowing the user
+to craft a template of a request, but
+leave holes, which it calls payloads,
+for fuzzing by the tool.
+Unlike SPIKE, which is a programming API,
+BURP Intruder provides a nice,
+GUI front end.
+And BURP Intruder integrates with the rest
+of the BURP Suite, which includes a proxy,
+scanner, spider and many other tools.
+Okay, so you've been penetration testing,
+you're using fuzzing, and a crash occurs.
+You have questions.
+For example, what is the root cause of
+the crash that the fuzzer found, so
+that we can fix it.
+In order to figure this out we might ask,
+is there a way to make the input smaller
+so that it's more understandable or
+are two or more crashes signaling what
+is effectively the same bug, that is
+do they minimize to the same input so
+that when removing superfluous
+differences they result in a crash.
+Some tools provide some assistance
+in answering these questions.
+For example in trying to make
+the input smaller automatically.
+Sometimes though the operator needs
+to figure this out for himself.
+Another important question is weather
+a crash is security relevant.
+That is does it signal the possibility
+of an exploitable vulnerability.
+Now a crash due to dereferencing
+a NULL pointer is rarely exploitable,
+particularly when running
+a user space program.
+But buffer overruns more often can be.
+Memory errors are particularly
+difficult to deal with after fuzzing,
+because the effects of a memory error may
+occur well after the point at which it
+originally takes place.
+That is if you over run a buffer and
+scribble over some portion of memory.
+The program will not immediately crash.
+Only when that scribbled over memory is
+re-used will the program go the wrong way.
+One way to make it so that crashes happen
+immediately upon overriding buffers is to
+use Address Sanitizer.
+This is a tool that can
+instrument a program so
+that accesses to arrays check for
+overflows and use after free errors.
+Given your instrumented program, you can
+fuzz it, and if the program crashes with
+an ASAN-signaled error then you can
+start worrying about exploitability.
+You can do the same trick with
+other sorts of error checkers for
+the purposes of testing.
+For example, valgrind memcheck is another
+way of looking for memory errors.
+We've discussed several example fuzzers so
+far and the basics of fuzzing overall, and
+there are yet
+more fuzzers that are available for use.
+For example,
+the CERT Basic Fuzzing Framework, or
+BFF, based in part on an earlier fuzzer,
+Zzuf, is freely available, and
+it has been used to find bugs in commonly
+used software, like Adobe Reader,
+Flash Player, Apple's Preview and
+QuickTime, and many others.
+Sulley is a fuzzing tool
+that provides lots of
+extras to manage the fuzzing process.
+In addition to the core technology
+of generating random inputs to
+find useful test cases,
+Sulley wrote, watch the network and
+methodically maintain records
+about what's happened.
+Instrument and
+monitor the health of the target,
+capable of reverting to a known
+good state if things go awry.
+Detecting, tracking and categorizing
+detected faults and even fuzzing in
+parallel, if that's
+desired Let's summarize.
+Penetration testing aims to simulate
+deployment scenarios involving
+determined attackers.
+The goal is to see whether the penetration
+team can find exploitable vulnerabilities.
+If they can they have provided
+evidence of true insecurity.
+On the other hand the lack of penetrations
+is not evidence of their impossibility and
+as such designs should
+always aim to mitigate and
+recover from as yet unknown attacks.
+Pin testers employ a variety
+of tools in their work.
+Ranging from scanners to proxies
+to exploit injection and
+management tools,
+to fuzz testing tools, nevertheless,
+tools are no replacement for an ingenious
+and thoughtful testing person.
+Such a tester will use tools to increase
+the coverage, speed, reliability, and
+repeatability of her efforts.
+
